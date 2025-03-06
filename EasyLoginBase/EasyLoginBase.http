@@ -1,0 +1,6 @@
+@EasyLoginBase_HostAddress = http://localhost:5252
+
+GET {{EasyLoginBase_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

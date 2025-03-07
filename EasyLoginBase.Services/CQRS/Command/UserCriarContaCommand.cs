@@ -9,14 +9,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EasyLoginBase.Services.CQRS.Command;
 
-public class UserCreateCommand : IRequest<RequestResult<UserDto>>
+public class UserCriarContaCommand : IRequest<RequestResult<UserDto>>
 {
-    public required UserDtoCreate UserCreate { get; set; }
+    public required UserCriarContaDtoRequest UserCreate { get; set; }
 
     public class UserCreateCommandHandler(UserManager<UserEntity> _userManager, IEmailService _emailService)
-     : IRequestHandler<UserCreateCommand, RequestResult<UserDto>>
+     : IRequestHandler<UserCriarContaCommand, RequestResult<UserDto>>
     {
-        public async Task<RequestResult<UserDto>> Handle(UserCreateCommand request, CancellationToken cancellationToken)
+        public async Task<RequestResult<UserDto>> Handle(UserCriarContaCommand request, CancellationToken cancellationToken)
         {
             try
             {

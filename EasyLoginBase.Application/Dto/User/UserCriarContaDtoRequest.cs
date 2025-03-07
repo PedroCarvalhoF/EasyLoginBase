@@ -2,7 +2,7 @@
 
 namespace EasyLoginBase.Application.Dto.User;
 
-public class UserDtoCreate
+public class UserCriarContaDtoRequest
 {
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Nome { get; private set; }
@@ -22,7 +22,7 @@ public class UserDtoCreate
     [Compare(nameof(Senha), ErrorMessage = "As senhas devem ser iguais")]
     [DataType(DataType.Password)]
     public string SenhaConfirmacao { get; private set; }
-    public UserDtoCreate(string nome, string sobreNome, string email, string senha, string senhaConfirmacao, string? imagemName)
+    public UserCriarContaDtoRequest(string nome, string sobreNome, string email, string senha, string senhaConfirmacao, string? imagemName)
     {
         Nome = nome;
         SobreNome = sobreNome;

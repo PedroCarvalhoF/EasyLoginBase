@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyLoginBase.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyLoginBase.Services", "EasyLoginBase.Services\EasyLoginBase.Services.csproj", "{C2CFDAC6-2533-4295-BABA-AE0E7D4FB539}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyLoginBase.Application", "EasyLoginBase.Application\EasyLoginBase.Application.csproj", "{A84353F6-CA08-45CB-ADB0-15C245A91350}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C2CFDAC6-2533-4295-BABA-AE0E7D4FB539}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2CFDAC6-2533-4295-BABA-AE0E7D4FB539}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2CFDAC6-2533-4295-BABA-AE0E7D4FB539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A84353F6-CA08-45CB-ADB0-15C245A91350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A84353F6-CA08-45CB-ADB0-15C245A91350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A84353F6-CA08-45CB-ADB0-15C245A91350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A84353F6-CA08-45CB-ADB0-15C245A91350}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,6 +10,11 @@ public class UserEntity : IdentityUser<Guid>
     public UserEntity() { }
     public UserEntity(string nome, string sobreNome, string userName, string email)
     {
+        Nome = nome;
+        SobreNome = sobreNome;
+        UserName = email;
+        Email = email;
+        EmailConfirmed = true;
     }
     public static UserEntity Create(string nome, string sobreNome, string userName, string email)
         => new UserEntity(nome, sobreNome, userName, email);

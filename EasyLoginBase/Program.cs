@@ -1,25 +1,52 @@
+using EasyLoginBase.CrossCutting.DependencyInjection;
+using EasyLoginBase.Extensions;
+using Microsoft.Extensions.FileProviders;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+builder.Services.AddCors();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddVersioning();
+builder.Services.AddSwagger();
+builder.Services.AddAuthentication(builder.Configuration);
+builder.Services.ConfigureDependenciesRepository(builder.Configuration);
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//configurar json
+builder.Services.AddControllers()
+.AddJsonOptions(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+})
+.AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+WebApplication app = builder.Build();
+
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
-
+app.UseCors(builder => builder
+   .SetIsOriginAllowed(orign => true)
+   .AllowAnyMethod()
+   .AllowAnyHeader()
+   .AllowCredentials());
+// Map controllers
 app.MapControllers();
+
+// Ensure the Resources directory exists and serve static files from it
+string resourcesPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
+if (!Directory.Exists(resourcesPath))
+    Directory.CreateDirectory(resourcesPath);
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+    RequestPath = new PathString("/Resources")
+});
 
 app.Run();

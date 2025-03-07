@@ -1,67 +1,36 @@
 ﻿namespace EasyLoginBase.Application.Dto;
 
-public class RequestResult<T> where T : class
+public class RequestResult<T>
 {
-    public bool Status { get; set; } = false;
-    public int StatusCode { get; private set; } = 400;
-    public string? Mensagem { get; private set; }
-    public T? Data { get; private set; }
-    public RequestResult()
+    public bool Status { get; }
+    public int StatusCode { get; }
+    public string? Mensagem { get; }
+    public T? Data { get; }
+
+    private RequestResult(bool status, int statusCode, string? mensagem, T? data = default)
     {
-
-    }
-    RequestResult(T? data, string? mensagem)
-    {
-        Status = true;
-        StatusCode = 200;
-
-        if (string.IsNullOrEmpty(mensagem))
-            Mensagem = "Requisição realizada com sucesso.";
-        else
-            Mensagem = mensagem;
-
+        Status = status;
+        StatusCode = statusCode;
+        Mensagem = mensagem;
         Data = data;
     }
 
-    RequestResult(string? mensagem)
-    {
-        Status = false;
-        StatusCode = 400;
+    public static RequestResult<T> Ok(T? data = default, string mensagem = "Requisição realizada com sucesso.")
+        => new(true, 200, mensagem, data);
 
-        if (string.IsNullOrEmpty(mensagem))
-            Mensagem = "Não foi possível relizar requisição.";
-        else
-            Mensagem = mensagem;
-        Data = null;
-    }
+    public static RequestResult<T> BadRequest(string mensagem = "Não foi possível realizar a requisição.")
+        => new(false, 400, mensagem);
 
-    public RequestResult<T> ResultOk(T data)
-    => Ok(data);
-    public RequestResult<T> Erro(Exception ex)
-    => BadRequest(ex.Message);
-    public RequestResult<T> Erro(string mensagem)
-    => BadRequest(mensagem);
+    public static RequestResult<T> BadRequest(T data, string mensagem = "Não foi possível realizar a requisição.")
+        => new(false, 400, mensagem, data);
 
-    public RequestResult<T> EntidadeInvalida()
-        => EntidadeInvalida();
-    public RequestResult<T> SemParamentroConsulta()
-    => BadRequest("Nenhum parametro foi encontrado para realizar consulta");
+    public static RequestResult<T> Unauthorized(string mensagem = "Acesso não autorizado.")
+        => new(false, 401, mensagem);
 
-    public RequestResult<T> ErroSalvarNoBanco()
-     => BadRequest("Não foi possível salvar no banco de dados.");
+    public static RequestResult<T> NotFound(string mensagem = "Recurso não encontrado.")
+        => new(false, 404, mensagem);
 
-    public static RequestResult<T> Ok(T? data = null, string? mensagem = "Requesição realizada com sucesso.")
-    => new RequestResult<T>(data, mensagem);
-
-    public static RequestResult<T> BadRequest(string? mensagem = "Não foi possível realizar requisição.")
-    => new RequestResult<T>(mensagem);
-
-    public static RequestResult<T> EntidadeInvalida(string? mensagem = "Entidade não foi validada. Verifique os requesistos necessários.")
-   => new RequestResult<T>(mensagem);
-
-    public static RequestResult<T> FalhaCommitRepository(string? mensagem = "Falha ao tentar realizar tarefa no banco de dados.")
-   => new RequestResult<T>(mensagem);
-
-    public static RequestResult<T> BadRequest(T data, string? mensagem = "Não foi possível realizar requisição.")
-   => new RequestResult<T>(mensagem);
+    public static RequestResult<T> ServerError(string mensagem = "Erro interno no servidor.")
+        => new(false, 500, mensagem);
 }
+

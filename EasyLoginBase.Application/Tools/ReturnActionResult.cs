@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace EasyLoginBase.Application.Tools;
-public class ReturnActionResult<T> : Controller where T : class
+public class ReturnActionResult<T> : Controller
 {
     public ActionResult ParseToActionResult(RequestResult<T> requestResult)
     {

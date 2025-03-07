@@ -19,4 +19,11 @@ public class AccountController(IMediator _mediator) : ControllerBase
     {
         return new ReturnActionResult<UserDto>().ParseToActionResult(await _mediator.Send(command));
     }
+
+    [AllowAnonymous]
+    [HttpPost("confirmar-conta")]
+    public async Task<ActionResult<RequestResult<bool>>> ConfirmarConta([FromBody] UserConfirmCommand command)
+    {
+        return new ReturnActionResult<bool>().ParseToActionResult(await _mediator.Send(command));
+    }
 }

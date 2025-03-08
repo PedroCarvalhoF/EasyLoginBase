@@ -2,10 +2,16 @@
 
 public class EmailDto
 {
-    public required string EmailDestinatario { get; set; }
-    public required string Assunto { get; set; }
-    public required string Corpo { get; set; }
-
+    public  string? EmailDestinatario { get; set; }
+    public  string? Assunto { get; set; }
+    public  string? Corpo { get; set; }
+    public EmailDto() { }
+    public EmailDto(string emailDestinatario, string assunto, string corpo)
+    {
+        EmailDestinatario = emailDestinatario;
+        Assunto = assunto;
+        Corpo = corpo;
+    }
     public static EmailDto ConfirmacaoEmail(string emailDestinatario, string codigo)
     {
         string corpoEmail = $@"

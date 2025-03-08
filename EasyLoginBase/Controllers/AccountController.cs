@@ -74,4 +74,14 @@ public class AccountController(IMediator _mediator) : ControllerBase
         return new ReturnActionResult<UserDtoSolicitarTokenResult>().ParseToActionResult(result);
     }
 
+    [AllowAnonymous]
+    [HttpPost("recuperar-senha")]
+    public async Task<ActionResult<RequestResult<UserDtoSolicitarTokenResult>>> RecuperarSenha([FromBody] SolicitarRecuperacaoSenhaCommand command)
+    {
+        if (command == null)
+            return BadRequest("Requisição inválida.");
+        var result = await _mediator.Send(command);
+        return new ReturnActionResult<UserDtoRecuperarSenhaResult>().ParseToActionResult(result);
+    }
+
 }

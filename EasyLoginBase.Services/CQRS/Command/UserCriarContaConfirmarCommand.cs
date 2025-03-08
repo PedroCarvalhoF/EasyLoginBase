@@ -1,4 +1,5 @@
-﻿using EasyLoginBase.Application.Dto;
+﻿using EasyLoginBase.Application.Constants;
+using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.User;
 using EasyLoginBase.Domain.Entities.User;
 using MediatR;
@@ -22,7 +23,7 @@ public class UserCriarContaConfirmarCommand : IRequest<RequestResult<bool>>
                     return RequestResult<bool>.BadRequest("Usuário não encontrado.");
 
                 // Recuperar o token salvo no Identity
-                var tokenSalvo = await _userManager.GetAuthenticationTokenAsync(user, "Default", "AberturaContaToken");
+                var tokenSalvo = await _userManager.GetAuthenticationTokenAsync(user, Tokens.Default, Tokens.AberturaContaToken);
 
                 if (tokenSalvo != request.UserConfirmarContaDto.Codigo)
                     return RequestResult<bool>.BadRequest("Código inválido ou expirado.");
@@ -34,6 +35,8 @@ public class UserCriarContaConfirmarCommand : IRequest<RequestResult<bool>>
                 var updateResult = await _userManager.UpdateAsync(user);
                 if (!updateResult.Succeeded)
                     return RequestResult<bool>.BadRequest("Erro ao ativar a conta.");
+
+                await _userManager.RemoveAuthenticationTokenAsync(user, Tokens.Default, Tokens.AberturaContaToken);
 
                 return RequestResult<bool>.Ok(true, "Conta ativada com sucesso!");
             }

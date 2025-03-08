@@ -1,4 +1,5 @@
-﻿using EasyLoginBase.Application.Dto;
+﻿using EasyLoginBase.Application.Constants;
+using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.Email;
 using EasyLoginBase.Application.Dto.User;
 using EasyLoginBase.Domain.Entities.User;
@@ -42,7 +43,7 @@ public class UserCriarContaCommand : IRequest<RequestResult<UserDto>>
 
                 // Gerar token de confirmação
                 var token = GerarToken();
-                await _userManager.SetAuthenticationTokenAsync(userCreateEntity, "Default", "AberturaContaToken", token);
+                await _userManager.SetAuthenticationTokenAsync(userCreateEntity, Tokens.Default, Tokens.AberturaContaToken, token);
 
                 // Enviar e-mail de confirmação
                 var emailDto = EmailDto.ConfirmacaoEmail(userCreateEntity.Email, token);

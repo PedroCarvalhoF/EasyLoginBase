@@ -7,6 +7,7 @@ public class JwtOptions
     public string SecurityKey { get; set; }
     public int AccessTokenExpiration { get; set; }
     public int RefreshTokenExpiration { get; set; }
+    public JwtOptions() { }
     public JwtOptions(string issuer, string audience, string securityKey, int accessTokenExpiration, int refreshTokenExpiration)
     {
         Issuer = issuer;

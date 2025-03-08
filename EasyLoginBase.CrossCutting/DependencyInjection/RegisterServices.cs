@@ -15,11 +15,10 @@ public static class RegisterServices
         serviceCollection.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
 
         IdentityConfiguration.Configurar(serviceCollection, configuration);
-
-        var myhandlers = AppDomain.CurrentDomain.Load("EasyLoginBase.Services");
-        serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myhandlers));
-
         serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         serviceCollection.AddTransient<IEmailService, EmailService>();
+
+        var myhandlers = AppDomain.CurrentDomain.Load("EasyLoginBase.Services");
+        serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myhandlers));      
     }
 }

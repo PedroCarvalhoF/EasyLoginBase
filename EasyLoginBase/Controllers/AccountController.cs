@@ -12,7 +12,17 @@ namespace EasyLoginBase.Controllers;
 [ApiController]
 [Authorize]
 public class AccountController(IMediator _mediator) : ControllerBase
-{   
+{ /// <summary>
+  /// Login de usuário
+  /// </summary>
+    [AllowAnonymous]
+    [HttpPost("login")]
+    public async Task<ActionResult<RequestResult<UsuarioLoginResponse>>> Login([FromBody] UserLoginCommand command)
+    {
+        return await _mediator.Send(command);
+    }
+
+
     /// <summary>
     /// Criar nova conta de usuário
     /// </summary>
@@ -53,4 +63,6 @@ public class AccountController(IMediator _mediator) : ControllerBase
         var result = await _mediator.Send(command);
         return new ReturnActionResult<bool>().ParseToActionResult(result);
     }
+
+
 }

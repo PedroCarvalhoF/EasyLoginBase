@@ -5,11 +5,11 @@ using EasyLoginBase.Domain.Entities.User;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace EasyLoginBase.Services.CQRS.Command;
+namespace EasyLoginBase.Services.CQRS.User.Command;
 
 public class UserCriarContaConfirmarCommand : IRequest<RequestResult<bool>>
 {
-    public required UserCriarContaConfirmarDtoRequest UserConfirmarContaDto { get; set; }
+    public required UserDtoCriarContaConfirmarRequest UserConfirmarContaDto { get; set; }
 
     public class UserConfirmCommandHandler(UserManager<UserEntity> _userManager)
         : IRequestHandler<UserCriarContaConfirmarCommand, RequestResult<bool>>

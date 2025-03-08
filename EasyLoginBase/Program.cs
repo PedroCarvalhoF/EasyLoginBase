@@ -6,10 +6,8 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar JwtOptions
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 
-// Configurar dependências
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -18,7 +16,6 @@ builder.Services.AddSwagger();
 builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.ConfigureDependenciesRepository(builder.Configuration);
 
-// Configurar JSON
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -29,7 +26,6 @@ builder.Services.AddControllers()
 
 WebApplication app = builder.Build();
 
-// Usar middlewares
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthentication();
@@ -40,7 +36,6 @@ app.UseCors(builder => builder
    .AllowAnyHeader()
    .AllowCredentials());
 
-// Mapear controladores
 app.MapControllers();
 
 // Configurar arquivos estáticos

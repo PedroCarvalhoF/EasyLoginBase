@@ -5,7 +5,7 @@ using EasyLoginBase.Domain.Entities.User;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace EasyLoginBase.Services.CQRS.Command;
+namespace EasyLoginBase.Services.CQRS.User.Command;
 
 public class SolicitarRecuperacaoSenhaCommand : BaseCommands<UserDtoRecuperarSenhaResult>
 {

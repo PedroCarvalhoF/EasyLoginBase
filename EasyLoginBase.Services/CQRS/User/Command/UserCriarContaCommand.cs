@@ -8,11 +8,11 @@ using EasyLoginBase.Services.Tools.UseCase;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace EasyLoginBase.Services.CQRS.Command;
+namespace EasyLoginBase.Services.CQRS.User.Command;
 
 public class UserCriarContaCommand : IRequest<RequestResult<UserDto>>
 {
-    public required UserCriarContaDtoRequest UserCreate { get; set; }
+    public required UserDtoCriarContaRequest UserCreate { get; set; }
 
     public class UserCreateCommandHandler(UserManager<UserEntity> _userManager, IEmailService _emailService)
      : IRequestHandler<UserCriarContaCommand, RequestResult<UserDto>>
@@ -39,14 +39,14 @@ public class UserCriarContaCommand : IRequest<RequestResult<UserDto>>
 
                 var userCreateResult = await _userManager.CreateAsync(userCreateEntity, request.UserCreate.Senha);
                 if (!userCreateResult.Succeeded)
-                    return RequestResult<UserDto>.BadRequest(userCreateResult.Errors.Select(r => r.Description).FirstOrDefault());
+                    return RequestResult<UserDto>.BadRequest(userCreateResult.Errors.Select(r => r.Description).FirstOrDefault()!);
 
                 // Gerar token de confirmação
                 var token = GerarToken();
                 await _userManager.SetAuthenticationTokenAsync(userCreateEntity, Tokens.Default, Tokens.AberturaContaToken, token);
 
                 // Enviar e-mail de confirmação
-                var emailDto = EmailDto.ConfirmacaoEmail(userCreateEntity.Email, token);
+                var emailDto = EmailDto.ConfirmacaoEmail(userCreateEntity.Email!, token);
                 await _emailService.EnviarEmailAsync(emailDto);
 
                 var userDto = DtoMapper.ParceUserDto(userCreateEntity);

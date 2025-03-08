@@ -4,11 +4,11 @@ using EasyLoginBase.Domain.Entities.User;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace EasyLoginBase.Services.CQRS.Command;
+namespace EasyLoginBase.Services.CQRS.User.Command;
 
 public class UserAlterarSenhaCommand : IRequest<RequestResult<bool>>
 {
-    public required UserAlterarSenhaDtoRequest UserAlterarSenhaDtoRequest { get; set; }
+    public required UserDtoAlterarSenhaRequest UserAlterarSenhaDtoRequest { get; set; }
 
     public class AlterarSenhaUserCommandHandler : IRequestHandler<UserAlterarSenhaCommand, RequestResult<bool>>
     {

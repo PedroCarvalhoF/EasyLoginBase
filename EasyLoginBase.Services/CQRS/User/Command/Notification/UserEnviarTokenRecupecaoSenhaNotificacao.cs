@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace EasyLoginBase.Services.CQRS.Command.Notification;
+namespace EasyLoginBase.Services.CQRS.User.Command.Notification;
 
 public class UserEnviarTokenRecupecaoSenhaNotificacao : INotification
 {

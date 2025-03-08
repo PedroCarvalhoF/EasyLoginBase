@@ -1,6 +1,6 @@
 ﻿namespace EasyLoginBase.Application.Dto.User;
 
-public class UsuarioLoginResponse
+public class UserDtoLoginResponse
 {
     public bool Sucesso => !Erros.Any();
     public List<string> Erros { get; } = new();
@@ -10,8 +10,8 @@ public class UsuarioLoginResponse
     public string? AccessToken { get; private set; }
     public string? RefreshToken { get; private set; }
 
-    public UsuarioLoginResponse() { }
-    public UsuarioLoginResponse(string accessToken, string refreshToken)
+    public UserDtoLoginResponse() { }
+    public UserDtoLoginResponse(string accessToken, string refreshToken)
     {
         AccessToken = accessToken;
         RefreshToken = refreshToken;

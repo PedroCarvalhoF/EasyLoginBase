@@ -17,5 +17,5 @@ public class UserEntity : IdentityUser<Guid>
         EmailConfirmed = true;
     }
     public static UserEntity Create(string nome, string sobreNome, string userName, string email)
-        => new UserEntity(nome, sobreNome, userName, email);
+        => new (nome, sobreNome, userName, email);
 }

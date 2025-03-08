@@ -6,7 +6,6 @@ namespace EasyLoginBase.Services.CQRS.NotificationEmail;
 public class NotificarEnviarEmailHandler : INotificationHandler<EmailNotification>
 {
     private readonly IEmailService _emailService;
-
     public NotificarEnviarEmailHandler(IEmailService emailService)
     {
         _emailService = emailService;

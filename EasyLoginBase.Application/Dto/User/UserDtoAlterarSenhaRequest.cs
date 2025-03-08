@@ -2,7 +2,7 @@
 
 namespace EasyLoginBase.Application.Dto.User;
 
-public class UserAlterarSenhaDtoRequest
+public class UserDtoAlterarSenhaRequest
 {
     [Required]
     [EmailAddress]
@@ -22,7 +22,7 @@ public class UserAlterarSenhaDtoRequest
     [Display(Name = "Confirma Nova Senha")]
     [Compare("NovaSenha", ErrorMessage = "As senhas não combinão.")]
     public string ConfirmPassword { get; private set; }
-    public UserAlterarSenhaDtoRequest(string email, string senhaAntiga, string novaSenha, string confirmPassword)
+    public UserDtoAlterarSenhaRequest(string email, string senhaAntiga, string novaSenha, string confirmPassword)
     {
         this.email = email;
         SenhaAntiga = senhaAntiga;

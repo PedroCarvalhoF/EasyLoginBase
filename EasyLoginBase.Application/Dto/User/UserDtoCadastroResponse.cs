@@ -1,12 +1,12 @@
 ﻿namespace EasyLoginBase.Application.Dto.User;
 
-public class UsuarioCadastroResponse
+public class UserDtoCadastroResponse
 {
     public bool? Sucesso { get; private set; }
     public List<string>? Erros { get; private set; }
     public Guid IdUserCreate { get; private set; }
-    public UsuarioCadastroResponse() => Erros = new List<string>();
-    public UsuarioCadastroResponse(bool sucesso, Guid idUserCreate)
+    public UserDtoCadastroResponse() => Erros = new List<string>();
+    public UserDtoCadastroResponse(bool sucesso, Guid idUserCreate)
     {
         Sucesso = sucesso;
         IdUserCreate = idUserCreate;

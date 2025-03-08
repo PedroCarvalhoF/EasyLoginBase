@@ -16,10 +16,10 @@ public static class RegisterServices
 
         IdentityConfiguration.Configurar(serviceCollection, configuration);
         serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-        
+
         serviceCollection.AddTransient<IEmailService, EmailService>();
 
         var myhandlers = AppDomain.CurrentDomain.Load("EasyLoginBase.Services");
-        serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myhandlers));      
+        serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myhandlers));
     }
 }

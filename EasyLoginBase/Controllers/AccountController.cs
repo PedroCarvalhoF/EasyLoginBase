@@ -1,7 +1,7 @@
 ﻿using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.User;
 using EasyLoginBase.Application.Tools;
-using EasyLoginBase.Services.CQRS.Command;
+using EasyLoginBase.Services.CQRS.User.Command;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ public class AccountController(IMediator _mediator) : ControllerBase
   /// </summary>
     [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<ActionResult<RequestResult<UsuarioLoginResponse>>> Login([FromBody] UserLoginCommand command)
+    public async Task<ActionResult<RequestResult<UserDtoLoginResponse>>> Login([FromBody] UserLoginCommand command)
     {
         return await _mediator.Send(command);
     }

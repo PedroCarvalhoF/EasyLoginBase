@@ -2,8 +2,7 @@
 
 public static class Roles
 {
-    private static List<string> _funcoes = new List<string>
-        {"Programador","Admin","RH","Financeiro","SupervisorOperacional","Caixa","PermissaoSistema"};
+    private static List<string> _funcoes = ["Programador","Admin","RH","Financeiro","SupervisorOperacional","Caixa","PermissaoSistema"];
     public static List<string> GetListaFuncoes()
     {
         return _funcoes;

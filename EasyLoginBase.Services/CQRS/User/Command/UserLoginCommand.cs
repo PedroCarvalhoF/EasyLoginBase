@@ -11,10 +11,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-public class UserLoginCommand : BaseCommands<UsuarioLoginResponse>
+public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
 {
-    public required UserLoginDtoRequest UserLoginDtoRequest { get; set; }
-    public class UserLoginCommandHandler : IRequestHandler<UserLoginCommand, RequestResult<UsuarioLoginResponse>>
+    public required UserDtoLoginRequest UserLoginDtoRequest { get; set; }
+    public class UserLoginCommandHandler : IRequestHandler<UserLoginCommand, RequestResult<UserDtoLoginResponse>>
     {
         private readonly SignInManager<UserEntity> _signInManager;
         private readonly UserManager<UserEntity> _userManager;
@@ -28,11 +28,11 @@ public class UserLoginCommand : BaseCommands<UsuarioLoginResponse>
             _userManager = userManager;
             _jwtOptions = jwtOptions.Value;
         }
-        public async Task<RequestResult<UsuarioLoginResponse>> Handle(UserLoginCommand request, CancellationToken cancellationToken)
+        public async Task<RequestResult<UserDtoLoginResponse>> Handle(UserLoginCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var usuarioLoginResponse = new UsuarioLoginResponse();
+                var usuarioLoginResponse = new UserDtoLoginResponse();
                 var result = await _signInManager.PasswordSignInAsync(request.UserLoginDtoRequest.Email, request.UserLoginDtoRequest.Senha, false, true);
 
                 if (!result.Succeeded)
@@ -42,21 +42,21 @@ public class UserLoginCommand : BaseCommands<UsuarioLoginResponse>
                                                       result.RequiresTwoFactor ? "É necessário confirmar o login no seu segundo fator de autenticação" :
                                                       "Usuário ou senha estão incorretos");
 
-                    return RequestResult<UsuarioLoginResponse>.BadRequest(usuarioLoginResponse, usuarioLoginResponse.Erros.First());
+                    return RequestResult<UserDtoLoginResponse>.BadRequest(usuarioLoginResponse, usuarioLoginResponse.Erros.First());
                 }
 
                 var userSelecionado = await _userManager.FindByEmailAsync(request.UserLoginDtoRequest.Email) ?? throw new Exception("Usuário não encontrado.");
                 usuarioLoginResponse = await GerarCredenciais(userSelecionado);
                 usuarioLoginResponse.DefinirDetalhesUsuario(userSelecionado.Id, userSelecionado.Nome!, userSelecionado.Email!);
 
-                return RequestResult<UsuarioLoginResponse>.Ok(usuarioLoginResponse, "Login realizado com sucesso.");
+                return RequestResult<UserDtoLoginResponse>.Ok(usuarioLoginResponse, "Login realizado com sucesso.");
             }
             catch (Exception ex)
             {
-                return RequestResult<UsuarioLoginResponse>.BadRequest(ex.Message);
+                return RequestResult<UserDtoLoginResponse>.BadRequest(ex.Message);
             }
         }
-        private async Task<UsuarioLoginResponse> GerarCredenciais(UserEntity user)
+        private async Task<UserDtoLoginResponse> GerarCredenciais(UserEntity user)
         {
             var accessTokenClaims = await ObterClaims(user, true);
             var refreshTokenClaims = new List<Claim>
@@ -68,7 +68,7 @@ public class UserLoginCommand : BaseCommands<UsuarioLoginResponse>
             var accessToken = GerarToken(accessTokenClaims, _jwtOptions.AccessTokenExpiration);
             var refreshToken = GerarToken(refreshTokenClaims, _jwtOptions.RefreshTokenExpiration);
 
-            return new UsuarioLoginResponse(accessToken, refreshToken);
+            return new UserDtoLoginResponse(accessToken, refreshToken);
         }
 
         private async Task<IList<Claim>> ObterClaims(UserEntity user, bool adicionarClaimsUsuario)
@@ -94,7 +94,7 @@ public class UserLoginCommand : BaseCommands<UsuarioLoginResponse>
 
         private string GerarToken(IEnumerable<Claim> claims, int segundosExpiracao)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.SecurityKey));
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.SecurityKey!));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var jwt = new JwtSecurityToken(

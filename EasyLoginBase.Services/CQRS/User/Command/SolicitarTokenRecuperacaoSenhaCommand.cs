@@ -6,7 +6,7 @@ using EasyLoginBase.Services.CQRS.NotificationEmail;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace EasyLoginBase.Services.CQRS.Command;
+namespace EasyLoginBase.Services.CQRS.User.Command;
 
 public class SolicitarTokenRecuperacaoSenhaCommand : BaseCommands<UserDtoSolicitarTokenResult>
 {

@@ -13,7 +13,7 @@ public class MyContext : IdentityDbContext
 
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {       
+    {
         base.OnModelCreating(modelBuilder);
         //configurando USER
         modelBuilder.Entity<UserRoleEntity>(userRole =>
@@ -29,6 +29,6 @@ public class MyContext : IdentityDbContext
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
-        });               
+        });
     }
 }

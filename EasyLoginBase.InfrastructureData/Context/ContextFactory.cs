@@ -8,7 +8,6 @@ public class ContextFactory : IDesignTimeDbContextFactory<MyContext>
 {
     public MyContext CreateDbContext(string[] args)
     {
-
         string DefaultConnectionDESENVOLVIMENTO =
             $"Server={ConfiguracaoBanco.Server};" +
             $"Port={ConfiguracaoBanco.Port};" +

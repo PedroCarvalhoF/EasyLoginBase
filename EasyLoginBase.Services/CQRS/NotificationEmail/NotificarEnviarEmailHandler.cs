@@ -10,7 +10,6 @@ public class NotificarEnviarEmailHandler : INotificationHandler<EmailNotificatio
     {
         _emailService = emailService;
     }
-
     public async Task Handle(EmailNotification notification, CancellationToken cancellationToken)
     {
         await _emailService.EnviarEmailAsync(notification.EmailDto);

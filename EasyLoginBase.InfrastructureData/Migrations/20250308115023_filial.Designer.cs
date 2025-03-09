@@ -4,6 +4,7 @@ using EasyLoginBase.InfrastructureData.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyLoginBase.InfrastructureData.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20250308115023_filial")]
+    partial class filial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,9 +37,6 @@ namespace EasyLoginBase.InfrastructureData.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("IdFilial");
-
-                    b.HasIndex("NomeFilial")
-                        .IsUnique();
 
                     b.ToTable("Filiais", (string)null);
                 });

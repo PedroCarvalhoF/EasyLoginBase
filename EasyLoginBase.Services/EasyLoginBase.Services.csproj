@@ -17,4 +17,8 @@
     <ProjectReference Include="..\EasyLoginBase.InfrastructureData\EasyLoginBase.InfrastructureData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tools\UseCase\EntityForDto\" />
+  </ItemGroup>
+
 </Project>

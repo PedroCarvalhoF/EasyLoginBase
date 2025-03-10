@@ -20,7 +20,7 @@ public class FilialServices : IFilialServices<FilialDto>
         {
             var entity = await _repository.FilialRepository.CreateFilialAsync(DtoMapper.ParceFilialDtoEntity(filial));
             if (await _repository.CommitAsync())
-                return DtoMapper.ParceFilialEntityForDto(entity);
+                return DtoMapper.ParceFilial(entity);
 
             throw new ArgumentException("Não foi possível salvar filial.");
 
@@ -35,9 +35,18 @@ public class FilialServices : IFilialServices<FilialDto>
     {
         throw new NotImplementedException();
     }
-    public Task<IEnumerable<FilialDto>> SelectFilialAsync()
+    public async Task<IEnumerable<FilialDto>> SelectFilialAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            var entities = await _repository.FilialRepository.SelectFilialAsync();
+            return DtoMapper.ParceFilial(entities);
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
     }
 
     public Task<IEnumerable<FilialDto>> SelectFilialAsync(Guid idFilial)

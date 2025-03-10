@@ -8,5 +8,6 @@ public interface IUnitOfWork
     Task<bool> CommitAsync();
     void FinalizarContexto();
 
+    //repository
     IFilialRepository<FilialEntity> FilialRepository { get; }
 }

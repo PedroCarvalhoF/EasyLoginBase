@@ -17,7 +17,7 @@ public class FilialRepository : IFilialRepository<FilialEntity>
     {
         try
         {
-            await _context.Filiais.AddAsync(filial);           
+            await _context.Filiais.AddAsync(filial);
             return filial;
         }
         catch (Exception ex)
@@ -30,7 +30,7 @@ public class FilialRepository : IFilialRepository<FilialEntity>
     {
         try
         {
-            return await _context.Filiais.ToListAsync();
+            return await _context.Filiais.OrderBy(f => f.NomeFilial).ToListAsync();
         }
         catch (Exception ex)
         {
@@ -59,7 +59,7 @@ public class FilialRepository : IFilialRepository<FilialEntity>
                 throw new KeyNotFoundException("Filial não encontrada");
 
             existingFilial.NomeFilial = filial.NomeFilial;
-            _context.Filiais.Update(existingFilial);           
+            _context.Filiais.Update(existingFilial);
             return existingFilial;
         }
         catch (Exception ex)

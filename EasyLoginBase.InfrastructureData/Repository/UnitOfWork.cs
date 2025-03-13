@@ -1,8 +1,11 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
+using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.InfrastructureData.Context;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
+using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyLoginBase.InfrastructureData.Repository;
@@ -11,6 +14,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly MyContext _context;
     private IFilialRepository<FilialEntity>? _filialRepository;
+    private IPessoaClienteRepository<PessoaClienteEntity>? _pessoaClienteRepository;
     public UnitOfWork(MyContext context)
     {
         _context = context;
@@ -57,6 +61,14 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         get
         {
             return _filialRepository = _filialRepository ?? new FilialRepository(_context);
+        }
+    }
+
+    public IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository
+    {
+        get
+        {
+            return _pessoaClienteRepository = _pessoaClienteRepository ?? new PessoaClienteRepository(_context);
         }
     }
 

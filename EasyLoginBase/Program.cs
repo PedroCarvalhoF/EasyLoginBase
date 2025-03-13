@@ -1,4 +1,5 @@
 using EasyLoginBase.CrossCutting.DependencyInjection;
+using EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
 using EasyLoginBase.Extensions;
 using EasyLoginBase.InfrastructureData.Configuration;
 using Microsoft.Extensions.FileProviders;
@@ -14,7 +15,8 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddVersioning();
 builder.Services.AddSwagger();
 builder.Services.AddAuthentication(builder.Configuration);
-builder.Services.ConfigureDependenciesRepository(builder.Configuration);
+builder.Services.ConfigureRepositories(builder.Configuration);
+builder.Services.ConfigurarServicos();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

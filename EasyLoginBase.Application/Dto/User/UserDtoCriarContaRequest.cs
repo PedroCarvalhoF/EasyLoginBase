@@ -22,7 +22,7 @@ public class UserDtoCriarContaRequest
     [Compare(nameof(Senha), ErrorMessage = "As senhas devem ser iguais")]
     [DataType(DataType.Password)]
     public string SenhaConfirmacao { get; private set; }
-    public UserDtoCriarContaRequest(string nome, string sobreNome, string email, string senha, string senhaConfirmacao, string? imagemName)
+    public UserDtoCriarContaRequest(string nome, string sobreNome, string email, string senha, string senhaConfirmacao)
     {
         Nome = nome;
         SobreNome = sobreNome;

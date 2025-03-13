@@ -12,7 +12,7 @@ namespace EasyLoginBase.Services.CQRS.User.Command;
 
 public class UserCriarContaCommand : IRequest<RequestResult<UserDto>>
 {
-    public required UserDtoCriarContaRequest UserCreate { get; set; }
+    public required UserDtoCriarContaRequest UserDtoCriarContaRequest { get; set; }
 
     public class UserCreateCommandHandler(UserManager<UserEntity> _userManager, IEmailService _emailService)
      : IRequestHandler<UserCriarContaCommand, RequestResult<UserDto>>
@@ -21,23 +21,23 @@ public class UserCriarContaCommand : IRequest<RequestResult<UserDto>>
         {
             try
             {
-                var userExists = await _userManager.FindByEmailAsync(request.UserCreate.Email);
+                var userExists = await _userManager.FindByEmailAsync(request.UserDtoCriarContaRequest.Email);
                 if (userExists != null)
                     return RequestResult<UserDto>.BadRequest("E-mail já está em uso");
 
                 // Criar usuário com e-mail não confirmado e bloqueado
                 var userCreateEntity = UserEntity.Create(
-                    request.UserCreate.Nome,
-                    request.UserCreate.SobreNome,
-                    request.UserCreate.Email,
-                    request.UserCreate.Email
+                    request.UserDtoCriarContaRequest.Nome,
+                    request.UserDtoCriarContaRequest.SobreNome,
+                    request.UserDtoCriarContaRequest.Email,
+                    request.UserDtoCriarContaRequest.Email
                 );
 
                 userCreateEntity.EmailConfirmed = false; // Não confirmado
                 userCreateEntity.LockoutEnabled = true; // Bloqueio ativado
                 userCreateEntity.LockoutEnd = DateTimeOffset.Now.AddMonths(1); // Bloqueado indefinidamente
 
-                var userCreateResult = await _userManager.CreateAsync(userCreateEntity, request.UserCreate.Senha);
+                var userCreateResult = await _userManager.CreateAsync(userCreateEntity, request.UserDtoCriarContaRequest.Senha);
                 if (!userCreateResult.Succeeded)
                     return RequestResult<UserDto>.BadRequest(userCreateResult.Errors.Select(r => r.Description).FirstOrDefault()!);
 

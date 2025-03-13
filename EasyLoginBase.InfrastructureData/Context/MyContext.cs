@@ -1,4 +1,5 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.InfrastructureData.Mapping;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +12,7 @@ public class MyContext : IdentityDbContext
     <UserEntity, RoleEntity, Guid, IdentityUserClaim<Guid>, UserRoleEntity, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
     public DbSet<FilialEntity> Filiais { get; set; }
+    public DbSet<PessoaClienteEntity> PessoaClientes { get; set; }
     public MyContext(DbContextOptions<MyContext> options) : base(options)
     {
 
@@ -18,7 +20,7 @@ public class MyContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new FilialMap());
-
+        modelBuilder.ApplyConfiguration(new PessoaClienteMap());
 
         base.OnModelCreating(modelBuilder);
 

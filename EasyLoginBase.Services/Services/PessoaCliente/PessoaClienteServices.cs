@@ -1,0 +1,86 @@
+﻿using EasyLoginBase.Application.Dto.PessoaCliente;
+using EasyLoginBase.Application.Services.Intefaces.PessoaCliente;
+using EasyLoginBase.Domain.Entities.User;
+using EasyLoginBase.Domain.Interfaces;
+using EasyLoginBase.Services.Tools.UseCase;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+namespace EasyLoginBase.Services.Services.PessoaCliente;
+
+public class PessoaClienteServices : IPessoaClienteServices<PessoaClienteDto>
+{
+    private readonly IUnitOfWork _repository;
+    private readonly UserManager<UserEntity> _userManager;
+    public PessoaClienteServices(IUnitOfWork repository, UserManager<UserEntity> userManager)
+    {
+        _repository = repository;
+        _userManager = userManager;
+    }
+    public async Task<PessoaClienteDto> CadastrarClienteEntity(PessoaClienteDtoCreate pessoaClienteCreate)
+    {
+        try
+        {
+            var usuarioExist = await _userManager.Users.SingleOrDefaultAsync(user => user.Id == pessoaClienteCreate.UsuarioEntityClienteId);
+
+            if (usuarioExist == null)
+                throw new Exception("Usuário não localizado.");
+
+            var usuarioClienteExists = await _repository.PessoaClienteRepository.ConsultarClientes(pessoaClienteCreate.UsuarioEntityClienteId);
+
+            if (usuarioClienteExists.Id != Guid.Empty)
+                throw new Exception("Usuário já é um cliente.");
+
+            bool nomeFantasioEmUso = await _repository.PessoaClienteRepository.VerificarUsoNomeFantasia(pessoaClienteCreate.NomeFantasia);
+            if (nomeFantasioEmUso)
+                throw new Exception("Nome fantasia já está em uso");
+
+            var pessoaEntity = DtoMapper.ParcePessoaCliente(pessoaClienteCreate);
+
+            var resultCreate = await _repository.PessoaClienteRepository.CadastrarClienteEntity(pessoaEntity);
+            if (!await _repository.CommitAsync())
+                throw new Exception("Erro ao salvar cliente");
+
+            return DtoMapper.ParcePessoaCliente(resultCreate);
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task<PessoaClienteDto> ConsultarClientes(Guid idCliente)
+    {
+        try
+        {
+            var entities = await _repository.PessoaClienteRepository.ConsultarClientes(idCliente);
+
+            var dtos = DtoMapper.ParcePessoaCliente(entities);
+
+            return dtos;
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task<IEnumerable<PessoaClienteDto>> ConsultarClientes()
+    {
+        try
+        {
+            var entities = await _repository.PessoaClienteRepository.ConsultarClientes();
+
+            IEnumerable<PessoaClienteDto> dtos = DtoMapper.ParcePessoaCliente(entities);
+
+            return dtos;
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
+}

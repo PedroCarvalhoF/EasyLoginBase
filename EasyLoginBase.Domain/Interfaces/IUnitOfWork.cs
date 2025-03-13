@@ -1,5 +1,7 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Filial;
+using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 
 namespace EasyLoginBase.Domain.Interfaces;
 
@@ -10,4 +12,5 @@ public interface IUnitOfWork
 
     //repository
     IFilialRepository<FilialEntity> FilialRepository { get; }
+    IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository { get; }
 }

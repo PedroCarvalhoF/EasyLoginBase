@@ -37,6 +37,22 @@ public class AccountController(IMediator _mediator) : ControllerBase
         return new ReturnActionResult<UserDto>().ParseToActionResult(result);
     }
 
+
+    /// <summary>
+    /// Criar nova conta sem confirmação de email
+    /// </summary>
+    [AllowAnonymous]
+    [HttpPost("criar-conta-sem-confirmacao-email")]
+    public async Task<ActionResult<RequestResult<UserDto>>> CadastrarUsuarioSemConfirmacao([FromBody] UserCriarContaCommand command)
+    {
+        if (command == null)
+            return BadRequest("Requisição inválida.");
+
+        var result = await _mediator.Send(command);
+        return new ReturnActionResult<UserDto>().ParseToActionResult(result);
+    }
+
+
     /// <summary>
     /// Confirmar conta do usuário
     /// </summary>

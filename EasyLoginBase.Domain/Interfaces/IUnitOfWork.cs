@@ -13,4 +13,5 @@ public interface IUnitOfWork
     //repository
     IFilialRepository<FilialEntity> FilialRepository { get; }
     IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository { get; }
+    IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository { get; }
 }

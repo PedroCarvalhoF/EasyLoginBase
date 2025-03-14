@@ -9,7 +9,7 @@ public partial class DtoMapper
 {
     public static PessoaClienteDto ParcePessoaCliente(PessoaClienteEntity pessoaClienteEntity)
     {
-        return new PessoaClienteDto(pessoaClienteEntity.Id, pessoaClienteEntity.UsuarioEntityClienteId, pessoaClienteEntity.UsuarioEntityCliente.Nome, pessoaClienteEntity.NomeFantasia, pessoaClienteEntity.DataAbertura, pessoaClienteEntity.DataVencimentoUso);
+        return new PessoaClienteDto(pessoaClienteEntity.Id, pessoaClienteEntity.UsuarioEntityClienteId, pessoaClienteEntity.UsuarioEntityCliente!.Nome!, pessoaClienteEntity.NomeFantasia, pessoaClienteEntity.DataAbertura, pessoaClienteEntity.DataVencimentoUso);
     }
 
     public static IEnumerable<PessoaClienteDto> ParcePessoaCliente(IEnumerable<PessoaClienteEntity> pessoasClientesEntities)

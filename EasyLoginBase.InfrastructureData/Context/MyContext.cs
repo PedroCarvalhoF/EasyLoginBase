@@ -13,6 +13,7 @@ public class MyContext : IdentityDbContext
 {
     public DbSet<FilialEntity> Filiais { get; set; }
     public DbSet<PessoaClienteEntity> PessoaClientes { get; set; }
+    public DbSet<PessoaClienteVinculadaEntity> PessoasClientesVinculadas { get; set; }
     public MyContext(DbContextOptions<MyContext> options) : base(options)
     {
 
@@ -21,6 +22,7 @@ public class MyContext : IdentityDbContext
     {
         modelBuilder.ApplyConfiguration(new FilialMap());
         modelBuilder.ApplyConfiguration(new PessoaClienteMap());
+        modelBuilder.ApplyConfiguration(new PessoaClienteVinculadaMap());
 
         base.OnModelCreating(modelBuilder);
 

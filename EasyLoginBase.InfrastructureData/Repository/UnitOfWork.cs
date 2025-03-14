@@ -15,6 +15,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private readonly MyContext _context;
     private IFilialRepository<FilialEntity>? _filialRepository;
     private IPessoaClienteRepository<PessoaClienteEntity>? _pessoaClienteRepository;
+    private IPessoaClienteVinculadaRepository? _pessoaClienteVinculadaRepository;
     public UnitOfWork(MyContext context)
     {
         _context = context;
@@ -63,12 +64,18 @@ public class UnitOfWork : IUnitOfWork, IDisposable
             return _filialRepository = _filialRepository ?? new FilialRepository(_context);
         }
     }
-
     public IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository
     {
         get
         {
             return _pessoaClienteRepository = _pessoaClienteRepository ?? new PessoaClienteRepository(_context);
+        }
+    }
+    public IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository
+    {
+        get
+        {
+            return _pessoaClienteVinculadaRepository = _pessoaClienteVinculadaRepository ?? new PessoaClienteVinculadaRepository(_context);
         }
     }
 

@@ -1,11 +1,12 @@
 ﻿using EasyLoginBase.Application.Dto.Filial;
 using EasyLoginBase.Application.Services.Intefaces;
+using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Interfaces;
-using EasyLoginBase.Services.Tools.UseCase.DtoForEntity.Filial;
+using EasyLoginBase.Services.Tools.UseCase;
 
 namespace EasyLoginBase.Services.Services.Filial;
 
-public class FilialServices : IFilialServices<FilialDto>
+public class FilialServices : IFilialServices
 {
     private readonly IUnitOfWork _repository;
 
@@ -14,16 +15,52 @@ public class FilialServices : IFilialServices<FilialDto>
         _repository = repository;
     }
 
-    public async Task<FilialDto> CreateFilialAsync(FiliaDtoCreateRequest filial)
+    public async Task<FilialDto> CriarFilialAsync(FilialDtoCreate filialCreate)
     {
         try
         {
-            var entity = await _repository.FilialRepository.CreateFilialAsync(DtoMapper.ParceFilialDtoEntity(filial));
-            if (await _repository.CommitAsync())
-                return DtoMapper.ParceFilial(entity);
+            var entity = FilialEntity.CriarFilial(filialCreate.PessoaClienteId, filialCreate.NomeFilial);
 
-            throw new ArgumentException("Não foi possível salvar filial.");
+            var filial = await _repository.FilialRepository.CriarFilialAsync(entity);
 
+            var filialDto = DtoMapper.ParceFilial(filial);
+
+            return filialDto;
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message); ;
+        }
+    }
+
+    public async Task<IEnumerable<FilialDto>> SelecionarFiliaisPorIdPessoaCliente(Guid idPessoaCliente)
+    {
+        try
+        {
+            var filiais = await _repository.FilialRepository.SelecionarFiliaisPorIdPessoaCliente(idPessoaCliente);
+
+            return DtoMapper.ParceFilial(filiais);
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message); ;
+        }
+    }
+
+    public async Task<FilialDto?> SelecionarFilialPorId(Guid idFilial)
+    {
+        try
+        {
+            var filial = await _repository.FilialRepository.SelecionarFilialPorId(idFilial);
+
+            if (filial == null)
+                throw new Exception("Filial não encontrada");
+
+            var dto = DtoMapper.ParceFilial(filial);
+
+            return dto;
         }
         catch (Exception ex)
         {
@@ -31,28 +68,4 @@ public class FilialServices : IFilialServices<FilialDto>
             throw new Exception(ex.Message);
         }
     }
-    public Task<FilialDto> UpdateFilialAsync(FilialDtoUpdateRequest filial)
-    {
-        throw new NotImplementedException();
-    }
-    public async Task<IEnumerable<FilialDto>> SelectFilialAsync()
-    {
-        try
-        {
-            var entities = await _repository.FilialRepository.SelectFilialAsync();
-            return DtoMapper.ParceFilial(entities);
-        }
-        catch (Exception ex)
-        {
-
-            throw new Exception(ex.Message);
-        }
-    }
-
-    public Task<IEnumerable<FilialDto>> SelectFilialAsync(Guid idFilial)
-    {
-        throw new NotImplementedException();
-    }
-
-
 }

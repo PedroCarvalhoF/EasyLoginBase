@@ -24,19 +24,27 @@ namespace EasyLoginBase.InfrastructureData.Migrations
 
             modelBuilder.Entity("EasyLoginBase.Domain.Entities.Filial.FilialEntity", b =>
                 {
-                    b.Property<Guid>("IdFilial")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("DataCriacaoFilial")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("Habilitada")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("NomeFilial")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.HasKey("IdFilial");
+                    b.Property<Guid>("PessoaClienteId")
+                        .HasColumnType("char(36)");
 
-                    b.HasIndex("NomeFilial")
-                        .IsUnique();
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaClienteId");
 
                     b.ToTable("Filiais", (string)null);
                 });
@@ -288,6 +296,17 @@ namespace EasyLoginBase.InfrastructureData.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EasyLoginBase.Domain.Entities.Filial.FilialEntity", b =>
+                {
+                    b.HasOne("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteEntity", "PessoaCliente")
+                        .WithMany("Filiais")
+                        .HasForeignKey("PessoaClienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PessoaCliente");
+                });
+
             modelBuilder.Entity("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteEntity", b =>
                 {
                     b.HasOne("EasyLoginBase.Domain.Entities.User.UserEntity", "UsuarioEntityCliente")
@@ -375,6 +394,8 @@ namespace EasyLoginBase.InfrastructureData.Migrations
 
             modelBuilder.Entity("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteEntity", b =>
                 {
+                    b.Navigation("Filiais");
+
                     b.Navigation("UsuariosVinculados");
                 });
 

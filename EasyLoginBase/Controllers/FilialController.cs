@@ -21,16 +21,4 @@ public class FilialController(IMediator _mediator) : ControllerBase
         var result = await _mediator.Send(command);
         return new ReturnActionResult<FilialDto>().ParseToActionResult(result);
     }
-
-    [HttpGet("get-filiais")]
-    public async Task<ActionResult<RequestResult<IEnumerable<FilialDto>>>> GetFiliais()
-    {
-        var command = new FilialCommandGetFiliais();
-
-        if (command == null)
-            return BadRequest("Requisição inválida.");
-
-        var result = await _mediator.Send(command);
-        return new ReturnActionResult<IEnumerable<FilialDto>>().ParseToActionResult(result);
-    }
 }

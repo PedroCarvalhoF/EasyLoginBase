@@ -7,11 +7,23 @@ public class FilialMap : IEntityTypeConfiguration<FilialEntity>
 {
     public void Configure(EntityTypeBuilder<FilialEntity> builder)
     {
-        builder.ToTable("Filiais");
-        builder.HasKey(f => f.IdFilial);
+        builder.ToTable("Filiais"); // Nome da tabela
 
-        builder.Property(f => f.NomeFilial).IsRequired().HasMaxLength(100).HasColumnType("varchar(100)");
-        builder.HasIndex(f => f.NomeFilial).IsUnique();
-       
+        builder.HasKey(f => f.Id);
+
+        builder.Property(f => f.NomeFilial)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(f => f.DataCriacaoFilial)
+             .HasColumnType("datetime");
+
+        builder.Property(f => f.Habilitada)
+             .IsRequired();
+
+        builder.HasOne(f => f.PessoaCliente)
+            .WithMany(pf => pf.Filiais)
+            .HasForeignKey(f => f.PessoaClienteId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

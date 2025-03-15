@@ -24,4 +24,5 @@ public interface IPessoaClienteVinculadaServices
     /// </summary>
     Task<List<PessoaClienteVinculadaDto>> ObterClientesVinculadosPorUsuarioAsync(Guid usuarioVinculadoId);
     Task<IEnumerable<PessoaClienteVinculadaDto>> GetPessoasVinculadas();
+    Task<IEnumerable<PessoaClienteVinculadaDto>> GetVinculosPessoa(Guid idPessoaVinculada);
 }

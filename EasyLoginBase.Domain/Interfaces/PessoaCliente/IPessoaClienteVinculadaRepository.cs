@@ -31,4 +31,5 @@ public interface IPessoaClienteVinculadaRepository
     /// </summary>
     Task<List<PessoaClienteVinculadaEntity>> ObterClientesVinculadosPorUsuarioAsync(Guid usuarioVinculadoId);
     Task<IEnumerable<PessoaClienteVinculadaEntity>> GetPessoasVinculas();
+    Task<IEnumerable<PessoaClienteVinculadaEntity>> GetVinculosPessoas(Guid idPessoaVinculada);
 }

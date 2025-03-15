@@ -2,10 +2,10 @@
 
 namespace EasyLoginBase.Domain.Interfaces.Filial;
 
-public interface IFilialRepository<F> where F : FilialEntity
+public interface IFilialRepository
 {
-    Task<F> CreateFilialAsync(F filial);
-    Task<F> UpdateFilialAsync(F filial);
-    Task<IEnumerable<F>> SelectFilialAsync();
-    Task<IEnumerable<F>> SelectFilialAsync(Guid idFilial);
+    Task<FilialEntity> CriarFilialAsync(FilialEntity filial);
+    FilialEntity AlterarFilialAsync(FilialEntity filial);
+    Task<FilialEntity?> SelecionarFilialPorId(Guid idFilial);
+    Task<IEnumerable<FilialEntity>> SelecionarFiliaisPorIdPessoaCliente(Guid idPessoaCliente);
 }

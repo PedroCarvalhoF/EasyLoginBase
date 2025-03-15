@@ -1,5 +1,4 @@
-﻿using EasyLoginBase.Domain.Entities.Filial;
-using EasyLoginBase.Domain.Entities.PessoaCliente;
+﻿using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 
@@ -11,7 +10,7 @@ public interface IUnitOfWork
     void FinalizarContexto();
 
     //repository
-    IFilialRepository<FilialEntity> FilialRepository { get; }
+    IFilialRepository FilialRepository { get; }
     IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository { get; }
     IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository { get; }
 }

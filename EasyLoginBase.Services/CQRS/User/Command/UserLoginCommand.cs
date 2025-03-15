@@ -22,7 +22,6 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
         public UserLoginCommandHandler(SignInManager<UserEntity> signInManager,
                            UserManager<UserEntity> userManager,
                            IOptions<JwtOptions> jwtOptions)
-
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -70,17 +69,16 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
 
             return new UserDtoLoginResponse(accessToken, refreshToken);
         }
-
         private async Task<IList<Claim>> ObterClaims(UserEntity user, bool adicionarClaimsUsuario)
         {
             var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Nbf, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
-        };
+                        {
+                            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                            new Claim(JwtRegisteredClaimNames.Nbf, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
+                            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+                        };
 
             if (adicionarClaimsUsuario)
             {
@@ -88,7 +86,6 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
                 foreach (var role in await _userManager.GetRolesAsync(user))
                     claims.Add(new Claim("roles", role));
             }
-
             return claims;
         }
 

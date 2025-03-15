@@ -4,7 +4,6 @@ using EasyLoginBase.Application.Dto.PessoaClienteVinculada;
 using EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
 using EasyLoginBase.Application.Tools;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace EasyLoginBase.Controllers;
 
@@ -46,4 +45,22 @@ public class PessoaClienteVinculadaController(IPessoaClienteVinculadaServices _s
             return new ReturnActionResult<PessoaClienteDto>().BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("pessoa-vinculo/{idPessoaVinculada}")]
+
+    public async Task<ActionResult<RequestResult<IEnumerable<PessoaClienteVinculadaDto>>>> GetVinculosPessoa(Guid idPessoaVinculada)
+    {
+        try
+        {
+            IEnumerable<PessoaClienteVinculadaDto> result = await _services.GetVinculosPessoa(idPessoaVinculada);
+
+            return new ReturnActionResult<IEnumerable<PessoaClienteVinculadaDto>>().ParseToActionResult(RequestResult<IEnumerable<PessoaClienteVinculadaDto>>.Ok(result));
+        }
+        catch (Exception ex)
+        {
+
+            return new ReturnActionResult<PessoaClienteDto>().BadRequest(ex.Message);
+        }
+    }
+
 }

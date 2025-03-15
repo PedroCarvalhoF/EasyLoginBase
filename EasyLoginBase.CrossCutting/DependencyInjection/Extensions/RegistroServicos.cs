@@ -1,5 +1,4 @@
-﻿using EasyLoginBase.Application.Dto.Filial;
-using EasyLoginBase.Application.Dto.PessoaCliente;
+﻿using EasyLoginBase.Application.Dto.PessoaCliente;
 using EasyLoginBase.Application.Services.Intefaces;
 using EasyLoginBase.Application.Services.Intefaces.PessoaCliente;
 using EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
@@ -14,9 +13,9 @@ namespace EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
 public static class RegistroServicos
 {
     public static void ConfigurarServicos(this IServiceCollection serviceCollection)
-    {        
+    {
         serviceCollection.AddTransient<IEmailService, EmailService>();
-        serviceCollection.AddTransient<IFilialServices<FilialDto>, FilialServices>();
+        serviceCollection.AddTransient<IFilialServices, FilialServices>();
         serviceCollection.AddTransient<IPessoaClienteServices<PessoaClienteDto>, PessoaClienteServices>();
         serviceCollection.AddTransient<IPessoaClienteVinculadaServices, PessoaClienteVinculadaServices>();
     }

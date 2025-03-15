@@ -8,12 +8,10 @@ namespace EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 public class PessoaClienteVinculadaRepository : IPessoaClienteVinculadaRepository
 {
     private readonly MyContext _context;
-
     public PessoaClienteVinculadaRepository(MyContext context)
     {
         _context = context;
     }
-
     public async Task<PessoaClienteVinculadaEntity> AdicionarUsuarioVinculadoAsync(PessoaClienteVinculadaEntity pessoaVinculadaEntity)
     {
         var vinculo = new PessoaClienteVinculadaEntity
@@ -26,7 +24,6 @@ public class PessoaClienteVinculadaRepository : IPessoaClienteVinculadaRepositor
         await _context.PessoasClientesVinculadas.AddAsync(vinculo);
         return vinculo;
     }
-
     public async Task<PessoaClienteVinculadaEntity> AlterarStatusAcessoAsync(Guid id, bool acessoPermitido)
     {
         var vinculo = await _context.PessoasClientesVinculadas.FindAsync(id);
@@ -39,7 +36,6 @@ public class PessoaClienteVinculadaRepository : IPessoaClienteVinculadaRepositor
         _context.PessoasClientesVinculadas.Update(vinculo);
         return vinculo;
     }
-
     public async Task<IEnumerable<PessoaClienteVinculadaEntity>> GetPessoasVinculas()
     {
         return await _context.PessoasClientesVinculadas
@@ -47,7 +43,23 @@ public class PessoaClienteVinculadaRepository : IPessoaClienteVinculadaRepositor
             .Include(psv => psv.UsuarioVinculado)
             .ToListAsync();
     }
+    public async Task<IEnumerable<PessoaClienteVinculadaEntity>> GetVinculosPessoas(Guid idPessoaVinculada)
+    {
+        try
+        {
+            var entities = await _context.PessoasClientesVinculadas
+                .Where(v => v.UsuarioVinculadoId == idPessoaVinculada)
+                .Include(v => v.PessoaClienteEntity)
+                .Include(psv => psv.UsuarioVinculado)
+                .ToListAsync();
 
+            return entities;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
     public async Task<List<PessoaClienteVinculadaEntity>> ObterClientesVinculadosPorUsuarioAsync(Guid usuarioVinculadoId)
     {
         return await _context.PessoasClientesVinculadas
@@ -56,7 +68,6 @@ public class PessoaClienteVinculadaRepository : IPessoaClienteVinculadaRepositor
             .Include(psv => psv.UsuarioVinculado)
             .ToListAsync();
     }
-
     public async Task<List<PessoaClienteVinculadaEntity>> ObterUsuariosVinculadosPorClienteAsync(Guid pessoaClienteId)
     {
         return await _context.PessoasClientesVinculadas

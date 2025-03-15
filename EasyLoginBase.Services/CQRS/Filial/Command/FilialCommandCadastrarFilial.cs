@@ -9,7 +9,7 @@ namespace EasyLoginBase.Services.CQRS.Filial.Command;
 
 public class FilialCommandCadastrarFilial : BaseCommands<FilialDto>
 {
-    public required FiliaDtoCreateRequest FiliaDtoCreateRequest { get; set; }
+    public required FilialDtoCreate FiliaDtoCreateRequest { get; set; }
 
     public class FilialCommandCadastrarFilialHandler : IRequestHandler<FilialCommandCadastrarFilial, RequestResult<FilialDto>>
     {
@@ -24,9 +24,9 @@ public class FilialCommandCadastrarFilial : BaseCommands<FilialDto>
         {
             try
             {
-                var filialEntity = FilialEntity.Create(request.FiliaDtoCreateRequest.NomeFilial);
+                var filialEntity = FilialEntity.CriarFilial(request.FiliaDtoCreateRequest.PessoaClienteId, request.FiliaDtoCreateRequest.NomeFilial);
 
-                var result = await _repository.FilialRepository.CreateFilialAsync(filialEntity);
+                var result = await _repository.FilialRepository.CriarFilialAsync(filialEntity);
 
                 if (!await _repository.CommitAsync())
                     return RequestResult<FilialDto>.BadRequest("Não foi possível cadastrar nova filial.");

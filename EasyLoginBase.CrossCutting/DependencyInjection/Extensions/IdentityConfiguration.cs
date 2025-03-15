@@ -17,8 +17,7 @@ public static class IdentityConfiguration
 
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
         var serverVersionAutoDetec = ServerVersion.AutoDetect(connectionString);
-
-        // string? desenvolvimento = "Server=localhost;Port=3306;DataBase=desenvolvimento;Uid=root;password=010203;";
+        
         serviceCollection.
         AddDbContext<MyContext>(options =>
                      options.UseMySql(connectionString, serverVersionAutoDetec));

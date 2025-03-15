@@ -13,7 +13,7 @@ namespace EasyLoginBase.InfrastructureData.Repository;
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly MyContext _context;
-    private IFilialRepository<FilialEntity>? _filialRepository;
+    private IFilialRepository? _filialRepository;
     private IPessoaClienteRepository<PessoaClienteEntity>? _pessoaClienteRepository;
     private IPessoaClienteVinculadaRepository? _pessoaClienteVinculadaRepository;
     public UnitOfWork(MyContext context)
@@ -57,7 +57,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     }
 
     //Filial
-    public IFilialRepository<FilialEntity> FilialRepository
+    public IFilialRepository FilialRepository
     {
         get
         {

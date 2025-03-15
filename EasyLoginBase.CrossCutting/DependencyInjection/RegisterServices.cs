@@ -25,9 +25,10 @@ public static class RegisterServices
 
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        serviceCollection.AddTransient<IFilialRepository<FilialEntity>, FilialRepository>();
-        serviceCollection.AddTransient<IPessoaClienteRepository<PessoaClienteEntity>, PessoaClienteRepository>();
-        serviceCollection.AddTransient<IPessoaClienteVinculadaRepository, PessoaClienteVinculadaRepository>();
+        // Alterado para Scoped para melhor uso do DbContext
+        serviceCollection.AddScoped<IFilialRepository, FilialRepository>();
+        serviceCollection.AddScoped<IPessoaClienteRepository<PessoaClienteEntity>, PessoaClienteRepository>();
+        serviceCollection.AddScoped<IPessoaClienteVinculadaRepository, PessoaClienteVinculadaRepository>();
 
         var myhandlers = AppDomain.CurrentDomain.Load("EasyLoginBase.Services");
         serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myhandlers));

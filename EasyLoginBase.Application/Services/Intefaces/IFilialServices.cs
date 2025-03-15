@@ -2,10 +2,9 @@
 
 namespace EasyLoginBase.Application.Services.Intefaces;
 
-public interface IFilialServices<F> where F : FilialDto
+public interface IFilialServices
 {
-    Task<F> CreateFilialAsync(FiliaDtoCreateRequest filial);
-    Task<F> UpdateFilialAsync(FilialDtoUpdateRequest filial);
-    Task<IEnumerable<F>> SelectFilialAsync();
-    Task<IEnumerable<F>> SelectFilialAsync(Guid idFilial);
+    Task<FilialDto> CriarFilialAsync(FilialDtoCreate filialCreate);    
+    Task<FilialDto?> SelecionarFilialPorId(Guid idFilial);
+    Task<IEnumerable<FilialDto>> SelecionarFiliaisPorIdPessoaCliente(Guid idPessoaCliente);
 }

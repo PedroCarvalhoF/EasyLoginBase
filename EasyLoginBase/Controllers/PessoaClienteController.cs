@@ -19,19 +19,7 @@ namespace EasyLoginBase.Controllers
 
             var result = await _mediator.Send(command);
             return new ReturnActionResult<PessoaClienteDto>().ParseToActionResult(result);
-        }
-
-        [HttpPost("vincular-pessoa-ao-cliente")]
-        public async Task<ActionResult<RequestResult<PessoaClienteDto>>> VincularUsuarioCliente([FromBody] PessoaClienteCommandCreate command)
-        {
-            if (command == null)
-                return new ReturnActionResult<PessoaClienteDto>().BadRequest("Parametros inváidos.");
-
-            var result = await _mediator.Send(command);
-            return new ReturnActionResult<PessoaClienteDto>().ParseToActionResult(result);
-        }
-
-
+        }        
         [HttpGet("consultar-clientes")]
         public async Task<ActionResult<RequestResult<IEnumerable<PessoaClienteDto>>>> ConsultarClientes()
         {

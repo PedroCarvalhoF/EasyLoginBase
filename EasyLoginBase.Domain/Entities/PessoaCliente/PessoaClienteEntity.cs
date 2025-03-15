@@ -1,4 +1,5 @@
-﻿using EasyLoginBase.Domain.Entities.User;
+﻿using EasyLoginBase.Domain.Entities.Filial;
+using EasyLoginBase.Domain.Entities.User;
 
 namespace EasyLoginBase.Domain.Entities.PessoaCliente;
 
@@ -12,6 +13,8 @@ public class PessoaClienteEntity
     public DateTime DataVencimentoUso { get; set; }
 
     public virtual ICollection<PessoaClienteVinculadaEntity>? UsuariosVinculados { get; set; }
+    //uma pessoa cliente pode ter varias filiais
+    public virtual ICollection<FilialEntity>? Filiais { get; set; }
 
     public bool EntidadeValidada => ValidarEntidade();
 

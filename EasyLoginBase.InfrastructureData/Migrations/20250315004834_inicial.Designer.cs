@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyLoginBase.InfrastructureData.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20250306221018_First")]
-    partial class First
+    [Migration("20250315004834_inicial")]
+    partial class inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,79 @@ namespace EasyLoginBase.InfrastructureData.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("EasyLoginBase.Domain.Entities.Filial.FilialEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("DataCriacaoFilial")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("Habilitada")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("NomeFilial")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<Guid>("PessoaClienteId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaClienteId");
+
+                    b.ToTable("Filiais", (string)null);
+                });
+
+            modelBuilder.Entity("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("DataAbertura")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DataVencimentoUso")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NomeFantasia")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<Guid>("UsuarioEntityClienteId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioEntityClienteId");
+
+                    b.ToTable("PessoaClientes", (string)null);
+                });
+
+            modelBuilder.Entity("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteVinculadaEntity", b =>
+                {
+                    b.Property<Guid>("PessoaClienteEntityId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UsuarioVinculadoId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("AcessoPermitido")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("PessoaClienteEntityId", "UsuarioVinculadoId");
+
+                    b.HasIndex("UsuarioVinculadoId");
+
+                    b.ToTable("PessoasClientesVinculadas", (string)null);
+                });
 
             modelBuilder.Entity("EasyLoginBase.Domain.Entities.User.RoleEntity", b =>
                 {
@@ -226,6 +299,47 @@ namespace EasyLoginBase.InfrastructureData.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EasyLoginBase.Domain.Entities.Filial.FilialEntity", b =>
+                {
+                    b.HasOne("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteEntity", "PessoaCliente")
+                        .WithMany("Filiais")
+                        .HasForeignKey("PessoaClienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PessoaCliente");
+                });
+
+            modelBuilder.Entity("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteEntity", b =>
+                {
+                    b.HasOne("EasyLoginBase.Domain.Entities.User.UserEntity", "UsuarioEntityCliente")
+                        .WithMany("PessoasClientes")
+                        .HasForeignKey("UsuarioEntityClienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UsuarioEntityCliente");
+                });
+
+            modelBuilder.Entity("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteVinculadaEntity", b =>
+                {
+                    b.HasOne("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteEntity", "PessoaClienteEntity")
+                        .WithMany("UsuariosVinculados")
+                        .HasForeignKey("PessoaClienteEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EasyLoginBase.Domain.Entities.User.UserEntity", "UsuarioVinculado")
+                        .WithMany("ClientesVinculados")
+                        .HasForeignKey("UsuarioVinculadoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PessoaClienteEntity");
+
+                    b.Navigation("UsuarioVinculado");
+                });
+
             modelBuilder.Entity("EasyLoginBase.Domain.Entities.User.UserRoleEntity", b =>
                 {
                     b.HasOne("EasyLoginBase.Domain.Entities.User.RoleEntity", "Role")
@@ -281,6 +395,13 @@ namespace EasyLoginBase.InfrastructureData.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EasyLoginBase.Domain.Entities.PessoaCliente.PessoaClienteEntity", b =>
+                {
+                    b.Navigation("Filiais");
+
+                    b.Navigation("UsuariosVinculados");
+                });
+
             modelBuilder.Entity("EasyLoginBase.Domain.Entities.User.RoleEntity", b =>
                 {
                     b.Navigation("UserRoles");
@@ -288,6 +409,10 @@ namespace EasyLoginBase.InfrastructureData.Migrations
 
             modelBuilder.Entity("EasyLoginBase.Domain.Entities.User.UserEntity", b =>
                 {
+                    b.Navigation("ClientesVinculados");
+
+                    b.Navigation("PessoasClientes");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

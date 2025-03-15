@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EasyLoginBase.InfrastructureData.Migrations
 {
     /// <inheritdoc />
-    public partial class First : Migration
+    public partial class inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -191,6 +192,78 @@ namespace EasyLoginBase.InfrastructureData.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "PessoaClientes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UsuarioEntityClienteId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    NomeFantasia = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataAbertura = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DataVencimentoUso = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PessoaClientes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PessoaClientes_AspNetUsers_UsuarioEntityClienteId",
+                        column: x => x.UsuarioEntityClienteId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Filiais",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PessoaClienteId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    NomeFilial = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataCriacaoFilial = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Habilitada = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Filiais", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Filiais_PessoaClientes_PessoaClienteId",
+                        column: x => x.PessoaClienteId,
+                        principalTable: "PessoaClientes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PessoasClientesVinculadas",
+                columns: table => new
+                {
+                    PessoaClienteEntityId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UsuarioVinculadoId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    AcessoPermitido = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PessoasClientesVinculadas", x => new { x.PessoaClienteEntityId, x.UsuarioVinculadoId });
+                    table.ForeignKey(
+                        name: "FK_PessoasClientesVinculadas_AspNetUsers_UsuarioVinculadoId",
+                        column: x => x.UsuarioVinculadoId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PessoasClientesVinculadas_PessoaClientes_PessoaClienteEntity~",
+                        column: x => x.PessoaClienteEntityId,
+                        principalTable: "PessoaClientes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -227,6 +300,21 @@ namespace EasyLoginBase.InfrastructureData.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Filiais_PessoaClienteId",
+                table: "Filiais",
+                column: "PessoaClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PessoaClientes_UsuarioEntityClienteId",
+                table: "PessoaClientes",
+                column: "UsuarioEntityClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PessoasClientesVinculadas_UsuarioVinculadoId",
+                table: "PessoasClientesVinculadas",
+                column: "UsuarioVinculadoId");
         }
 
         /// <inheritdoc />
@@ -248,7 +336,16 @@ namespace EasyLoginBase.InfrastructureData.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Filiais");
+
+            migrationBuilder.DropTable(
+                name: "PessoasClientesVinculadas");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "PessoaClientes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

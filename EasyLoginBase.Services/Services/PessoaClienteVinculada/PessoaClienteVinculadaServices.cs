@@ -14,7 +14,6 @@ public class PessoaClienteVinculadaServices : IPessoaClienteVinculadaServices
     {
         _repository = repository;
     }
-
     public async Task<PessoaClienteVinculadaDto> AdicionarUsuarioVinculadoAsync(PessoaClienteVinculadaDtoCreate pessoaClienteVinculadaDtoCreate)
     {
 
@@ -32,12 +31,10 @@ public class PessoaClienteVinculadaServices : IPessoaClienteVinculadaServices
 
         throw new Exception("Erro ao adicionar usuário vinculado.");
     }
-
     public Task<PessoaClienteVinculadaDto> AlterarStatusAcessoAsync(PessoaClienteVinculadaDtoUpdate pessoaClienteVinculadaDtoUpdate)
     {
         throw new NotImplementedException();
     }
-
     public async Task<IEnumerable<PessoaClienteVinculadaDto>> GetPessoasVinculadas()
     {
         try
@@ -47,6 +44,21 @@ public class PessoaClienteVinculadaServices : IPessoaClienteVinculadaServices
             IEnumerable<PessoaClienteVinculadaDto> dtos = DtoMapper.ParsePessoaClienteVinculada(entities);
 
             return dtos;
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task<IEnumerable<PessoaClienteVinculadaDto>> GetVinculosPessoa(Guid idPessoaVinculada)
+    {
+        try
+        {
+            IEnumerable<PessoaClienteVinculadaEntity> entities = await _repository.PessoaClienteVinculadaRepository.GetVinculosPessoas(idPessoaVinculada);
+
+            return DtoMapper.ParsePessoaClienteVinculada(entities);
         }
         catch (Exception ex)
         {

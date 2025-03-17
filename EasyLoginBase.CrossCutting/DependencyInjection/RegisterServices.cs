@@ -22,6 +22,7 @@ public static class RegisterServices
         serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
         serviceCollection.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
+        serviceCollection.AddScoped(typeof(IBaseClienteRepository<>), typeof(BaseClienteRepository<>)); 
 
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 

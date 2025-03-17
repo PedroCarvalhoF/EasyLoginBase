@@ -1,5 +1,6 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
+using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.InfrastructureData.Mapping;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,7 @@ public class MyContext : IdentityDbContext
     public DbSet<FilialEntity> Filiais { get; set; }
     public DbSet<PessoaClienteEntity> PessoaClientes { get; set; }
     public DbSet<PessoaClienteVinculadaEntity> PessoasClientesVinculadas { get; set; }
+    public DbSet<CategoriaProdutoEntity> CategoriasProdutos { get; set; }
     public MyContext(DbContextOptions<MyContext> options) : base(options)
     {
 
@@ -23,9 +25,9 @@ public class MyContext : IdentityDbContext
         modelBuilder.ApplyConfiguration(new FilialMap());
         modelBuilder.ApplyConfiguration(new PessoaClienteMap());
         modelBuilder.ApplyConfiguration(new PessoaClienteVinculadaMap());
+        modelBuilder.ApplyConfiguration(new CategoriaProdutoMap());
 
         base.OnModelCreating(modelBuilder);
-
 
         modelBuilder.Entity<UserRoleEntity>(userRole =>
         {

@@ -20,7 +20,6 @@ public class UserEntity : IdentityUser<Guid>
         Email = email;
         EmailConfirmed = true;
     }
-
     public static UserEntity Create(string nome, string sobreNome, string userName, string email)
         => new(nome, sobreNome, userName, email);
 }

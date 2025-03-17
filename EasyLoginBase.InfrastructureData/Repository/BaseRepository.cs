@@ -1,4 +1,5 @@
 ﻿using EasyLoginBase.Domain.Entities;
+using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.InfrastructureData.Context;
 using Microsoft.EntityFrameworkCore;
@@ -67,7 +68,7 @@ public class BaseRepository<T, F> : IBaseRepository<T, F> where T : BaseEntity w
             foreach (var item in itens)
             {
                 // Tenta encontrar a entidade existente pelo Id
-                var getItem = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
+                var getItem = await _dataset.SingleOrDefaultAsync(p => p.Id.Equals(item. Id));
 
                 // Verifica se a entidade foi encontrada
                 if (getItem != null)

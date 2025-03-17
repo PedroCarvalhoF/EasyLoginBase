@@ -35,7 +35,5 @@ public class PessoaClienteEntity
     }
 
     public static PessoaClienteEntity CriarUsuarioPessoaCliente(Guid usuarioEntityClienteId, string nomeFantasia)
-    {
-        return new PessoaClienteEntity(usuarioEntityClienteId, nomeFantasia);
-    }
+    => new PessoaClienteEntity(usuarioEntityClienteId, nomeFantasia);
 }

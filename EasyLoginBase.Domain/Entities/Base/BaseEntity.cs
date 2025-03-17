@@ -1,4 +1,4 @@
-﻿namespace EasyLoginBase.Domain.Entities;
+﻿namespace EasyLoginBase.Domain.Entities.Base;
 
 public abstract class BaseEntity
 {

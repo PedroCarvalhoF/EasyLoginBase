@@ -14,7 +14,7 @@ public class UsuarioCommandCriarContaSemConfirmacao : IRequest<RequestResult<Use
 {
     public required UserDtoCriarContaRequest UserDtoCriarContaRequest { get; set; }
 
-    public class UsuarioCommandCriarContaSemConfirmacaoHandler(UserManager<UserEntity> _userManager, IEmailService _emailService)
+    public class UsuarioCommandCriarContaSemConfirmacaoHandler(UserManager<UserEntity> _userManager)
      : IRequestHandler<UsuarioCommandCriarContaSemConfirmacao, RequestResult<UserDto>>
     {
         public async Task<RequestResult<UserDto>> Handle(UsuarioCommandCriarContaSemConfirmacao request, CancellationToken cancellationToken)
@@ -25,32 +25,41 @@ public class UsuarioCommandCriarContaSemConfirmacao : IRequest<RequestResult<Use
                 if (userExists != null)
                     return RequestResult<UserDto>.BadRequest("E-mail já está em uso");
 
-                // Criar usuário com e-mail não confirmado e bloqueado
+                // Criar usuário com e-mail não confirmado e desbloqueado
                 var userCreateEntity = UserEntity.Create(
                     request.UserDtoCriarContaRequest.Nome,
                     request.UserDtoCriarContaRequest.SobreNome,
                     request.UserDtoCriarContaRequest.Email,
                     request.UserDtoCriarContaRequest.Email
-                );
+                );               
 
-                userCreateEntity.EmailConfirmed = true; // Não confirmado
-                userCreateEntity.LockoutEnabled = false; // Bloqueio ativado
-                userCreateEntity.LockoutEnd = DateTimeOffset.Now.AddMonths(1); // Bloqueado indefinidamente
+                userCreateEntity.EmailConfirmed = false; // Não confirmado
+                userCreateEntity.LockoutEnabled = false; // NÃO permite bloqueio automático
+                
 
                 var userCreateResult = await _userManager.CreateAsync(userCreateEntity, request.UserDtoCriarContaRequest.Senha);
                 if (!userCreateResult.Succeeded)
                     return RequestResult<UserDto>.BadRequest(userCreateResult.Errors.Select(r => r.Description).FirstOrDefault()!);
+                
+                // **Garantir que o usuário está desbloqueado**
+                await _userManager.SetLockoutEndDateAsync(userCreateEntity, null);
 
-                // Gerar token de confirmação
-                var token = GerarToken();
-                await _userManager.SetAuthenticationTokenAsync(userCreateEntity, Tokens.Default, Tokens.AberturaContaToken, token);
+                userCreateEntity.LockoutEnabled = false;
+                await _userManager.UpdateAsync(userCreateEntity);
 
-                // Enviar e-mail de confirmação
-                var emailDto = EmailDto.ConfirmacaoEmail(userCreateEntity.Email!, token);
-                await _emailService.EnviarEmailAsync(emailDto);
+
+                var user = await _userManager.FindByEmailAsync(userCreateEntity.Email);
+                if (user is not null && user.LockoutEnd != null)
+                {
+                    await _userManager.SetLockoutEndDateAsync(user, null);
+                    await _userManager.UpdateAsync(user);
+                }
+
+
+                
 
                 var userDto = DtoMapper.ParceUserDto(userCreateEntity);
-                return RequestResult<UserDto>.Ok(userDto, "Cadastro realizado com sucesso! Verifique seu e-mail para confirmar a conta.");
+                return RequestResult<UserDto>.Ok(userDto, "Cadastro realizado com sucesso, sem confirmação de e-email.");
             }
             catch (Exception ex)
             {

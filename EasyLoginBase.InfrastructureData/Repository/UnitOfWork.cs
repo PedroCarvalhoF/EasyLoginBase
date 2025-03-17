@@ -1,4 +1,4 @@
-﻿using EasyLoginBase.Domain.Entities.Filial;
+﻿using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
@@ -7,78 +7,56 @@ using EasyLoginBase.InfrastructureData.Context;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Concurrent;
 
-namespace EasyLoginBase.InfrastructureData.Repository;
-
-public class UnitOfWork : IUnitOfWork, IDisposable
+namespace EasyLoginBase.InfrastructureData.Repository
 {
-    private readonly MyContext _context;
-    private IFilialRepository? _filialRepository;
-    private IPessoaClienteRepository<PessoaClienteEntity>? _pessoaClienteRepository;
-    private IPessoaClienteVinculadaRepository? _pessoaClienteVinculadaRepository;
-    public UnitOfWork(MyContext context)
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        _context = context;
-    }
-    public async Task<bool> CommitAsync()
-    {
-        try
+        private readonly MyContext _context;
+        private readonly ConcurrentDictionary<Type, object> _repositories = new();
+
+        private IFilialRepository? _filialRepository;
+        private IPessoaClienteRepository<PessoaClienteEntity>? _pessoaClienteRepository;
+        private IPessoaClienteVinculadaRepository? _pessoaClienteVinculadaRepository;
+
+        public UnitOfWork(MyContext context)
         {
-            var result = await _context.SaveChangesAsync();
-            if (result > 0)
-                return true;
-            return false;
+            _context = context;
         }
-        catch (DbUpdateException ex)
+
+        public async Task<bool> CommitAsync()
         {
-            if (ex.InnerException!.Message != null)
+            try
+            {
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is not null)
+            {
                 throw new Exception(ex.InnerException.Message);
+            }
+        }
 
-            throw new Exception(ex.Message);
-        }
-        catch (Exception ex)
+        public void Dispose()
         {
+            _context.Dispose();
+            GC.SuppressFinalize(this);
+        }
 
-            throw new Exception(ex.Message);
-        }
-        finally
+        public void FinalizarContexto()
         {
+            Dispose();
+        }
+        public IBaseClienteRepository<T> GetRepository<T>() where T : BaseClienteEntity
+        {
+            return (IBaseClienteRepository<T>)_repositories.GetOrAdd(typeof(T), _ =>
+                new BaseClienteRepository<T>(_context));
+        }
 
-        }
-    }
-    public void Dispose()
-    {
-        _context.Dispose();
-        GC.SuppressFinalize(this);
-    }
-    public void FinalizarContexto()
-    {
-        Dispose();
-    }
+        public IFilialRepository FilialRepository => _filialRepository ??= new FilialRepository(_context);
 
-    //Filial
-    public IFilialRepository FilialRepository
-    {
-        get
-        {
-            return _filialRepository = _filialRepository ?? new FilialRepository(_context);
-        }
-    }
-    public IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository
-    {
-        get
-        {
-            return _pessoaClienteRepository = _pessoaClienteRepository ?? new PessoaClienteRepository(_context);
-        }
-    }
-    public IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository
-    {
-        get
-        {
-            return _pessoaClienteVinculadaRepository = _pessoaClienteVinculadaRepository ?? new PessoaClienteVinculadaRepository(_context);
-        }
-    }
+        public IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository => _pessoaClienteRepository ??= new PessoaClienteRepository(_context);
 
-    //REPOSITORIOS
-    //BASE REPOSITORIOS
+        public IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository => _pessoaClienteVinculadaRepository ??= new PessoaClienteVinculadaRepository(_context);
+    }
 }

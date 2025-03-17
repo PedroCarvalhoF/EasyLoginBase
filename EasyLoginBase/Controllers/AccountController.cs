@@ -43,7 +43,7 @@ public class AccountController(IMediator _mediator) : ControllerBase
     /// </summary>
     [AllowAnonymous]
     [HttpPost("criar-conta-sem-confirmacao-email")]
-    public async Task<ActionResult<RequestResult<UserDto>>> CadastrarUsuarioSemConfirmacao([FromBody] UserCriarContaCommand command)
+    public async Task<ActionResult<RequestResult<UserDto>>> CadastrarUsuarioSemConfirmacao([FromBody] UsuarioCommandCriarContaSemConfirmacao command)
     {
         if (command == null)
             return BadRequest("Requisição inválida.");

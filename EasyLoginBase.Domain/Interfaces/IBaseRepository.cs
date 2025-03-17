@@ -1,4 +1,4 @@
-﻿using EasyLoginBase.Domain.Entities;
+﻿using EasyLoginBase.Domain.Entities.Base;
 
 namespace EasyLoginBase.Domain.Interfaces;
 

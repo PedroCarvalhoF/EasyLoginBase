@@ -1,4 +1,5 @@
-﻿using EasyLoginBase.Domain.Entities.PessoaCliente;
+﻿using EasyLoginBase.Domain.Entities.Base;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 
@@ -9,8 +10,11 @@ public interface IUnitOfWork
     Task<bool> CommitAsync();
     void FinalizarContexto();
 
-    //repository
+    // Repositórios específicos
     IFilialRepository FilialRepository { get; }
     IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository { get; }
     IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository { get; }
+    
+    // Método para obter um repositório genérico
+    IBaseClienteRepository<T> GetRepository<T>() where T : BaseClienteEntity;
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EasyLoginBase.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PessoaClienteController(IMediator _mediator) : ControllerBase
     {

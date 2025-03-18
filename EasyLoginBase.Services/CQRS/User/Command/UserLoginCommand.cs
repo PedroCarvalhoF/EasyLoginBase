@@ -101,7 +101,7 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
             if (pessoaClienteVinculo != null)
             {
                 foreach (var pessoaVinculo in pessoaClienteVinculo)
-                {
+                {                    
                     claims.Add(new Claim("ClienteIdVinculo", pessoaVinculo.PessoaClienteEntityId.ToString()));
                 }
             }

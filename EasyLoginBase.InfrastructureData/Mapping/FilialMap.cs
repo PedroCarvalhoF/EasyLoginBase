@@ -3,25 +3,30 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EasyLoginBase.InfrastructureData.Mapping;
-public class FilialMap : IEntityTypeConfiguration<FilialEntity>
+public class FilialMap : BaseClienteEntityMap<FilialEntity>, IEntityTypeConfiguration<FilialEntity>
 {
     public void Configure(EntityTypeBuilder<FilialEntity> builder)
     {
-        builder.ToTable("Filiais"); // Nome da tabela
+        //configuração das propriedades base
+        ConfigureBaseProperties(builder, "Filiais");
 
-        builder.HasKey(f => f.Id);
+        //pessoa cliente id
+        builder
+            .Property(f => f.PessoaClienteId)
+            .IsRequired();
 
-        builder.Property(f => f.NomeFilial)
+        //nome filial
+        builder
+            .Property(f => f.NomeFilial)
             .IsRequired()
             .HasMaxLength(100);
+        builder
+            .HasIndex(f => f.NomeFilial)
+            .IsUnique();
 
-        builder.Property(f => f.DataCriacaoFilial)
-             .HasColumnType("datetime");
-
-        builder.Property(f => f.Habilitada)
-             .IsRequired();
-
-        builder.HasOne(f => f.PessoaCliente)
+        //relacionamento com pessoa cliente
+        builder
+            .HasOne(f => f.PessoaCliente)
             .WithMany(pf => pf.Filiais)
             .HasForeignKey(f => f.PessoaClienteId)
             .OnDelete(DeleteBehavior.Restrict);

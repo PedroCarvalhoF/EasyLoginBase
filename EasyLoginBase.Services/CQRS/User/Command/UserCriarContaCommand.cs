@@ -49,7 +49,7 @@ public class UserCriarContaCommand : IRequest<RequestResult<UserDto>>
                 var emailDto = EmailDto.ConfirmacaoEmail(userCreateEntity.Email!, token);
                 await _emailService.EnviarEmailAsync(emailDto);
 
-                var userDto = DtoMapper.ParceUserDto(userCreateEntity);
+                var userDto = DtoMapper.ParseUserDto(userCreateEntity);
                 return RequestResult<UserDto>.Ok(userDto, "Cadastro realizado com sucesso! Verifique seu e-mail para confirmar a conta.");
             }
             catch (Exception ex)

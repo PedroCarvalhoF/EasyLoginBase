@@ -3,11 +3,8 @@
 public class FilialDtoCreate
 {
     public string NomeFilial { get; private set; }
-    public Guid PessoaClienteId { get; private set; }
-
-    public FilialDtoCreate(string nomeFilial, Guid pessoaClienteId)
+    public FilialDtoCreate(string nomeFilial)
     {
         NomeFilial = nomeFilial;
-        PessoaClienteId = pessoaClienteId;
     }
 }

@@ -58,7 +58,7 @@ public class UsuarioCommandCriarContaSemConfirmacao : IRequest<RequestResult<Use
 
                 
 
-                var userDto = DtoMapper.ParceUserDto(userCreateEntity);
+                var userDto = DtoMapper.ParseUserDto(userCreateEntity);
                 return RequestResult<UserDto>.Ok(userDto, "Cadastro realizado com sucesso, sem confirmação de e-email.");
             }
             catch (Exception ex)

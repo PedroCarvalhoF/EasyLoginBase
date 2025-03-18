@@ -2,10 +2,11 @@
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.InfrastructureData.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace EasyLoginBase.InfrastructureData.Repository.Filial;
 
-public class FilialRepository : IFilialRepository
+public class FilialRepository : IFilialRepository<FilialEntity, ClaimsPrincipal>
 {
     private readonly MyContext _context;
 
@@ -14,30 +15,23 @@ public class FilialRepository : IFilialRepository
         _context = context;
     }
 
-    public FilialEntity AlterarFilialAsync(FilialEntity filial)
+    public async Task<IEnumerable<FilialEntity>?> ConsultarFiliais(ClaimsPrincipal user, Guid clienteId)
     {
-        _context.Filiais.Update(filial);
-        return filial;
-    }
+        try
+        {
+            var entities = await _context.Filiais
+                .AsNoTracking()
+                .Where(x => x.ClienteId == clienteId)
+                .Include(pessoaCliente => pessoaCliente.PessoaCliente)
+                .OrderBy(f => f.NomeFilial)
+                .ToListAsync();
 
-    public async Task<FilialEntity> CriarFilialAsync(FilialEntity filial)
-    {
-        await _context.Filiais.AddAsync(filial);
-        return filial;
-    }
+            return entities;
+        }
+        catch (Exception ex)
+        {
 
-    public async Task<IEnumerable<FilialEntity>> SelecionarFiliaisPorIdPessoaCliente(Guid idPessoaCliente)
-    {
-        return await _context.Filiais
-            .AsNoTracking()
-            .Where(f => f.PessoaClienteId == idPessoaCliente)
-            .ToListAsync();
-    }
-
-    public async Task<FilialEntity?> SelecionarFilialPorId(Guid idFilial)
-    {
-        return await _context.Filiais
-            .AsNoTracking()
-            .FirstOrDefaultAsync(f => f.Id == idFilial);
+            throw new Exception(ex.Message);
+        }
     }
 }

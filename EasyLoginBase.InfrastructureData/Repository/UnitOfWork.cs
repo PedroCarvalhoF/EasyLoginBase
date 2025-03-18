@@ -1,4 +1,5 @@
 ﻿using EasyLoginBase.Domain.Entities.Base;
+using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
@@ -8,6 +9,7 @@ using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
+using System.Security.Claims;
 
 namespace EasyLoginBase.InfrastructureData.Repository
 {
@@ -16,7 +18,7 @@ namespace EasyLoginBase.InfrastructureData.Repository
         private readonly MyContext _context;
         private readonly ConcurrentDictionary<Type, object> _repositories = new();
 
-        private IFilialRepository? _filialRepository;
+        private IFilialRepository<FilialEntity, ClaimsPrincipal>? _filialRepository;
         private IPessoaClienteRepository<PessoaClienteEntity>? _pessoaClienteRepository;
         private IPessoaClienteVinculadaRepository? _pessoaClienteVinculadaRepository;
 
@@ -53,7 +55,7 @@ namespace EasyLoginBase.InfrastructureData.Repository
                 new BaseClienteRepository<T>(_context));
         }
 
-        public IFilialRepository FilialRepository => _filialRepository ??= new FilialRepository(_context);
+        public IFilialRepository<FilialEntity,ClaimsPrincipal> FilialRepository => _filialRepository ??= new FilialRepository(_context);
 
         public IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository => _pessoaClienteRepository ??= new PessoaClienteRepository(_context);
 

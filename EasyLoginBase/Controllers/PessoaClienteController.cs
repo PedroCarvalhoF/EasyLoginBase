@@ -19,7 +19,8 @@ namespace EasyLoginBase.Controllers
 
             var result = await _mediator.Send(command);
             return new ReturnActionResult<PessoaClienteDto>().ParseToActionResult(result);
-        }        
+        }
+
         [HttpGet("consultar-clientes")]
         public async Task<ActionResult<RequestResult<IEnumerable<PessoaClienteDto>>>> ConsultarClientes()
         {

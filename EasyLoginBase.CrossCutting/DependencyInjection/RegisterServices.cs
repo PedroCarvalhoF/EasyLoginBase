@@ -1,5 +1,6 @@
 ﻿using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
+using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Interfaces;
@@ -12,6 +13,7 @@ using EasyLoginBase.Services.Services.Produto;
 using EasyLoginBase.Services.Tools.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
 
 namespace EasyLoginBase.CrossCutting.DependencyInjection;
 
@@ -29,7 +31,7 @@ public static class RegisterServices
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Alterado para Scoped para melhor uso do DbContext
-        serviceCollection.AddScoped<IFilialRepository, FilialRepository>();
+        serviceCollection.AddScoped<IFilialRepository<FilialEntity, ClaimsPrincipal>, FilialRepository>();
         serviceCollection.AddScoped<IPessoaClienteRepository<PessoaClienteEntity>, PessoaClienteRepository>();
         serviceCollection.AddScoped<IPessoaClienteVinculadaRepository, PessoaClienteVinculadaRepository>();
         serviceCollection.AddScoped<IBaseClienteRepository<ProdutoEntity>, BaseClienteRepository<ProdutoEntity>>();

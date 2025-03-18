@@ -6,7 +6,7 @@ namespace EasyLoginBase.InfrastructureData.Mapping;
 
 public class BaseClienteEntityMap<TEntity> where TEntity : BaseClienteEntity
 {
-    public virtual void ConfigureBaseProperties(EntityTypeBuilder<TEntity> builder,string nomeTabela)
+    public virtual void ConfigureBaseProperties(EntityTypeBuilder<TEntity> builder, string nomeTabela)
     {
         // Configuração da tabela
         builder.ToTable(nomeTabela);

@@ -1,11 +1,9 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
+using System.Security.Claims;
 
 namespace EasyLoginBase.Domain.Interfaces.Filial;
 
-public interface IFilialRepository
+public interface IFilialRepository<F, USER> where F : FilialEntity where USER : ClaimsPrincipal
 {
-    Task<FilialEntity> CriarFilialAsync(FilialEntity filial);
-    FilialEntity AlterarFilialAsync(FilialEntity filial);
-    Task<FilialEntity?> SelecionarFilialPorId(Guid idFilial);
-    Task<IEnumerable<FilialEntity>> SelecionarFiliaisPorIdPessoaCliente(Guid idPessoaCliente);
+    Task<IEnumerable<FilialEntity>?> ConsultarFiliais(ClaimsPrincipal user, Guid clienteId);
 }

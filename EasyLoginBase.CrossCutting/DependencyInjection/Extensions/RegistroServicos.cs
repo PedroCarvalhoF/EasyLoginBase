@@ -1,5 +1,5 @@
 ﻿using EasyLoginBase.Application.Dto.PessoaCliente;
-using EasyLoginBase.Application.Services.Intefaces;
+using EasyLoginBase.Application.Services.Intefaces.Filial;
 using EasyLoginBase.Application.Services.Intefaces.PessoaCliente;
 using EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
 using EasyLoginBase.Application.Services.Intefaces.Produto;

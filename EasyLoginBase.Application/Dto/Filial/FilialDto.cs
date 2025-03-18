@@ -2,11 +2,11 @@
 
 public class FilialDto
 {
-    public Guid IdFilial { get; private set; }
+    public Guid Id { get;  set; }
     public string NomeFilial { get; set; }
-    public FilialDto(Guid idFilial, string nomeFilial)
+    public FilialDto(Guid id, string nomeFilial)
     {
-        IdFilial = idFilial;
+        Id = id;
         NomeFilial = nomeFilial;
     }
 }

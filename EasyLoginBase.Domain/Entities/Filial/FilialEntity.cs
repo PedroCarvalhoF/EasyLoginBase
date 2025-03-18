@@ -1,32 +1,38 @@
-﻿using EasyLoginBase.Domain.Entities.PessoaCliente;
+﻿using EasyLoginBase.Domain.Entities.Base;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
+using EasyLoginBase.Domain.Entities.Produto;
+using System.ComponentModel.DataAnnotations;
 
 namespace EasyLoginBase.Domain.Entities.Filial;
 
-public class FilialEntity
+public class FilialEntity : BaseClienteEntity
 {
-    public Guid Id { get; private set; }
-
     // Uma filial pertence a um cliente
     public Guid PessoaClienteId { get; private set; }
     public PessoaClienteEntity? PessoaCliente { get; private set; }
     public string? NomeFilial { get; private set; }
-    public DateTime DataCriacaoFilial { get; private set; }
-    public bool Habilitada { get; private set; }
-
+    public bool EntidadeValidada => ValidarProduto();    
     public FilialEntity() { }
-    private FilialEntity(Guid id, Guid pessoaClienteId, PessoaClienteEntity? pessoaCliente, string nomeFilial, DateTime dataCriacaoFilial, bool habilitada)
+    FilialEntity(Guid pessoaClienteId, string nomeFilial, Guid clienteId, Guid usuarioRegistroId) : base(clienteId, usuarioRegistroId)
     {
-        Id = id;
         PessoaClienteId = pessoaClienteId;
-        PessoaCliente = pessoaCliente;
         NomeFilial = nomeFilial;
-        DataCriacaoFilial = dataCriacaoFilial;
-        Habilitada = habilitada;
     }
+    public static FilialEntity CriarFilial(Guid pessoaClienteId, string nomeFilial, Guid clienteId, Guid usuarioRegistroId)
+    => new FilialEntity(pessoaClienteId, nomeFilial, clienteId, usuarioRegistroId);
+    private bool ValidarProduto()
+    {
+        var validator = new FilialValidator();
+        var resultado = validator.Validate(this);
 
-    public static FilialEntity CriarFilial(Guid pessoaClienteId, string nomeFilial, DateTime? dataCriacao = null)
-        => new FilialEntity(Guid.NewGuid(), pessoaClienteId, null, nomeFilial, dataCriacao ?? DateTime.Now, true);
+        if (!resultado.IsValid)
+        {
+            var erros = string.Join("; ", resultado.Errors.Select(e => e.ErrorMessage));
+            throw new ValidationException($"Validação falhou: {erros}");
+        }
 
+        return true;
+    }
     public void AtualizarNome(string nomeFilial)
     {
         if (string.IsNullOrWhiteSpace(nomeFilial))
@@ -34,7 +40,4 @@ public class FilialEntity
 
         NomeFilial = nomeFilial;
     }
-
-    public void DesativarFilial() => Habilitada = false;
-    public void AtivarFilial() => Habilitada = true;
 }

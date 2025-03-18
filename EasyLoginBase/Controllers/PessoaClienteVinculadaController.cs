@@ -1,4 +1,5 @@
 ﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Filial;
 using EasyLoginBase.Application.Dto.PessoaCliente;
 using EasyLoginBase.Application.Dto.PessoaClienteVinculada;
 using EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
@@ -26,7 +27,7 @@ public class PessoaClienteVinculadaController(IPessoaClienteVinculadaServices _s
         catch (Exception ex)
         {
 
-            return new ReturnActionResult<PessoaClienteDto>().BadRequest(ex.Message);
+            return new ReturnActionResult<PessoaClienteVinculadaDto>().ParseToActionResult(RequestResult<PessoaClienteVinculadaDto>.BadRequest(ex.Message));
         }
     }
 

@@ -11,12 +11,10 @@ namespace EasyLoginBase.Services.Services.Produto;
 public class CategoriaProdutoServices : ICategoriaProdutoServices
 {
     private readonly IUnitOfWork _repository;
-
     public CategoriaProdutoServices(IUnitOfWork repository)
     {
         _repository = repository;
-    }
-
+    }    
     public async Task<CategoriaProdutoDto> CadastrarCategoriaProduto(CategoriaProdutoDtoCreate categoriaProdutoDtoCreate, ClaimsPrincipal user)
     {
         try
@@ -49,7 +47,6 @@ public class CategoriaProdutoServices : ICategoriaProdutoServices
             throw new Exception(ex.Message);
         }
     }
-
     public async Task<IEnumerable<CategoriaProdutoDto>> ConsultarCategoriasProdutos(ClaimsPrincipal user)
     {
         try

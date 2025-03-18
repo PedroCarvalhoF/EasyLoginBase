@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "watch EasyLoginBase",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "watch",
+                "--project",
+                "C:\\Users\\PEDRO\\Documents\\Programacao\\C#\\APIS\\Login\\EasyLoginBase\\EasyLoginBase\\EasyLoginBase.csproj"
+            ],
+            "problemMatcher": [],
+            "group": "build",
+            "dependsOn": "dotnet: build"
+        },
+        {
+            "label": "dotnet: build",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "C:\\Users\\PEDRO\\Documents\\Programacao\\C#\\APIS\\Login\\EasyLoginBase\\EasyLoginBase\\EasyLoginBase.csproj"
+            ],
+            "problemMatcher": [],
+            "group": "build"
+        }
+    ]
+}

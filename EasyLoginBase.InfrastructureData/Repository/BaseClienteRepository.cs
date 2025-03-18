@@ -3,6 +3,7 @@ using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.InfrastructureData.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace EasyLoginBase.InfrastructureData.Repository
 {
@@ -10,10 +11,24 @@ namespace EasyLoginBase.InfrastructureData.Repository
     {
         private readonly MyContext _context;
         private readonly DbSet<T> _dataset;
+
         public BaseClienteRepository(MyContext context)
         {
             _context = context;
             _dataset = _context.Set<T>();
+        }
+
+        private IQueryable<T> IncludeProperties(IQueryable<T> query)
+        {
+            var navigationProperties = typeof(T).GetProperties()
+                .Where(p => p.PropertyType.IsClass && p.PropertyType != typeof(string));
+
+            foreach (var property in navigationProperties)
+            {
+                query = query.Include(property.Name);
+            }
+
+            return query;
         }
 
         public void AtualizarAsync(T entidade)
@@ -33,7 +48,6 @@ namespace EasyLoginBase.InfrastructureData.Repository
             try
             {
                 await _dataset.AddAsync(entidade);
-
             }
             catch (Exception ex)
             {
@@ -41,11 +55,14 @@ namespace EasyLoginBase.InfrastructureData.Repository
             }
         }
 
-        public async Task<IEnumerable<T>> ConsultarPorFiltroAsync(Expression<Func<T, bool>> filtro)
+        public async Task<IEnumerable<T>> ConsultarPorFiltroAsync(Expression<Func<T, bool>> filtro, Guid clientId)
         {
             try
             {
-                return await _dataset.Where(filtro).ToListAsync();
+                return await IncludeProperties(_dataset.AsNoTracking())
+                    .Where(filtro)
+                    .Where(e => e.ClienteId == clientId)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -53,11 +70,12 @@ namespace EasyLoginBase.InfrastructureData.Repository
             }
         }
 
-        public async Task<T?> ConsultarPorIdAsync(Guid id)
+        public async Task<T?> ConsultarPorIdAsync(Guid id, Guid clienteId)
         {
             try
             {
-                return await _dataset.FirstOrDefaultAsync(e => e.Id == id);
+                return await IncludeProperties(_dataset.AsNoTracking())
+                    .FirstOrDefaultAsync(e => e.Id == id && e.ClienteId == clienteId);
             }
             catch (Exception ex)
             {
@@ -69,7 +87,9 @@ namespace EasyLoginBase.InfrastructureData.Repository
         {
             try
             {
-                return await _dataset.Where(cliente=>cliente.ClienteId== clienteId).ToListAsync();
+                return await IncludeProperties(_dataset.AsNoTracking())
+                    .Where(cliente => cliente.ClienteId == clienteId)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -77,11 +97,12 @@ namespace EasyLoginBase.InfrastructureData.Repository
             }
         }
 
-        public async Task<bool> ExisteAsync(Guid id)
+        public async Task<bool> ExisteAsync(Guid id, Guid clienteId)
         {
             try
             {
-                return await _dataset.AnyAsync(e => e.Id == id);
+                return await _dataset.AsNoTracking()
+                    .AnyAsync(e => e.Id == id && e.ClienteId == clienteId);
             }
             catch (Exception ex)
             {
@@ -89,11 +110,11 @@ namespace EasyLoginBase.InfrastructureData.Repository
             }
         }
 
-        public async Task RemoverAsync(Guid id)
+        public async Task RemoverAsync(Guid id, Guid clienteId)
         {
             try
             {
-                var entidade = await ConsultarPorIdAsync(id);
+                var entidade = await ConsultarPorIdAsync(id, clienteId);
                 if (entidade == null)
                     throw new KeyNotFoundException("Entidade não encontrada.");
 

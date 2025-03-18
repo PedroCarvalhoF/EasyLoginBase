@@ -16,6 +16,7 @@ public class MyContext : IdentityDbContext
     public DbSet<PessoaClienteEntity> PessoaClientes { get; set; }
     public DbSet<PessoaClienteVinculadaEntity> PessoasClientesVinculadas { get; set; }
     public DbSet<CategoriaProdutoEntity> CategoriasProdutos { get; set; }
+    public DbSet<ProdutoEntity> Produtos { get; set; }
     public MyContext(DbContextOptions<MyContext> options) : base(options)
     {
 
@@ -26,6 +27,7 @@ public class MyContext : IdentityDbContext
         modelBuilder.ApplyConfiguration(new PessoaClienteMap());
         modelBuilder.ApplyConfiguration(new PessoaClienteVinculadaMap());
         modelBuilder.ApplyConfiguration(new CategoriaProdutoMap());
+        modelBuilder.ApplyConfiguration(new ProdutoMap());
 
         base.OnModelCreating(modelBuilder);
 

@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug API EasyLoginBase",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "watch EasyLoginBase",
+            "program": "C:\\Users\\PEDRO\\Documents\\Programacao\\C#\\APIS\\Login\\EasyLoginBase\\EasyLoginBase\\bin\\Debug\\net7.0\\EasyLoginBase.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/EasyLoginBase",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        }
+    ]
+}

@@ -1,9 +1,7 @@
 ﻿using EasyLoginBase.Application.Dto.PessoaClienteVinculada;
-using EasyLoginBase.Application.Dto.Produto.Categoria;
+using EasyLoginBase.Application.Dto.Produto.Produto;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace EasyLoginBase.Services.Tools.UseCase;
 
@@ -27,27 +25,23 @@ public partial class DtoMapper
         return entities.Select(ParsePessoaClienteVinculada);
     }
 
-    public static CategoriaProdutoEntity ParseCategoriaProduto(CategoriaProdutoDtoCreate categoriaProdutoDtoCreate, Guid clienteId, Guid usuarioRegistroId)
+    public static ProdutoDto ParseProduto(ProdutoEntity produtoEntity)
     {
-        return CategoriaProdutoEntity.Criar(categoriaProdutoDtoCreate.NomeCategoria, clienteId, usuarioRegistroId);
-    }
-    public static CategoriaProdutoDto ParceCategoriaProduto(CategoriaProdutoEntity categoriaProdutoEntity)
-    {
-        return new CategoriaProdutoDto
+        return new ProdutoDto
         {
-            Id = categoriaProdutoEntity.Id,
-            ClienteId = categoriaProdutoEntity.ClienteId,
-            UsuarioRegistroId = categoriaProdutoEntity.UsuarioRegistroId,
-            NomeCategoria = categoriaProdutoEntity.NomeCategoria!,
-            CreateAt = categoriaProdutoEntity.CreateAt,
-            Habilitado = categoriaProdutoEntity.Habilitado
+            Id = produtoEntity.Id,
+            NomeProduto = produtoEntity.NomeProduto,
+            CodigoProduto = produtoEntity.CodigoProduto,
+            CategoriaProdutoEntityId = produtoEntity.CategoriaProdutoEntityId,
+            CategoriaProduto = produtoEntity.CategoriaProdutoEntity.NomeCategoria,
         };
     }
-    internal static IEnumerable<CategoriaProdutoDto> ParseCategoriaProduto(IEnumerable<CategoriaProdutoEntity> categoriasEntities)
+
+    internal static IEnumerable<ProdutoDto> ParseProdutos(IEnumerable<ProdutoEntity> entities)
     {
-        foreach (var categoriaEntity in categoriasEntities)
+        foreach (var entity in entities)
         {
-            yield return ParceCategoriaProduto(categoriaEntity);
+            yield return ParseProduto(entity);
         }
     }
 }

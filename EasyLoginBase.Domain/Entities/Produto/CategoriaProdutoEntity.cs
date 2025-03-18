@@ -5,6 +5,7 @@ namespace EasyLoginBase.Domain.Entities.Produto;
 public class CategoriaProdutoEntity : BaseClienteEntity
 {
     public string? NomeCategoria { get; private set; }
+    public virtual ICollection<ProdutoEntity>? Produtos { get; private set; }
     public CategoriaProdutoEntity() { }
     private CategoriaProdutoEntity(string nomeCategoria, Guid clienteId, Guid usuarioRegistroId) : base(clienteId, usuarioRegistroId)
     {
@@ -23,7 +24,7 @@ public class CategoriaProdutoEntity : BaseClienteEntity
     // Método para alterar o nome da categoria de forma segura
     public void AlterarNome(string novoNome)
     {
-        DefinirNome(novoNome); AtualizarData();
+        DefinirNome(novoNome);
     }
 
     // Encapsula a lógica de definição do nome
@@ -33,6 +34,7 @@ public class CategoriaProdutoEntity : BaseClienteEntity
             throw new ArgumentException("O nome da categoria não pode ser vazio ou nulo.", nameof(nomeCategoria));
 
         NomeCategoria = nomeCategoria;
+        AtualizarData();
     }
 
     public void ValidarCategoria()

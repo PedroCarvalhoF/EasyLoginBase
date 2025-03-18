@@ -17,8 +17,8 @@ public abstract class BaseClienteEntity
         ClienteId = clienteId;
         UsuarioRegistroId = usuarioRegistroId;
         Habilitado = true;
-        CreateAt = DateTime.UtcNow;
-        UpdateAt = DateTime.UtcNow;
+        CreateAt = DateTime.Now;
+        UpdateAt = DateTime.Now;
     }
     public void Ativar()
     {

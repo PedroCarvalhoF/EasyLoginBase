@@ -21,5 +21,6 @@ public static class RegistroServicos
         serviceCollection.AddTransient<IPessoaClienteServices<PessoaClienteDto>, PessoaClienteServices>();
         serviceCollection.AddTransient<IPessoaClienteVinculadaServices, PessoaClienteVinculadaServices>();
         serviceCollection.AddTransient<ICategoriaProdutoServices, CategoriaProdutoServices>();
+        serviceCollection.AddTransient<IProdutoServices, ProdutoServices>();
     }
 }

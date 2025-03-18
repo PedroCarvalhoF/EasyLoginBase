@@ -1,5 +1,6 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
+using EasyLoginBase.Domain.Entities.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.InfrastructureData.Mapping;
@@ -8,7 +9,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyLoginBase.InfrastructureData.Context;
-
 public class MyContext : IdentityDbContext
     <UserEntity, RoleEntity, Guid, IdentityUserClaim<Guid>, UserRoleEntity, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
@@ -17,10 +17,8 @@ public class MyContext : IdentityDbContext
     public DbSet<PessoaClienteVinculadaEntity> PessoasClientesVinculadas { get; set; }
     public DbSet<CategoriaProdutoEntity> CategoriasProdutos { get; set; }
     public DbSet<ProdutoEntity> Produtos { get; set; }
-    public MyContext(DbContextOptions<MyContext> options) : base(options)
-    {
-
-    }
+    public DbSet<CategoriaPrecoProdutoEntity> CategoriasPrecosProdutos { get; set; }
+    public MyContext(DbContextOptions<MyContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new FilialMap());
@@ -28,6 +26,7 @@ public class MyContext : IdentityDbContext
         modelBuilder.ApplyConfiguration(new PessoaClienteVinculadaMap());
         modelBuilder.ApplyConfiguration(new CategoriaProdutoMap());
         modelBuilder.ApplyConfiguration(new ProdutoMap());
+        modelBuilder.ApplyConfiguration(new CategoriaPrecoProdutoMap());
 
         base.OnModelCreating(modelBuilder);
 

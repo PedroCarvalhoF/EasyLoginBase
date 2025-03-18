@@ -1,4 +1,5 @@
 ﻿using EasyLoginBase.Domain.Entities.Base;
+using EasyLoginBase.Domain.Entities.Preco.Produto;
 using System.ComponentModel.DataAnnotations;
 
 namespace EasyLoginBase.Domain.Entities.Produto;
@@ -9,6 +10,9 @@ public class ProdutoEntity : BaseClienteEntity
     public string? CodigoProduto { get; private set; }
     public Guid CategoriaProdutoEntityId { get; private set; }
     public CategoriaProdutoEntity? CategoriaProdutoEntity { get; private set; }
+
+    //um produto pode ter varios precos
+    public virtual ICollection<PrecoProdutoEntity>? Precos { get; private set; }
     public bool EntidadeValidada => ValidarProduto();
     private bool ValidarProduto()
     {

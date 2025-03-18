@@ -1,5 +1,4 @@
-﻿using EasyLoginBase.Application.Services.Intefaces.Produto;
-using EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
+﻿using EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
@@ -9,7 +8,6 @@ using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.InfrastructureData.Repository;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
-using EasyLoginBase.Services.Services.Produto;
 using EasyLoginBase.Services.Tools.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,9 +20,7 @@ public static class RegisterServices
     public static void ConfigureRepositories(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         IdentityConfiguration.Configurar(serviceCollection, configuration);
-
         serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-
         serviceCollection.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
         serviceCollection.AddScoped(typeof(IBaseClienteRepository<>), typeof(BaseClienteRepository<>));
 

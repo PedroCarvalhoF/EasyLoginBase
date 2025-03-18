@@ -1,6 +1,6 @@
 ﻿using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
-using EasyLoginBase.Domain.Entities.Produto;
+using EasyLoginBase.Domain.Entities.Preco.Produto;
 using System.ComponentModel.DataAnnotations;
 
 namespace EasyLoginBase.Domain.Entities.Filial;
@@ -11,7 +11,10 @@ public class FilialEntity : BaseClienteEntity
     public Guid PessoaClienteId { get; private set; }
     public PessoaClienteEntity? PessoaCliente { get; private set; }
     public string? NomeFilial { get; private set; }
-    public bool EntidadeValidada => ValidarProduto();    
+
+    // Uma filial pode ter varios precos
+    public virtual ICollection<PrecoProdutoEntity>? PrecoProdutoEntities { get; private set; }
+    public bool EntidadeValidada => ValidarProduto();
     public FilialEntity() { }
     FilialEntity(Guid pessoaClienteId, string nomeFilial, Guid clienteId, Guid usuarioRegistroId) : base(clienteId, usuarioRegistroId)
     {

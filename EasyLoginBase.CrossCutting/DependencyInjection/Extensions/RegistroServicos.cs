@@ -2,12 +2,14 @@
 using EasyLoginBase.Application.Services.Intefaces.Filial;
 using EasyLoginBase.Application.Services.Intefaces.PessoaCliente;
 using EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
+using EasyLoginBase.Application.Services.Intefaces.Preco.Produto;
 using EasyLoginBase.Application.Services.Intefaces.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.Services.Services.Email;
 using EasyLoginBase.Services.Services.Filial;
 using EasyLoginBase.Services.Services.PessoaCliente;
 using EasyLoginBase.Services.Services.PessoaClienteVinculada;
+using EasyLoginBase.Services.Services.Preco.Produto;
 using EasyLoginBase.Services.Services.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Services.Services.Produto;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,5 +26,6 @@ public static class RegistroServicos
         serviceCollection.AddTransient<ICategoriaProdutoServices, CategoriaProdutoServices>();
         serviceCollection.AddTransient<IProdutoServices, ProdutoServices>();
         serviceCollection.AddTransient<ICategoriaPrecoProdutoServices, CategoriaPrecoProdutoServices>();
+        serviceCollection.AddTransient<IPrecoProdutoServices, PrecoProdutoServices>();
     }
 }

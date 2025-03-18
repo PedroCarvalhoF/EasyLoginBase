@@ -6,6 +6,7 @@ namespace EasyLoginBase.Domain.Entities.Preco.Produto.CategoriaPreco;
 public class CategoriaPrecoProdutoEntity : BaseClienteEntity
 {
     public string? CategoriaPreco { get; private set; }
+    public virtual ICollection<PrecoProdutoEntity>? PrecoProdutoEntities { get; private set; }
     public bool EntidadeValidada => ValidarCategoriaPrecoProduto();
     public CategoriaPrecoProdutoEntity() { }
     CategoriaPrecoProdutoEntity(string categoriaPreco, Guid clienteId, Guid usuarioRegistroId) : base(clienteId, usuarioRegistroId)
@@ -18,7 +19,6 @@ public class CategoriaPrecoProdutoEntity : BaseClienteEntity
     {
         var validator = new CategoriaPrecoProdutoValidator();
         var resultado = validator.Validate(this);
-
         if (!resultado.IsValid)
         {
             var erros = string.Join("; ", resultado.Errors.Select(e => e.ErrorMessage));
@@ -27,7 +27,6 @@ public class CategoriaPrecoProdutoEntity : BaseClienteEntity
 
         var validarBaseCliente = new BaseClienteEntityValidator();
         var resultadoBaseCliente = validarBaseCliente.Validate(this);
-
         if (!resultadoBaseCliente.IsValid)
         {
             var erros = string.Join("; ", resultado.Errors.Select(e => e.ErrorMessage));

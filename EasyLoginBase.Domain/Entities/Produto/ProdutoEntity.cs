@@ -12,7 +12,7 @@ public class ProdutoEntity : BaseClienteEntity
     public CategoriaProdutoEntity? CategoriaProdutoEntity { get; private set; }
 
     //um produto pode ter varios precos
-    public virtual ICollection<PrecoProdutoEntity>? Precos { get; private set; }
+    public virtual ICollection<PrecoProdutoEntity>? PrecosEntities { get; private set; }
     public bool EntidadeValidada => ValidarProduto();
     private bool ValidarProduto()
     {

@@ -118,4 +118,21 @@ public class ProdutoServices : IProdutoServices
             throw new Exception(ex.Message);
         }
     }
+    public async Task<ProdutoDto> ConsultarProdutoById(Guid produtoEntityId, ClaimsPrincipal user)
+    {
+        try
+        {
+            var clienteId = user.GetClienteIdVinculo();
+            var user_logado = user.GetUserId();
+
+            var entity = await _repository.GetRepository<ProdutoEntity>().ConsultarPorIdAsync(produtoEntityId, clienteId);
+
+            return entity is null ? throw new Exception("Produto não localizado.") : DtoMapper.ParseProduto(entity);
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
 }

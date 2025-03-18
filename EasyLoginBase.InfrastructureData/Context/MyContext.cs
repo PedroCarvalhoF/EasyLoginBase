@@ -1,5 +1,6 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
+using EasyLoginBase.Domain.Entities.Preco.Produto;
 using EasyLoginBase.Domain.Entities.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.User;
@@ -18,6 +19,7 @@ public class MyContext : IdentityDbContext
     public DbSet<CategoriaProdutoEntity> CategoriasProdutos { get; set; }
     public DbSet<ProdutoEntity> Produtos { get; set; }
     public DbSet<CategoriaPrecoProdutoEntity> CategoriasPrecosProdutos { get; set; }
+    public DbSet<PrecoProdutoEntity> PrecosProdutos { get; set; }
     public MyContext(DbContextOptions<MyContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,6 +29,7 @@ public class MyContext : IdentityDbContext
         modelBuilder.ApplyConfiguration(new CategoriaProdutoMap());
         modelBuilder.ApplyConfiguration(new ProdutoMap());
         modelBuilder.ApplyConfiguration(new CategoriaPrecoProdutoMap());
+        modelBuilder.ApplyConfiguration(new PrecoProdutoMap());
 
         base.OnModelCreating(modelBuilder);
 

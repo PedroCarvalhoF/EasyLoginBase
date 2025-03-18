@@ -40,6 +40,17 @@ public class CategoriaPrecoProdutoServices : ICategoriaPrecoProdutoServices
         catch (Exception ex) { throw new Exception(ex.Message); }
     }
 
+    public async Task<CategoriaPrecoProdutoDto> ConsultarCategoriaPrecoProdutoById(Guid categoriaPrecoProdutoEntityId, ClaimsPrincipal user)
+    {
+        try
+        {
+            var categoriaPrecoProdutoEntityResult = await _repository.GetRepository<CategoriaPrecoProdutoEntity>().ConsultarPorIdAsync(categoriaPrecoProdutoEntityId, user.GetClienteIdVinculo());
+
+            return categoriaPrecoProdutoEntityResult is null ? throw new Exception("Categoria de preço não localizada.") : new CategoriaPrecoProdutoDto { Id = categoriaPrecoProdutoEntityResult.Id, CategoriaPreco = categoriaPrecoProdutoEntityResult.CategoriaPreco! };
+        }
+        catch (Exception ex) { throw new Exception(ex.Message); }
+    }
+
     public async Task<IEnumerable<CategoriaPrecoProdutoDto>> ConsultarCategoriasPrecosProdutos(ClaimsPrincipal user)
     {
         try

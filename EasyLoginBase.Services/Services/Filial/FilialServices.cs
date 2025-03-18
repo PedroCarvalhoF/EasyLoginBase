@@ -48,7 +48,6 @@ public class FilialServices : IFilialServices
             throw new Exception(ex.Message);
         }
     }
-
     public async Task<IEnumerable<FilialDto>> ConsultarFiliais(ClaimsPrincipal user)
     {
         try
@@ -65,6 +64,19 @@ public class FilialServices : IFilialServices
         catch (Exception ex)
         {
 
+            throw new Exception(ex.Message);
+        }
+    }
+    public async Task<FilialDto> ConsultarFilialById(Guid filialEntityId, ClaimsPrincipal user)
+    {
+        try
+        {
+            var filiaisEntities = await _repository.GetRepository<FilialEntity>().ConsultarPorFiltroAsync(f => f.Id == filialEntityId, user.GetClienteIdVinculo());
+
+            return filiaisEntities is null || filiaisEntities.Count() == 0 ? throw new Exception("Filial não localizada.") : DtoMapper.ParseFilial(filiaisEntities.Single());
+        }
+        catch (Exception ex)
+        {
             throw new Exception(ex.Message);
         }
     }

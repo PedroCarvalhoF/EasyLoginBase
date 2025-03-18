@@ -10,4 +10,5 @@ public interface IProdutoServices
 
     Task<bool> NomeProdutoUso(string nomeProduto, ClaimsPrincipal user);
     Task<bool> CodigoProdutoUso(string codigoProduto, ClaimsPrincipal user);
+    Task<ProdutoDto> ConsultarProdutoById(Guid produtoEntityId, ClaimsPrincipal user);
 }

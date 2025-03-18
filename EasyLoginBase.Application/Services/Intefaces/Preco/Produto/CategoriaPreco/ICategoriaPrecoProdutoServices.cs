@@ -6,6 +6,7 @@ namespace EasyLoginBase.Application.Services.Intefaces.Preco.Produto.CategoriaPr
 public interface ICategoriaPrecoProdutoServices
 {
     Task<CategoriaPrecoProdutoDto> CadastrarCategoriaPrecoProduto(CategoriaPrecoProdutoDtoCreate create, ClaimsPrincipal user);
+    Task<CategoriaPrecoProdutoDto> ConsultarCategoriaPrecoProdutoById(Guid categoriaPrecoProdutoEntityId, ClaimsPrincipal user);
     Task<IEnumerable<CategoriaPrecoProdutoDto>> ConsultarCategoriasPrecosProdutos(ClaimsPrincipal user);
     Task<bool> NomeCategoriaPrecoProdutoEmUso(string nomeCategoriaPrecoProduto, ClaimsPrincipal user);
 

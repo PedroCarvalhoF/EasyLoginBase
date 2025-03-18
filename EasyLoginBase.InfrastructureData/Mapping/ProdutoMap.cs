@@ -15,14 +15,16 @@ public class ProdutoMap : BaseClienteEntityMap<ProdutoEntity>, IEntityTypeConfig
             .IsRequired()
             .HasMaxLength(100);
         builder
-            .HasIndex(p => p.NomeProduto);
+            .HasIndex(p => p.NomeProduto)
+            .IsUnique();
 
         builder.Property(p => p.CodigoProduto)
             .IsRequired()
             .HasMaxLength(50);
 
         builder
-            .HasIndex(p => p.CodigoProduto);
+            .HasIndex(p => p.CodigoProduto)
+            .IsUnique();
 
         builder.HasOne(p => p.CategoriaProdutoEntity)
             .WithMany(cat => cat.Produtos)

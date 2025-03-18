@@ -16,14 +16,19 @@ public class ProdutoServices : IProdutoServices
     {
         _repository = repository;
     }
-
     public async Task<ProdutoDto> CadastrarProduto(ProdutoDtoCreate produtoDtoCreate, ClaimsPrincipal user)
     {
         try
         {
-
             var clienteId = user.GetClienteIdVinculo();
             var user_logado = user.GetUserId();
+
+            if (await NomeProdutoUso(produtoDtoCreate.NomeProduto, user))
+                throw new ArgumentException("Nome do produto já está em uso");
+
+            if (await CodigoProdutoUso(produtoDtoCreate.CodigoProduto, user))
+                throw new ArgumentException("Código do produto já está em uso");
+
 
             ProdutoEntity produtoEntity = ProdutoEntity.CriarProdutoEntity(produtoDtoCreate.NomeProduto, produtoDtoCreate.CodigoProduto, produtoDtoCreate.CategoriaProdutoEntityId, clienteId, user_logado);
 
@@ -50,7 +55,6 @@ public class ProdutoServices : IProdutoServices
             throw new Exception(ex.Message);
         }
     }
-
     public async Task<IEnumerable<ProdutoDto>> ConsultarProdutos(ClaimsPrincipal user)
     {
         try
@@ -67,6 +71,46 @@ public class ProdutoServices : IProdutoServices
 
             return dtos;
 
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
+    public async Task<bool> CodigoProdutoUso(string codigoProduto, ClaimsPrincipal user)
+    {
+        try
+        {
+            var clienteId = user.GetClienteIdVinculo();
+            var user_logado = user.GetUserId();
+
+            var result = await _repository.GetRepository<ProdutoEntity>().ConsultarPorFiltroAsync(p => p.CodigoProduto == codigoProduto, clienteId);
+
+            if (result is null)
+                return false;
+
+            return result.Count() > 0;
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
+    public async Task<bool> NomeProdutoUso(string nomeProduto, ClaimsPrincipal user)
+    {
+        try
+        {
+            var clienteId = user.GetClienteIdVinculo();
+            var user_logado = user.GetUserId();
+
+            var result = await _repository.GetRepository<ProdutoEntity>().ConsultarPorFiltroAsync(p => p.NomeProduto.ToLower() == nomeProduto.ToLower(), clienteId);
+
+            if (result is null)
+                return false;
+
+            return result.Count() > 0;
         }
         catch (Exception ex)
         {

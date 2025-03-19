@@ -1,11 +1,9 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Produto;
-using EasyLoginBase.Application.Dto;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Preco.Produto;
+using EasyLoginBase.Application.Services.Intefaces.Preco.Produto;
 using EasyLoginBase.Application.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EasyLoginBase.Application.Dto.Preco.Produto;
-using EasyLoginBase.Application.Services.Intefaces.Preco.Produto;
-using EasyLoginBase.Application.Services.Intefaces.Filial;
 
 namespace EasyLoginBase.Controllers;
 
@@ -29,6 +27,34 @@ public class PrecoProdutoController(IPrecoProdutoServices _precoProdutoServices)
         catch (Exception ex)
         {
             return new ReturnActionResult<PrecoProdutoDto>().ParseToActionResult(RequestResult<PrecoProdutoDto>.BadRequest(ex.Message));
+        }
+    }
+
+    [HttpGet("consultar-preco-produto/produto={idProduto}")]
+    public async Task<ActionResult<RequestResult<IEnumerable<PrecoProdutoDto>>>> ConsultarProdutoByProdutoId(Guid idProduto)
+    {
+        try
+        {
+            IEnumerable<PrecoProdutoDto> result = await _precoProdutoServices.ConsultarProdutoByProdutoId(idProduto, User);
+            return new ReturnActionResult<IEnumerable<PrecoProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<PrecoProdutoDto>>.Ok(result));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<IEnumerable<PrecoProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<PrecoProdutoDto>>.BadRequest(ex.Message));
+        }
+    }
+
+    [HttpGet("consultar-precos-produtos")]
+    public async Task<ActionResult<RequestResult<IEnumerable<PrecoProdutoDto>>>> ConsultarPrecosProdutos()
+    {
+        try
+        {
+            var result = await _precoProdutoServices.ConsultarPrecosProdutos(User);
+            return new ReturnActionResult<IEnumerable<PrecoProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<PrecoProdutoDto>>.Ok(result));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<IEnumerable<PrecoProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<PrecoProdutoDto>>.BadRequest(ex.Message));
         }
     }
 }

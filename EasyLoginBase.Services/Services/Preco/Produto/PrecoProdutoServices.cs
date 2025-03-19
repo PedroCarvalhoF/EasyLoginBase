@@ -96,9 +96,63 @@ public class PrecoProdutoServices : IPrecoProdutoServices
 
         throw new Exception("Erro ao cadastrar preço do produto");
     }
-
-    public async Task<PrecoProdutoDto> PrecoProdutoJaCadastrado(PrecoProdutoDtoCreate preco, ClaimsPrincipal user)
+    public async Task<IEnumerable<PrecoProdutoDto>> ConsultarPrecosProdutos(ClaimsPrincipal user)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var precosProdutosEntities = await _repository.GetRepository<PrecoProdutoEntity>().ConsultarTodosAsync(user.GetClienteIdVinculo());
+
+            return precosProdutosEntities.Select(precoProdutoEntity => new PrecoProdutoDto
+            {
+                Id = precoProdutoEntity.Id,
+                ProdutoEntityId = precoProdutoEntity.ProdutoEntityId,
+                NomeProduto = precoProdutoEntity.ProdutoEntity?.NomeProduto,
+                FilialEntityId = precoProdutoEntity.FilialEntityId,
+                NomeFilial = precoProdutoEntity.FilialEntity?.NomeFilial,
+                CategoriaPrecoProdutoEntityId = precoProdutoEntity.CategoriaPrecoProdutoEntityId,
+                CategoriaPreco = precoProdutoEntity.CategoriaPrecoProdutoEntity?.CategoriaPreco,
+                PrecoProduto = precoProdutoEntity.PrecoProduto,
+                TipoPrecoProduto = precoProdutoEntity.TipoPrecoProdutoEnum.ToString()
+            }).OrderBy(f => f.NomeFilial).ThenBy(p => p.NomeProduto);
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
     }
+    public async Task<IEnumerable<PrecoProdutoDto>> ConsultarProdutoByProdutoId(Guid idProduto, ClaimsPrincipal user)
+    {
+        try
+        {
+            var precoProdutoEntities = await _repository
+                .GetRepository<PrecoProdutoEntity>()
+                .ConsultarPorFiltroAsync(pr => pr.ProdutoEntityId == idProduto, user.GetClienteIdVinculo());
+
+            if (!precoProdutoEntities?.Any() ?? true)
+                throw new KeyNotFoundException("Preço do produto não encontrado");
+
+            return precoProdutoEntities.Select(pr => new PrecoProdutoDto
+            {
+                Id = pr.Id,
+                ProdutoEntityId = pr.ProdutoEntityId,
+                NomeProduto = pr.ProdutoEntity?.NomeProduto, // Se necessário, verifique se ProdutoEntity está carregado
+                FilialEntityId = pr.FilialEntityId,
+                NomeFilial = pr.FilialEntity?.NomeFilial, // Se necessário, verifique se FilialEntity está carregado
+                CategoriaPrecoProdutoEntityId = pr.CategoriaPrecoProdutoEntityId,
+                CategoriaPreco = pr.CategoriaPrecoProdutoEntity?.CategoriaPreco, // Se necessário, verifique se CategoriaPrecoProdutoEntity está carregado
+                PrecoProduto = pr.PrecoProduto,
+                TipoPrecoProduto = pr.TipoPrecoProdutoEnum.ToString()
+            });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            throw; // Mantém a exceção específica
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao consultar preço do produto.", ex);
+        }
+    }
+
 }

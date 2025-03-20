@@ -4,9 +4,11 @@ using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
+using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.InfrastructureData.Repository;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
+using EasyLoginBase.InfrastructureData.Repository.PDV;
 using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 using EasyLoginBase.Services.Tools.Email;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +33,7 @@ public static class RegisterServices
         serviceCollection.AddScoped<IPessoaClienteRepository<PessoaClienteEntity>, PessoaClienteRepository>();
         serviceCollection.AddScoped<IPessoaClienteVinculadaRepository, PessoaClienteVinculadaRepository>();
         serviceCollection.AddScoped<IBaseClienteRepository<ProdutoEntity>, BaseClienteRepository<ProdutoEntity>>();
+        serviceCollection.AddScoped<IUsuarioPdvRepository, UsuarioPdvRepository>();
 
         var myhandlers = AppDomain.CurrentDomain.Load("EasyLoginBase.Services");
         serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myhandlers));

@@ -51,7 +51,6 @@ public class PessoaClienteVinculadaServices : IPessoaClienteVinculadaServices
             throw new Exception(ex.Message);
         }
     }
-
     public async Task<IEnumerable<PessoaClienteVinculadaDto>> GetVinculosPessoa(Guid idPessoaVinculada)
     {
         try
@@ -66,7 +65,6 @@ public class PessoaClienteVinculadaServices : IPessoaClienteVinculadaServices
             throw new Exception(ex.Message);
         }
     }
-
     public Task<List<PessoaClienteVinculadaDto>> ObterClientesVinculadosPorUsuarioAsync(Guid usuarioVinculadoId)
     {
         throw new NotImplementedException();

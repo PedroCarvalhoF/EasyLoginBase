@@ -9,7 +9,7 @@ public class FilialEntity : BaseClienteEntity
 {
     // Uma filial pertence a um cliente
     public Guid PessoaClienteId { get; private set; }
-    public PessoaClienteEntity? PessoaCliente { get; private set; }
+    public virtual PessoaClienteEntity? PessoaCliente { get; private set; }
     public string? NomeFilial { get; private set; }
 
     // Uma filial pode ter varios precos

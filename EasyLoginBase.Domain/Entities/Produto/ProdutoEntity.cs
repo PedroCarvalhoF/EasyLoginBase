@@ -9,7 +9,7 @@ public class ProdutoEntity : BaseClienteEntity
     public string? NomeProduto { get; private set; }
     public string? CodigoProduto { get; private set; }
     public Guid CategoriaProdutoEntityId { get; private set; }
-    public CategoriaProdutoEntity? CategoriaProdutoEntity { get; private set; }
+    public virtual CategoriaProdutoEntity? CategoriaProdutoEntity { get; private set; }
 
     //um produto pode ter varios precos
     public virtual ICollection<PrecoProdutoEntity>? PrecosEntities { get; private set; }

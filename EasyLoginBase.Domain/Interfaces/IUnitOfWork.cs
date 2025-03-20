@@ -2,6 +2,7 @@
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Filial;
+using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Preco.Produto.CategoriaPreco;
 using System.Security.Claims;
@@ -16,7 +17,8 @@ public interface IUnitOfWork
     // Repositórios específicos
     IFilialRepository<FilialEntity, ClaimsPrincipal> FilialRepository { get; }
     IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository { get; }
-    IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository { get; }    
+    IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository { get; }
+    IUsuarioPdvRepository UsuarioPdvRepository { get; }
 
     // Método para obter um repositório genérico
     IBaseClienteRepository<T> GetRepository<T>() where T : BaseClienteEntity;

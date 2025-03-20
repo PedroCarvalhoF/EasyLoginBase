@@ -34,9 +34,9 @@ public class PrecoProdutoEntity : BaseClienteEntity
     public Guid ProdutoEntityId { get; private set; }
     public ProdutoEntity? ProdutoEntity { get; private set; }
     public Guid FilialEntityId { get; private set; }
-    public FilialEntity? FilialEntity { get; private set; }
+    public virtual FilialEntity? FilialEntity { get; private set; }
     public Guid CategoriaPrecoProdutoEntityId { get; private set; }
-    public CategoriaPrecoProdutoEntity? CategoriaPrecoProdutoEntity { get; private set; }
+    public virtual CategoriaPrecoProdutoEntity? CategoriaPrecoProdutoEntity { get; private set; }
     public decimal PrecoProduto { get; private set; }
     public PrecoProdutoEnum TipoPrecoProdutoEnum { get; private set; }
     public bool ValidarPrecoProduto(out List<string> erros)

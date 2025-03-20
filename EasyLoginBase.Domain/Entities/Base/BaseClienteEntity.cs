@@ -19,6 +19,8 @@ public abstract class BaseClienteEntity
         Habilitado = true;
         CreateAt = DateTime.Now;
         UpdateAt = CreateAt;
+
+        ValidarBaseClienteEntity();
     }
     public void Ativar()
     {

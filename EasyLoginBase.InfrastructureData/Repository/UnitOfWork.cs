@@ -3,9 +3,11 @@ using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
+using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.InfrastructureData.Context;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
+using EasyLoginBase.InfrastructureData.Repository.PDV;
 using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
@@ -21,6 +23,7 @@ namespace EasyLoginBase.InfrastructureData.Repository
         private IFilialRepository<FilialEntity, ClaimsPrincipal>? _filialRepository;
         private IPessoaClienteRepository<PessoaClienteEntity>? _pessoaClienteRepository;
         private IPessoaClienteVinculadaRepository? _pessoaClienteVinculadaRepository;
+        private IUsuarioPdvRepository? _usuarioPdvRepository;
 
         public UnitOfWork(MyContext context)
         {
@@ -55,10 +58,12 @@ namespace EasyLoginBase.InfrastructureData.Repository
                 new BaseClienteRepository<T>(_context));
         }
 
-        public IFilialRepository<FilialEntity,ClaimsPrincipal> FilialRepository => _filialRepository ??= new FilialRepository(_context);
+        public IFilialRepository<FilialEntity, ClaimsPrincipal> FilialRepository => _filialRepository ??= new FilialRepository(_context);
 
         public IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository => _pessoaClienteRepository ??= new PessoaClienteRepository(_context);
 
         public IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository => _pessoaClienteVinculadaRepository ??= new PessoaClienteVinculadaRepository(_context);
+
+        public IUsuarioPdvRepository UsuarioPdvRepository => _usuarioPdvRepository ??= new UsuarioPdvRepository(_context);
     }
 }

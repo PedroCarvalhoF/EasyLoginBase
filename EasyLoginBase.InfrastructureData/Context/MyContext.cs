@@ -22,6 +22,7 @@ public class MyContext : IdentityDbContext
     public DbSet<CategoriaPrecoProdutoEntity> CategoriasPrecosProdutos { get; set; }
     public DbSet<PrecoProdutoEntity> PrecosProdutos { get; set; }
     public DbSet<UsuarioPdvEntity> UsuariosPdvs { get; set; }
+    public DbSet<PontoVendaEntity> PontosVendas { get; set; }
     public MyContext(DbContextOptions<MyContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,6 +34,7 @@ public class MyContext : IdentityDbContext
         modelBuilder.ApplyConfiguration(new CategoriaPrecoProdutoMap());
         modelBuilder.ApplyConfiguration(new PrecoProdutoMap());
         modelBuilder.ApplyConfiguration(new UsuarioPdvMap());
+        modelBuilder.ApplyConfiguration(new PontoVendaMap());
 
         base.OnModelCreating(modelBuilder);
 

@@ -10,7 +10,7 @@ public class UsuarioPdvEntity : BaseClienteEntity
     public bool AcessoCaixa { get; private set; }
     public Guid UsuarioCaixaPdvEntityId { get; private set; }
     public virtual UserEntity? UserCaixaPdvEntity { get; private set; }
-
+    public virtual ICollection<PontoVendaEntity>? PontoVendaEntities { get; private set; }   
     private UsuarioPdvEntity(bool acessoCaixa, Guid usuarioCaixaPdvEntityId, Guid clienteId, Guid usuarioRegistroId)
         : base(clienteId, usuarioRegistroId)
     {

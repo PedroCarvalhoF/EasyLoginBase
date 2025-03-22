@@ -10,4 +10,5 @@ public interface IBaseRepository<T, F> where T : BaseEntity /*where F : FiltroBa
     //Task<IEnumerable<T>> SelectAsync(FiltroBase filtro, bool includeAll = false);
     //Task<T> SelectAsync(Guid id, FiltroBase filtro, bool includeAll = false);
     Task<bool> DeleteRange(IEnumerable<T> itens);
+
 }

@@ -135,7 +135,6 @@ public class BaseRepository<T, F> : IBaseRepository<T, F> where T : BaseEntity w
             throw new Exception(ex.Message);
         }
     }
-
     public async Task<bool> DeleteRange(IEnumerable<T> itens)
     {
         try

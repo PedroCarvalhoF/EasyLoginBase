@@ -1,5 +1,6 @@
 ﻿using EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
 using EasyLoginBase.Domain.Entities.Filial;
+using EasyLoginBase.Domain.Entities.PDV;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Interfaces;
@@ -34,6 +35,8 @@ public static class RegisterServices
         serviceCollection.AddScoped<IPessoaClienteVinculadaRepository, PessoaClienteVinculadaRepository>();
         serviceCollection.AddScoped<IBaseClienteRepository<ProdutoEntity>, BaseClienteRepository<ProdutoEntity>>();
         serviceCollection.AddScoped<IUsuarioPdvRepository, UsuarioPdvRepository>();
+
+        serviceCollection.AddScoped<IPontoVendaRepository<PontoVendaEntity>, PontoVendaRepository>();
 
         var myhandlers = AppDomain.CurrentDomain.Load("EasyLoginBase.Services");
         serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myhandlers));

@@ -40,7 +40,7 @@ public abstract class BaseClienteEntity
     }
 
     protected void AtualizarData()
-    => UpdateAt = DateTime.UtcNow;
+    => UpdateAt = DateTime.Now;
 
     public void ValidarBaseClienteEntity()
     {

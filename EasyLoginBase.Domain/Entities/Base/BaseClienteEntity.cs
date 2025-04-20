@@ -22,19 +22,13 @@ public abstract class BaseClienteEntity
 
         ValidarBaseClienteEntity();
     }
-    public void Ativar()
+    public void Habilitar()
     {
-        if (Habilitado)
-            throw new InvalidOperationException("A entidade já está habilitada.");
-
         Habilitado = true;
         AtualizarData();
     }
-    public void Desativar()
+    public void Desabilitar()
     {
-        if (!Habilitado)
-            throw new InvalidOperationException("A entidade já está desabilitada.");
-
         Habilitado = false;
         AtualizarData();
     }

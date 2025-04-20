@@ -7,39 +7,41 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EasyLoginBase.Controllers;
 
-
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class CategoriaProdutoController(ICategoriaProdutoServices _services) : ControllerBase
 {
     [HttpPost("cadastrar-categoria-produto")]
-    public async Task<ActionResult<RequestResult<CategoriaProdutoDto>>> CadastrarFilial([FromBody] CategoriaProdutoDtoCreate command)
+    public async Task<ActionResult<RequestResult<CategoriaProdutoDto>>> CadastrarCategoriaProduto([FromBody] CategoriaProdutoDtoCreate command)
+    {
+        if (command == null)
+            return BadRequest("Requisição inválida.");
+
+        return new ReturnActionResult<CategoriaProdutoDto>().ParseToActionResult(await _services.CadastrarCategoriaProduto(command, User));
+    }
+
+    [HttpPost("consultar-categoria-by-id")]
+    public async Task<ActionResult<RequestResult<CategoriaProdutoDto>>> ConsultarCategoriaProdutoById(DtoRequestId id)
     {
         try
         {
-            if (command == null)
-                return BadRequest("Requisição inválida.");
-
-            var result = await _services.CadastrarCategoriaProduto(command, User);
-
-            return new ReturnActionResult<CategoriaProdutoDto>().ParseToActionResult(RequestResult<CategoriaProdutoDto>.Ok(result));
+            return new ReturnActionResult<CategoriaProdutoDto>()
+                .ParseToActionResult(await _services.ConsultarCategoriaProdutoById(User, id));
         }
         catch (Exception ex)
         {
             return new ReturnActionResult<CategoriaProdutoDto>().ParseToActionResult(RequestResult<CategoriaProdutoDto>.BadRequest(ex.Message));
         }
     }
-
 
     [HttpGet("consultar-categorias-produtos")]
     public async Task<ActionResult<RequestResult<IEnumerable<CategoriaProdutoDto>>>> ConsultarCategoriasProdutos()
     {
         try
         {
-            IEnumerable<CategoriaProdutoDto> result = await _services.ConsultarCategoriasProdutos(User);
-
-            return new ReturnActionResult<IEnumerable<CategoriaProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<CategoriaProdutoDto>>.Ok(result));
+            return new ReturnActionResult<IEnumerable<CategoriaProdutoDto>>()
+                .ParseToActionResult(await _services.ConsultarCategoriasProdutos(User));
         }
         catch (Exception ex)
         {
@@ -47,5 +49,13 @@ public class CategoriaProdutoController(ICategoriaProdutoServices _services) : C
         }
     }
 
+    [HttpPost("atualizar-categoria-produto")]
 
+    public async Task<ActionResult<RequestResult<CategoriaProdutoDto>>> AtualizarCategoriaProduto([FromBody] CategoriaProdutoDtoUpdate categoriaProdutoDtoUpdate)
+    {
+        if (categoriaProdutoDtoUpdate == null)
+            return BadRequest("Requisição inválida.");
+        return new ReturnActionResult<CategoriaProdutoDto>().
+            ParseToActionResult(await _services.AlterarCategoriaProduto(categoriaProdutoDtoUpdate, User));
+    }
 }

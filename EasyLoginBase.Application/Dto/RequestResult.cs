@@ -1,4 +1,6 @@
-﻿namespace EasyLoginBase.Application.Dto;
+﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace EasyLoginBase.Application.Dto;
 
 public class RequestResult<T>
 {
@@ -6,6 +8,23 @@ public class RequestResult<T>
     public int StatusCode { get; }
     public string? Mensagem { get; }
     public T? Data { get; }
+
+    public RequestResult(T dados)
+    {
+        Status = true;
+        StatusCode = 200;
+        Data = dados;
+        Mensagem = "Requisição realizada com sucesso.";
+    }
+
+    public RequestResult(Exception ex)
+    {
+        Status = false;
+        StatusCode = 400;
+        Data = default;
+        Mensagem = ex.Message;
+    }
+
 
     private RequestResult(bool status, int statusCode, string? mensagem, T? data = default)
     {

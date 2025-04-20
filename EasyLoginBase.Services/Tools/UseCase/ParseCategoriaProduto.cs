@@ -9,7 +9,7 @@ public partial class DtoMapper
     {
         return CategoriaProdutoEntity.Criar(categoriaProdutoDtoCreate.NomeCategoria, clienteId, usuarioRegistroId);
     }
-    public static CategoriaProdutoDto ParceCategoriaProduto(CategoriaProdutoEntity categoriaProdutoEntity)
+    public static CategoriaProdutoDto ParseCategoriaProduto(CategoriaProdutoEntity categoriaProdutoEntity)
     {
         return new CategoriaProdutoDto
         {
@@ -21,11 +21,11 @@ public partial class DtoMapper
             Habilitado = categoriaProdutoEntity.Habilitado
         };
     }
-    internal static IEnumerable<CategoriaProdutoDto> ParseCategoriaProduto(IEnumerable<CategoriaProdutoEntity> categoriasEntities)
+    public static IEnumerable<CategoriaProdutoDto> ParseCategoriaProduto(IEnumerable<CategoriaProdutoEntity> categoriasEntities)
     {
         foreach (var categoriaEntity in categoriasEntities)
         {
-            yield return ParceCategoriaProduto(categoriaEntity);
+            yield return ParseCategoriaProduto(categoriaEntity);
         }
     }
 }

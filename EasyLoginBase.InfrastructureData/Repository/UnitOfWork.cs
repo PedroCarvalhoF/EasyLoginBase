@@ -88,6 +88,13 @@ namespace EasyLoginBase.InfrastructureData.Repository
                 ?? throw new InvalidOperationException($"Falha ao criar repositório para {typeof(T).Name}"));
         }
 
+        public IGerenericRepository<T> GetGenericRepository<T>() where T : class
+        {
+            return (IGerenericRepository<T>)_repositories.GetOrAdd(typeof(T), _ =>
+                new GenericRepository<T>(_context) as object
+                ?? throw new InvalidOperationException($"Falha ao criar repositório genérico para {typeof(T).Name}"));
+        }
+
         /// <summary>
         /// Repositório para Filiais.
         /// </summary>

@@ -24,7 +24,7 @@ public interface IUnitOfWork
 
     // Método para obter um repositório genérico
     IBaseClienteRepository<T> GetRepository<T>() where T : BaseClienteEntity;
-
+    IGerenericRepository<T> GetGenericRepository<T>() where T : class;
 
 }
 

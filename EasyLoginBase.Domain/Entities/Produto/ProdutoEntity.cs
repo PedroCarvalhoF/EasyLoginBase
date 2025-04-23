@@ -10,6 +10,8 @@ public class ProdutoEntity : BaseClienteEntity
     public string? CodigoProduto { get; private set; }
     public Guid CategoriaProdutoEntityId { get; private set; }
     public virtual CategoriaProdutoEntity? CategoriaProdutoEntity { get; private set; }
+    public Guid UnidadeMedidaProdutoEntityId { get; private set; }
+    public virtual UnidadeMedidaProdutoEntity? UnidadeMedidaProdutoEntity { get; private set; }
 
     //um produto pode ter varios precos
     public virtual ICollection<PrecoProdutoEntity>? PrecosEntities { get; private set; }

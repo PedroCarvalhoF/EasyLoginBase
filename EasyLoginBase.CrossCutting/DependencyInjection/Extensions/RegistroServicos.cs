@@ -30,6 +30,7 @@ public static class RegistroServicos
         serviceCollection.AddTransient<ICategoriaPrecoProdutoServices, CategoriaPrecoProdutoServices>();
         serviceCollection.AddTransient<IPrecoProdutoServices, PrecoProdutoServices>();
         serviceCollection.AddTransient<IUsuarioPdvServices, UsuarioPdvServices>();
-        serviceCollection.AddTransient<IPontoVendaServices,PontoVendaServices>();
+        serviceCollection.AddTransient<IPontoVendaServices, PontoVendaServices>();
+        serviceCollection.AddTransient<IUnidadeMedidaProdutoServices, UnidadeMedidaProdutoServices>();
     }
 }

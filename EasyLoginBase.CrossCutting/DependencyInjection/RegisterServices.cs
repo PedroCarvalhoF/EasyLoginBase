@@ -14,6 +14,7 @@ using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 using EasyLoginBase.Services.Tools.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection.Emit;
 using System.Security.Claims;
 
 namespace EasyLoginBase.CrossCutting.DependencyInjection;
@@ -26,6 +27,7 @@ public static class RegisterServices
         serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         serviceCollection.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
         serviceCollection.AddScoped(typeof(IBaseClienteRepository<>), typeof(BaseClienteRepository<>));
+        serviceCollection.AddScoped(typeof(IGerenericRepository<>), typeof(GenericRepository<>));
 
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 

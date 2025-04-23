@@ -19,10 +19,12 @@ public class MyContext : IdentityDbContext
     public DbSet<PessoaClienteVinculadaEntity> PessoasClientesVinculadas { get; set; }
     public DbSet<CategoriaProdutoEntity> CategoriasProdutos { get; set; }
     public DbSet<ProdutoEntity> Produtos { get; set; }
+    public DbSet<UnidadeMedidaProdutoEntity> UnidadeMedidaProdutos { get; set; }
     public DbSet<CategoriaPrecoProdutoEntity> CategoriasPrecosProdutos { get; set; }
     public DbSet<PrecoProdutoEntity> PrecosProdutos { get; set; }
     public DbSet<UsuarioPdvEntity> UsuariosPdvs { get; set; }
     public DbSet<PontoVendaEntity> PontosVendas { get; set; }
+
     public MyContext(DbContextOptions<MyContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

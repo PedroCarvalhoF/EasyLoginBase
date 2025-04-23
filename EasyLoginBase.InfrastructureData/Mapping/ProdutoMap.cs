@@ -29,11 +29,11 @@ public class ProdutoMap : BaseClienteEntityMap<ProdutoEntity>, IEntityTypeConfig
         builder.HasOne(p => p.CategoriaProdutoEntity)
             .WithMany(cat => cat.Produtos)
             .HasForeignKey(p => p.CategoriaProdutoEntityId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(p => p.UnidadeMedidaProdutoEntity)
             .WithMany(ump => ump.ProdutosEntities)
             .HasForeignKey(p => p.UnidadeMedidaProdutoEntityId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

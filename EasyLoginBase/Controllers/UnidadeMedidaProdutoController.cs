@@ -25,7 +25,7 @@ namespace EasyLoginBase.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("consultar-unidades-medidas-produtos")]
         public async Task<ActionResult<RequestResult<IEnumerable<UnidadeMedidaProdutoDto>>>> ConsultarUnidadesProdutosAsync()
         {
             try

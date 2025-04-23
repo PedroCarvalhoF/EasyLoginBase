@@ -30,15 +30,16 @@ public class ProdutoEntity : BaseClienteEntity
         return true;
     }
     public ProdutoEntity() { }
-    ProdutoEntity(string nomeProduto, string codigoProduto, Guid categoriaProdutoEntityId, Guid clienteId, Guid usuarioRegistroId) : base(clienteId, usuarioRegistroId)
+    ProdutoEntity(string nomeProduto, string codigoProduto, Guid categoriaProdutoEntityId, Guid unidadeProdutoId, Guid clienteId, Guid usuarioRegistroId) : base(clienteId, usuarioRegistroId)
     {
         NomeProduto = nomeProduto;
         CodigoProduto = codigoProduto;
         CategoriaProdutoEntityId = categoriaProdutoEntityId;
+        UnidadeMedidaProdutoEntityId = unidadeProdutoId;
     }
 
-    public static ProdutoEntity CriarProdutoEntity(string nomeProduto, string codigoProduto, Guid categoriaProdutoEntityId, Guid clienteId, Guid usuarioRegistroId)
-        => new ProdutoEntity(nomeProduto, codigoProduto, categoriaProdutoEntityId, clienteId, usuarioRegistroId);
+    public static ProdutoEntity CriarProdutoEntity(string nomeProduto, string codigoProduto, Guid categoriaProdutoEntityId, Guid unidadeProdutoId, Guid clienteId, Guid usuarioRegistroId)
+        => new ProdutoEntity(nomeProduto, codigoProduto, categoriaProdutoEntityId, unidadeProdutoId, clienteId, usuarioRegistroId);
 
     public void AlterarNome(string novoNome)
     {

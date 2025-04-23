@@ -30,7 +30,7 @@ public class ProdutoServices : IProdutoServices
                 throw new ArgumentException("Código do produto já está em uso");
 
 
-            ProdutoEntity produtoEntity = ProdutoEntity.CriarProdutoEntity(produtoDtoCreate.NomeProduto, produtoDtoCreate.CodigoProduto, produtoDtoCreate.CategoriaProdutoEntityId, clienteId, user_logado);
+            ProdutoEntity produtoEntity = ProdutoEntity.CriarProdutoEntity(produtoDtoCreate.NomeProduto, produtoDtoCreate.CodigoProduto,produtoDtoCreate.UnidadeMedidaProdutoId, produtoDtoCreate.CategoriaProdutoEntityId, clienteId, user_logado);
 
             await _repository.GetRepository<ProdutoEntity>().CadastrarAsync(produtoEntity);
 

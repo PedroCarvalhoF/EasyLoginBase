@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Implementacao\" />
     <Folder Include="Tools\" />
     <Folder Include="Seeds\" />
   </ItemGroup>

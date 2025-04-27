@@ -1,4 +1,5 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Produto;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Produto.Produto;
 using System.Security.Claims;
 
 namespace EasyLoginBase.Application.Services.Intefaces.Produto;
@@ -6,6 +7,7 @@ namespace EasyLoginBase.Application.Services.Intefaces.Produto;
 public interface IProdutoServices
 {
     Task<ProdutoDto> CadastrarProduto(ProdutoDtoCreate produtoDtoCreate, ClaimsPrincipal claims);
+    Task<RequestResult<ProdutoDto>> UpdateAsync(ProdutoDtoUpdate produtoDtoUpdate, ClaimsPrincipal claims);
     Task<IEnumerable<ProdutoDto>> ConsultarProdutos(ClaimsPrincipal user);
 
     Task<bool> NomeProdutoUso(string nomeProduto, ClaimsPrincipal user);

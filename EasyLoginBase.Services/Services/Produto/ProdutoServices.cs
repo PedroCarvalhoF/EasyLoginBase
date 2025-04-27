@@ -1,4 +1,5 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Produto;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Produto.Produto;
 using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.Application.Tools;
 using EasyLoginBase.Domain.Entities.Produto;
@@ -30,7 +31,7 @@ public class ProdutoServices : IProdutoServices
                 throw new ArgumentException("Código do produto já está em uso");
 
 
-            ProdutoEntity produtoEntity = ProdutoEntity.CriarProdutoEntity(produtoDtoCreate.NomeProduto, produtoDtoCreate.CodigoProduto, produtoDtoCreate.CategoriaProdutoEntityId,produtoDtoCreate.UnidadeMedidaProdutoId, clienteId, user_logado);
+            ProdutoEntity produtoEntity = ProdutoEntity.CriarProdutoEntity(produtoDtoCreate.NomeProduto, produtoDtoCreate.CodigoProduto, produtoDtoCreate.CategoriaProdutoEntityId, produtoDtoCreate.UnidadeMedidaProdutoId, clienteId, user_logado);
 
             await _repository.GetRepository<ProdutoEntity>().CadastrarAsync(produtoEntity);
 
@@ -53,6 +54,51 @@ public class ProdutoServices : IProdutoServices
         {
 
             throw new Exception(ex.Message);
+        }
+    }
+    public async Task<RequestResult<ProdutoDto>> UpdateAsync(ProdutoDtoUpdate produtoDtoUpdate, ClaimsPrincipal claims)
+    {
+        try
+        {
+            var clienteId = claims.GetClienteIdVinculo();
+            var user_logado = claims.GetUserId();
+
+            var produtoExists = await _repository.GetRepository<ProdutoEntity>().ConsultarPorIdAsync(produtoDtoUpdate.Id, clienteId);
+
+            if (produtoExists is null)
+                throw new ArgumentException("Produto não localizado.");
+
+            var validarNomeExists = await _repository.GetRepository<ProdutoEntity>().ConsultarPorFiltroAsync(p => p.NomeProduto.ToLower() == produtoDtoUpdate.NomeProduto.ToLower() && p.Id != produtoDtoUpdate.Id, clienteId);
+
+            if (validarNomeExists != null && validarNomeExists.Count() > 0)
+                throw new ArgumentException("Nome do produto está em uso");
+
+            var validarCodigoExists = await _repository.GetRepository<ProdutoEntity>().ConsultarPorFiltroAsync(p => p.CodigoProduto.ToLower() == produtoDtoUpdate.CodigoProduto.ToLower() && p.Id != produtoDtoUpdate.Id, clienteId);
+
+            if (validarCodigoExists != null && validarCodigoExists.Count() > 0)
+                throw new ArgumentException("Código do produto está em uso");
+
+            produtoExists.AlterarNome(produtoDtoUpdate.NomeProduto);
+            produtoExists.AlterarCodigo(produtoDtoUpdate.CodigoProduto);
+            produtoExists.AlterarCategoria(produtoDtoUpdate.CategoriaProdutoEntityId);
+
+            _repository.GetRepository<ProdutoEntity>().AtualizarAsync(produtoExists);
+
+            if (await _repository.CommitAsync())
+            {
+                var produtoEntityUpdate = await _repository.GetRepository<ProdutoEntity>().ConsultarPorIdAsync(produtoExists.Id, clienteId);
+                if (produtoEntityUpdate is null)
+                    throw new ArgumentException("Erro ao atualizar Produto");
+                ProdutoDto produtoDtoUpdateResult = DtoMapper.ParseProduto(produtoEntityUpdate);
+                return new RequestResult<ProdutoDto>(produtoDtoUpdateResult);
+            }
+
+            throw new ArgumentException("Erro inesperado ao atualizar produto.");
+        }
+        catch (Exception ex)
+        {
+
+            return new RequestResult<ProdutoDto>(ex);
         }
     }
     public async Task<IEnumerable<ProdutoDto>> ConsultarProdutos(ClaimsPrincipal user)
@@ -135,4 +181,6 @@ public class ProdutoServices : IProdutoServices
             throw new Exception(ex.Message);
         }
     }
+
+
 }

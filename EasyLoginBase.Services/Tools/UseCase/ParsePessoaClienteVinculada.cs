@@ -34,10 +34,12 @@ public partial class DtoMapper
             CodigoProduto = produtoEntity.CodigoProduto,
             CategoriaProdutoEntityId = produtoEntity.CategoriaProdutoEntityId,
             CategoriaProduto = produtoEntity.CategoriaProdutoEntity.NomeCategoria,
+            UnidadeMedidaProdutoEntityId = produtoEntity.UnidadeMedidaProdutoEntityId,
+            UnidadeMedidaProduto = produtoEntity.UnidadeMedidaProdutoEntity.Sigla
         };
     }
 
-    internal static IEnumerable<ProdutoDto> ParseProdutos(IEnumerable<ProdutoEntity> entities)
+    public static IEnumerable<ProdutoDto> ParseProdutos(IEnumerable<ProdutoEntity> entities)
     {
         foreach (var entity in entities)
         {

@@ -1,10 +1,9 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Categoria;
-using EasyLoginBase.Application.Dto;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Produto.Produto;
+using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.Application.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EasyLoginBase.Application.Dto.Produto.Produto;
-using EasyLoginBase.Application.Services.Intefaces.Produto;
 
 namespace EasyLoginBase.Controllers;
 
@@ -13,8 +12,23 @@ namespace EasyLoginBase.Controllers;
 [Authorize]
 public class ProdutoController(IProdutoServices _services) : ControllerBase
 {
+    [HttpGet("consultar-produtos")]
+    public async Task<ActionResult<RequestResult<IEnumerable<ProdutoDto>>>> ConsultarProdutosAsync()
+    {
+        try
+        {
+            IEnumerable<ProdutoDto> dtos = await _services.ConsultarProdutos(User);
+
+            return new ReturnActionResult<IEnumerable<ProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<ProdutoDto>>.Ok(dtos));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<IEnumerable<ProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<ProdutoDto>>.BadRequest(ex.Message));
+        }
+    }
+
     [HttpPost("cadastrar-produto")]
-    public async Task<ActionResult<RequestResult<ProdutoDto>>> CadastrarFilial([FromBody] ProdutoDtoCreate command)
+    public async Task<ActionResult<RequestResult<ProdutoDto>>> CadastrarProdutoAsync([FromBody] ProdutoDtoCreate command)
     {
         try
         {
@@ -31,19 +45,19 @@ public class ProdutoController(IProdutoServices _services) : ControllerBase
         }
     }
 
-
-    [HttpGet("consultar-produtos")]
-    public async Task<ActionResult<RequestResult<IEnumerable<ProdutoDto>>>> ConsultarProdutos()
+    [HttpPost("atualizar-produto")]
+    public async Task<ActionResult<RequestResult<ProdutoDto>>> AtualizarProdutoAcync([FromBody] ProdutoDtoUpdate update)
     {
         try
         {
-            IEnumerable<ProdutoDto> dtos = await _services.ConsultarProdutos(User);
+            if (update == null)
+                return BadRequest("Requisição inválida.");
 
-            return new ReturnActionResult<IEnumerable<ProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<ProdutoDto>>.Ok(dtos));
+            return new ReturnActionResult<ProdutoDto>().ParseToActionResult(await _services.UpdateAsync(update, User));
         }
         catch (Exception ex)
         {
-            return new ReturnActionResult<IEnumerable<ProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<ProdutoDto>>.BadRequest(ex.Message));
+            return new ReturnActionResult<ProdutoDto>().ParseToActionResult(RequestResult<ProdutoDto>.BadRequest(ex.Message));
         }
     }
 }

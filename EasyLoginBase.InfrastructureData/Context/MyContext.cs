@@ -40,6 +40,7 @@ public class MyContext : IdentityDbContext
         modelBuilder.ApplyConfiguration(new PrecoProdutoMap());
         modelBuilder.ApplyConfiguration(new UsuarioPdvMap());
         modelBuilder.ApplyConfiguration(new PontoVendaMap());
+        modelBuilder.ApplyConfiguration(new EstoqueProdutoMap());
 
         base.OnModelCreating(modelBuilder);
 

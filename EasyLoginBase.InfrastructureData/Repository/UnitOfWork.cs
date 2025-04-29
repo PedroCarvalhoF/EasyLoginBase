@@ -3,11 +3,14 @@ using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
+using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
+using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
 using EasyLoginBase.InfrastructureData.Context;
+using EasyLoginBase.InfrastructureData.Implementacao;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PDV;
 using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
@@ -33,6 +36,9 @@ namespace EasyLoginBase.InfrastructureData.Repository
         //NOVO REPOSITORIO
 
         private IBaseClienteRepository_REFACTOR<ProdutoEntity>? _produtoRepository;
+
+        private IBaseClienteRepository_REFACTOR<EstoqueProdutoEntity>? _produtoEstoqueRepository;
+        private IEstoqueProdutoRepository<EstoqueProdutoEntity>? _estoqueProdutoImplementacao;
 
 
         public UnitOfWork(MyContext context)
@@ -140,6 +146,25 @@ namespace EasyLoginBase.InfrastructureData.Repository
                     _produtoRepository = new BaseClienteRepository_REFACTOR<ProdutoEntity>(_context);
 
                 return _produtoRepository;
+            }
+        }
+        public IBaseClienteRepository_REFACTOR<EstoqueProdutoEntity> EstoqueProdutoRepository
+        {
+            get
+            {
+                if (_produtoEstoqueRepository == null)
+                    _produtoEstoqueRepository = new BaseClienteRepository_REFACTOR<EstoqueProdutoEntity>(_context);
+                return _produtoEstoqueRepository;
+            }
+        }
+        public IEstoqueProdutoRepository<EstoqueProdutoEntity> EstoqueProdutoImplementacao
+        {
+            get
+            {
+                if (_estoqueProdutoImplementacao == null)
+                    _estoqueProdutoImplementacao = new ProdutoEstoqueImplementacao(_context);
+
+                return _estoqueProdutoImplementacao;
             }
         }
     }

@@ -59,4 +59,10 @@ public class EstoqueProdutoEntity : BaseClienteEntity
             throw new ValidationException($"Validação falhou: {errors}");
         }
     }
+
+    public void AtualizarQuantidade(decimal quantidade)
+    {
+        Quantidade += quantidade;
+        AtualizarData();
+    }
 }

@@ -3,11 +3,14 @@ using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
+using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Produto;
+using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
+using EasyLoginBase.InfrastructureData.Implementacao;
 using EasyLoginBase.InfrastructureData.Repository;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PDV;
@@ -16,7 +19,6 @@ using EasyLoginBase.InfrastructureData.Repository.Produto;
 using EasyLoginBase.Services.Tools.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection.Emit;
 using System.Security.Claims;
 
 namespace EasyLoginBase.CrossCutting.DependencyInjection;
@@ -38,9 +40,13 @@ public static class RegisterServices
 
 
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
-      
+
         serviceCollection.AddScoped<IBaseClienteRepository_REFACTOR<ProdutoEntity>, BaseClienteRepository_REFACTOR<ProdutoEntity>>();
         serviceCollection.AddScoped<IProdutoRepository_REFACTOR, ProdutoRepository_REFACTOR>();
+
+        serviceCollection.AddScoped<IBaseClienteRepository_REFACTOR<EstoqueProdutoEntity>, BaseClienteRepository_REFACTOR<EstoqueProdutoEntity>>();
+        serviceCollection.AddScoped<IEstoqueProdutoRepository<EstoqueProdutoEntity>, ProdutoEstoqueImplementacao>();
+
 
         // Alterado para Scoped para melhor uso do DbContext
         serviceCollection.AddScoped<IFilialRepository<FilialEntity, ClaimsPrincipal>, FilialRepository>();

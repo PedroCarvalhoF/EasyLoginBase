@@ -64,4 +64,10 @@ public class ProdutoEntity : BaseClienteEntity
         CategoriaProdutoEntityId = novaCategoriaId;
         AtualizarData();
     }
+
+    public void AlterarUnidadeMedidaProduto(Guid unidadeMedidaProdutoId)
+    {
+        UnidadeMedidaProdutoEntityId = unidadeMedidaProdutoId;
+        AtualizarData();
+    }
 }

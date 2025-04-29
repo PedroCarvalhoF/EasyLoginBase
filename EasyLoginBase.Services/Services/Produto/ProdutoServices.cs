@@ -81,6 +81,7 @@ public class ProdutoServices : IProdutoServices
             produtoExists.AlterarNome(produtoDtoUpdate.NomeProduto);
             produtoExists.AlterarCodigo(produtoDtoUpdate.CodigoProduto);
             produtoExists.AlterarCategoria(produtoDtoUpdate.CategoriaProdutoEntityId);
+            produtoExists.AlterarUnidadeMedidaProduto(produtoDtoUpdate.UnidadeMedidaProdutoId);
 
             _repository.GetRepository<ProdutoEntity>().AtualizarAsync(produtoExists);
 

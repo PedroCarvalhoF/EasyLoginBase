@@ -2,6 +2,7 @@
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
+using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
@@ -26,5 +27,8 @@ public interface IUnitOfWork
     IBaseClienteRepository<T> GetRepository<T>() where T : BaseClienteEntity;
     IGerenericRepository<T> GetGenericRepository<T>() where T : class;
 
+
+    //REFACTOR NOVO REPOSITORIO E CONTEXTO
+    IBaseClienteRepository_REFACTOR<ProdutoEntity> ProdutoRepository { get; }
 }
 

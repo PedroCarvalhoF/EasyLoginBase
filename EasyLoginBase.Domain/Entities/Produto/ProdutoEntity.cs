@@ -1,5 +1,6 @@
 ﻿using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Entities.Preco.Produto;
+using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using System.ComponentModel.DataAnnotations;
 
 namespace EasyLoginBase.Domain.Entities.Produto;
@@ -11,10 +12,9 @@ public class ProdutoEntity : BaseClienteEntity
     public Guid CategoriaProdutoEntityId { get; private set; }
     public virtual CategoriaProdutoEntity? CategoriaProdutoEntity { get; private set; }
     public Guid UnidadeMedidaProdutoEntityId { get; private set; }
-    public virtual UnidadeMedidaProdutoEntity? UnidadeMedidaProdutoEntity { get; private set; }
-
-    //um produto pode ter varios precos
+    public virtual UnidadeMedidaProdutoEntity? UnidadeMedidaProdutoEntity { get; private set; }     
     public virtual ICollection<PrecoProdutoEntity>? PrecosEntities { get; private set; }
+    public virtual ICollection<EstoqueProdutoEntity>? EstoqueProdutoEntities { get; private set; }
     public bool EntidadeValidada => ValidarProduto();
     private bool ValidarProduto()
     {

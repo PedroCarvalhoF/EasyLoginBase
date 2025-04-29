@@ -2,6 +2,7 @@
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
+using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
@@ -28,6 +29,10 @@ namespace EasyLoginBase.InfrastructureData.Repository
 
         private IPontoVendaRepository<PontoVendaEntity>? _pontoVendaRepository;
         private IBaseClienteRepository<PontoVendaEntity>? _pontoVendaRepositoryBase;
+
+        //NOVO REPOSITORIO
+
+        private IBaseClienteRepository_REFACTOR<ProdutoEntity>? _produtoRepository;
 
 
         public UnitOfWork(MyContext context)
@@ -124,5 +129,18 @@ namespace EasyLoginBase.InfrastructureData.Repository
 
         public IBaseClienteRepository<PontoVendaEntity> PontoVendaRepositoryBase
         => _pontoVendaRepositoryBase ??= new BaseClienteRepository<PontoVendaEntity>(_context);
+
+
+        //NOVOS REPOSITORIOS
+        public IBaseClienteRepository_REFACTOR<ProdutoEntity> ProdutoRepository
+        {
+            get
+            {
+                if (_produtoRepository == null)
+                    _produtoRepository = new BaseClienteRepository_REFACTOR<ProdutoEntity>(_context);
+
+                return _produtoRepository;
+            }
+        }
     }
 }

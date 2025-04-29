@@ -12,7 +12,7 @@ namespace EasyLoginBase.Controllers;
 [Authorize]
 public class ProdutoController(IProdutoServices _services) : ControllerBase
 {
-    [HttpGet("consultar-produtos")]
+    [HttpGet]
     public async Task<ActionResult<RequestResult<IEnumerable<ProdutoDto>>>> ConsultarProdutosAsync()
     {
         try
@@ -27,7 +27,7 @@ public class ProdutoController(IProdutoServices _services) : ControllerBase
         }
     }
 
-    [HttpPost("cadastrar-produto")]
+    [HttpPost]
     public async Task<ActionResult<RequestResult<ProdutoDto>>> CadastrarProdutoAsync([FromBody] ProdutoDtoCreate command)
     {
         try
@@ -45,7 +45,7 @@ public class ProdutoController(IProdutoServices _services) : ControllerBase
         }
     }
 
-    [HttpPost("atualizar-produto")]
+    [HttpPut]
     public async Task<ActionResult<RequestResult<ProdutoDto>>> AtualizarProdutoAcync([FromBody] ProdutoDtoUpdate update)
     {
         try

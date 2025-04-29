@@ -12,7 +12,6 @@ namespace EasyLoginBase.Services.Services.Produto;
 public class ProdutoServices : IProdutoServices
 {
     private readonly IUnitOfWork _repository;
-
     public ProdutoServices(IUnitOfWork repository)
     {
         _repository = repository;
@@ -33,7 +32,7 @@ public class ProdutoServices : IProdutoServices
 
             ProdutoEntity produtoEntity = ProdutoEntity.CriarProdutoEntity(produtoDtoCreate.NomeProduto, produtoDtoCreate.CodigoProduto, produtoDtoCreate.CategoriaProdutoEntityId, produtoDtoCreate.UnidadeMedidaProdutoId, clienteId, user_logado);
 
-            await _repository.GetRepository<ProdutoEntity>().CadastrarAsync(produtoEntity);
+            await _repository.ProdutoRepository.CreateAsync(produtoEntity);
 
             if (await _repository.CommitAsync())
             {
@@ -63,7 +62,7 @@ public class ProdutoServices : IProdutoServices
             var clienteId = claims.GetClienteIdVinculo();
             var user_logado = claims.GetUserId();
 
-            var produtoExists = await _repository.GetRepository<ProdutoEntity>().ConsultarPorIdAsync(produtoDtoUpdate.Id, clienteId);
+            var produtoExists = await _repository.ProdutoRepository.SelectAsync(produtoDtoUpdate.Id, clienteId);
 
             if (produtoExists is null)
                 throw new ArgumentException("Produto não localizado.");
@@ -83,7 +82,7 @@ public class ProdutoServices : IProdutoServices
             produtoExists.AlterarCategoria(produtoDtoUpdate.CategoriaProdutoEntityId);
             produtoExists.AlterarUnidadeMedidaProduto(produtoDtoUpdate.UnidadeMedidaProdutoId);
 
-            _repository.GetRepository<ProdutoEntity>().AtualizarAsync(produtoExists);
+            _repository.ProdutoRepository.UpdateAsync(produtoExists);
 
             if (await _repository.CommitAsync())
             {
@@ -182,6 +181,4 @@ public class ProdutoServices : IProdutoServices
             throw new Exception(ex.Message);
         }
     }
-
-
 }

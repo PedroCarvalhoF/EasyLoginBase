@@ -4,8 +4,10 @@ using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Preco.Produto;
 using EasyLoginBase.Domain.Entities.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Domain.Entities.Produto;
+using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.InfrastructureData.Mapping;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,7 @@ public class MyContext : IdentityDbContext
     public DbSet<PrecoProdutoEntity> PrecosProdutos { get; set; }
     public DbSet<UsuarioPdvEntity> UsuariosPdvs { get; set; }
     public DbSet<PontoVendaEntity> PontosVendas { get; set; }
+    public DbSet<EstoqueProdutoEntity> EstoqueProdutos { get; set; }
 
     public MyContext(DbContextOptions<MyContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)

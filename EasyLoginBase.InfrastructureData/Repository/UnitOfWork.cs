@@ -39,6 +39,7 @@ namespace EasyLoginBase.InfrastructureData.Repository
 
         private IBaseClienteRepository_REFACTOR<EstoqueProdutoEntity>? _produtoEstoqueRepository;
         private IEstoqueProdutoRepository<EstoqueProdutoEntity>? _estoqueProdutoImplementacao;
+        private IBaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity>? _movimentacaoEstoqueProdutoRepository;
 
 
         public UnitOfWork(MyContext context)
@@ -165,6 +166,17 @@ namespace EasyLoginBase.InfrastructureData.Repository
                     _estoqueProdutoImplementacao = new ProdutoEstoqueImplementacao(_context);
 
                 return _estoqueProdutoImplementacao;
+            }
+        }
+
+        public IBaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity> MovimentacaoEstoqueProdutoRepository
+        {
+            get
+            {
+                if (_movimentacaoEstoqueProdutoRepository == null)
+                    _movimentacaoEstoqueProdutoRepository = new BaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity>(_context);
+
+                return _movimentacaoEstoqueProdutoRepository;
             }
         }
     }

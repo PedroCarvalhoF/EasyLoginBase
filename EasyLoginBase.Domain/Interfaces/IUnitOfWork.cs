@@ -32,7 +32,14 @@ public interface IUnitOfWork
 
     //REFACTOR NOVO REPOSITORIO E CONTEXTO
     IBaseClienteRepository_REFACTOR<ProdutoEntity> ProdutoRepository { get; }
+
+
+
+    //ESTOQUES
     IBaseClienteRepository_REFACTOR<EstoqueProdutoEntity> EstoqueProdutoRepository { get; }
     IEstoqueProdutoRepository<EstoqueProdutoEntity> EstoqueProdutoImplementacao { get; }
+    IBaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity> MovimentacaoEstoqueProdutoRepository { get; }
+
+
 }
 

@@ -18,6 +18,7 @@ public class FilialEntity : BaseClienteEntity
     public virtual ICollection<PrecoProdutoEntity>? PrecoProdutoEntities { get; private set; }
     public virtual ICollection<PontoVendaEntity>? PontoVendaEntities { get; private set; }
     public virtual ICollection<EstoqueProdutoEntity>? EstoqueProdutoEntities { get; private set; }
+    public virtual ICollection<MovimentacaoEstoqueProdutoEntity>? MovimentacaoEstoqueProdutoEntities { get; private set; }
 
     public bool EntidadeValidada => ValidarProduto();
     public FilialEntity() { }

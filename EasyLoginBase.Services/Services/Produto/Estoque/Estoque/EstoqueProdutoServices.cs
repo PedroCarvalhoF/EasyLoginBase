@@ -33,9 +33,13 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
 
                 if (await _repository.CommitAsync())
                 {
+
+
                     var estoqueProdutoResultCreate = await _repository.EstoqueProdutoImplementacao.SelectByProdutoIdFilialId(clienteId, estoqueMov.ProdutoId, estoqueMov.FilialId);
 
                     var dto = estoqueProdutoResultCreate!.EstoqueProdutoEntityToDto();
+
+                    await RegistrarMovimentoEstoque(estoqueMov, clienteId, user_logado);
 
                     return new RequestResult<EstoqueProdutoDto>(dto);
                 }
@@ -46,7 +50,11 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
             {
                 decimal quantidade = estoqueMov.Quantidade;
                 if (estoqueMov.EstoqueProdutoDtoOperacao == EstoqueProdutoDtoOperacao.Saida)
+                {
                     quantidade = estoqueMov.Quantidade * -1;
+
+                }
+
 
                 estoqueProdutoExists.AtualizarQuantidade(quantidade);
 
@@ -54,6 +62,9 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
 
                 if (await _repository.CommitAsync())
                 {
+
+                    await RegistrarMovimentoEstoque(estoqueMov, clienteId, user_logado);
+
                     var dto = estoqueProdutoExists.EstoqueProdutoEntityToDto();
                     return new RequestResult<EstoqueProdutoDto>(dto);
                 }
@@ -70,6 +81,41 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
 
             throw new Exception(ex.Message);
         }
+    }
+
+    private async Task RegistrarMovimentoEstoque(EstoqueProdutoDtoManter estoqueMov, Guid clienteId, Guid user_logado)
+    {
+        try
+        {
+            switch (estoqueMov.EstoqueProdutoDtoOperacao)
+            {
+                case EstoqueProdutoDtoOperacao.Entrada:
+
+                    var mov_estoque_entrada = MovimentacaoEstoqueProdutoEntity.Entrada(estoqueMov.ProdutoId, estoqueMov.FilialId, estoqueMov.Quantidade, null, clienteId, user_logado);
+                    await _repository.MovimentacaoEstoqueProdutoRepository.CreateAsync(mov_estoque_entrada);
+                    if (!await _repository.CommitAsync())
+                        throw new ArgumentException("Erro ao registrar movimentação do estoque");
+
+                    break;
+                case EstoqueProdutoDtoOperacao.Saida:
+
+
+                    var mov_estoque_saida = MovimentacaoEstoqueProdutoEntity.Saida(estoqueMov.ProdutoId, estoqueMov.FilialId, estoqueMov.Quantidade, null, clienteId, user_logado);
+                    await _repository.MovimentacaoEstoqueProdutoRepository.CreateAsync(mov_estoque_saida);
+                    if (!await _repository.CommitAsync())
+                        throw new ArgumentException("Erro ao registrar movimentação do estoque");
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+
+
     }
 
     public async Task<RequestResult<IEnumerable<EstoqueProdutoDto>>> SelectAllAsync(Guid clienteId, bool include = true)

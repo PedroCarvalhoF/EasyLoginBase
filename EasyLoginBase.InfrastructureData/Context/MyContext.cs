@@ -27,6 +27,7 @@ public class MyContext : IdentityDbContext
     public DbSet<UsuarioPdvEntity> UsuariosPdvs { get; set; }
     public DbSet<PontoVendaEntity> PontosVendas { get; set; }
     public DbSet<EstoqueProdutoEntity> EstoqueProdutos { get; set; }
+    public DbSet<MovimentacaoEstoqueProdutoEntity> EstoqueProdutosMovimentacao { get; set; }
 
     public MyContext(DbContextOptions<MyContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +42,7 @@ public class MyContext : IdentityDbContext
         modelBuilder.ApplyConfiguration(new UsuarioPdvMap());
         modelBuilder.ApplyConfiguration(new PontoVendaMap());
         modelBuilder.ApplyConfiguration(new EstoqueProdutoMap());
+        modelBuilder.ApplyConfiguration(new MovimentacaoEstoqueProdutoMap());
 
         base.OnModelCreating(modelBuilder);
 

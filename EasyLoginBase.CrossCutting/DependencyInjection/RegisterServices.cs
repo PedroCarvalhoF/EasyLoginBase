@@ -46,6 +46,7 @@ public static class RegisterServices
 
         serviceCollection.AddScoped<IBaseClienteRepository_REFACTOR<EstoqueProdutoEntity>, BaseClienteRepository_REFACTOR<EstoqueProdutoEntity>>();
         serviceCollection.AddScoped<IEstoqueProdutoRepository<EstoqueProdutoEntity>, ProdutoEstoqueImplementacao>();
+        serviceCollection.AddScoped<IBaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity>, BaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity>>();
 
 
         // Alterado para Scoped para melhor uso do DbContext

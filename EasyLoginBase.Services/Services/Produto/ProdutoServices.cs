@@ -1,8 +1,10 @@
 ﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Produto.Estoque.Estoque;
 using EasyLoginBase.Application.Dto.Produto.Produto;
 using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.Application.Tools;
 using EasyLoginBase.Domain.Entities.Produto;
+using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Services.Tools.UseCase;
 using System.Security.Claims;
@@ -12,9 +14,11 @@ namespace EasyLoginBase.Services.Services.Produto;
 public class ProdutoServices : IProdutoServices
 {
     private readonly IUnitOfWork _repository;
-    public ProdutoServices(IUnitOfWork repository)
+    private readonly IEstoqueProdutoServices<EstoqueProdutoDto> _estoqueProdutoServices;
+    public ProdutoServices(IUnitOfWork repository, IEstoqueProdutoServices<EstoqueProdutoDto> estoqueProdutoServices)
     {
         _repository = repository;
+        _estoqueProdutoServices = estoqueProdutoServices;
     }
     public async Task<ProdutoDto> CadastrarProduto(ProdutoDtoCreate produtoDtoCreate, ClaimsPrincipal user)
     {
@@ -43,6 +47,13 @@ public class ProdutoServices : IProdutoServices
                     throw new ArgumentException("Erro ao cadastrar Produto");
 
                 ProdutoDto produtoDtoCreateResult = DtoMapper.ParseProduto(produtoEntityCreate);
+
+                //apos cadastrar produto // registrar no estoque
+                //FORÇANDO FILIAL
+                //AJUSTAR CODIGO PARA MAIS DE UMA FILIAL
+                await _estoqueProdutoServices.MovimentarEstoque(new EstoqueProdutoDtoManter(produtoEntity.Id, Guid.Parse("c844692e-236a-4e07-a174-cd4f15d49d18"), 0, EstoqueProdutoDtoOperacao.Entrada), user);
+
+
 
                 return produtoDtoCreateResult;
             }

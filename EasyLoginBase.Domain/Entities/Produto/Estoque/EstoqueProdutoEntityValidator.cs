@@ -12,7 +12,7 @@ public class EstoqueProdutoEntityValidator : AbstractValidator<EstoqueProdutoEnt
         RuleFor(x => x.FilialId)
             .NotEmpty().WithMessage("FilialId é obrigatório.");
 
-        RuleFor(x => x.Quantidade)
-            .GreaterThan(0).WithMessage("Quantidade deve ser maior que zero.");
+        //RuleFor(x => x.Quantidade)
+        //    .GreaterThan(0).WithMessage("Quantidade deve ser maior que zero.");
     }
 }

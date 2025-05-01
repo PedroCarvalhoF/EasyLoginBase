@@ -11,6 +11,7 @@ namespace EasyLoginBase.Services.Services.Produto.Estoque.Estoque;
 public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
 {
     private readonly IUnitOfWork _repository;
+
     public EstoqueProdutoServices(IUnitOfWork repository)
     {
         _repository = repository;
@@ -118,10 +119,14 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
 
     }
 
-    public async Task<RequestResult<IEnumerable<EstoqueProdutoDto>>> SelectAllAsync(Guid clienteId, bool include = true)
+    public async Task<RequestResult<IEnumerable<EstoqueProdutoDto>>> SelectAllAsync(ClaimsPrincipal user, bool include = true)
     {
         try
         {
+
+            var clienteId = user.GetClienteIdVinculo();
+            var user_logado = user.GetUserId();
+
             var entities = await _repository.EstoqueProdutoImplementacao.SelectAllAsync(clienteId, include);
 
             var dto = entities.EstoqueProdutoEntityToDto();

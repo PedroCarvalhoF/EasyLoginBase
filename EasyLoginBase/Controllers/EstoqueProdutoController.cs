@@ -36,4 +36,16 @@ public class EstoqueProdutoController : ControllerBase
             return new ReturnActionResult<IEnumerable<ProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<ProdutoDto>>.BadRequest(ex.Message));
         }
     }
+    [HttpGet]
+    public async Task<ActionResult<RequestResult<EstoqueProdutoDto>>> SelectAllAsync()
+    {
+        try
+        {
+            return new ReturnActionResult<IEnumerable<EstoqueProdutoDto>>().ParseToActionResult(await _estoqueProdutoServices.SelectAllAsync(User, true));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<IEnumerable<ProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<ProdutoDto>>.BadRequest(ex.Message));
+        }
+    }
 }

@@ -20,6 +20,9 @@ public class ProdutoEstoqueImplementacao : BaseClienteRepository_REFACTOR<Estoqu
     {
         query = query
                 .Include(e => e.Produto)
+                .ThenInclude(e => e.UnidadeMedidaProdutoEntity)
+                .Include(e => e.Produto.CategoriaProdutoEntity)
+
                 .Include(e => e.Filial);
 
         return query;

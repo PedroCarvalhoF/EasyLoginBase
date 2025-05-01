@@ -20,8 +20,8 @@ public class MovimentacaoEstoqueProdutoEntity : BaseClienteEntity
         if (estoqueProdutoId == Guid.Empty)
             throw new ArgumentException("EstoqueProdutoId não pode ser vazio.");
 
-        if (quantidade <= 0)
-            throw new ArgumentException("Quantidade não pode ser menor zero.");
+        //if (quantidade <= 0)
+        //    throw new ArgumentException("Quantidade não pode ser menor zero.");
 
         ProdutoId = estoqueProdutoId;
         FilialId = filialId;

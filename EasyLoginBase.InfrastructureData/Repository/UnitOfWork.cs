@@ -1,4 +1,5 @@
-﻿using EasyLoginBase.Domain.Entities.Base;
+﻿using EasyLoginBase.Domain.Entities;
+using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
@@ -9,6 +10,7 @@ using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
+using EasyLoginBase.Domain.Interfaces.Produto.MovimentacaoEstoque;
 using EasyLoginBase.InfrastructureData.Context;
 using EasyLoginBase.InfrastructureData.Implementacao;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
@@ -37,9 +39,13 @@ namespace EasyLoginBase.InfrastructureData.Repository
 
         private IBaseClienteRepository_REFACTOR<ProdutoEntity>? _produtoRepository;
 
+        //ESTOQUE
         private IBaseClienteRepository_REFACTOR<EstoqueProdutoEntity>? _produtoEstoqueRepository;
         private IEstoqueProdutoRepository<EstoqueProdutoEntity>? _estoqueProdutoImplementacao;
+
+        //MOVIMENTACAO ESTOQUE
         private IBaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity>? _movimentacaoEstoqueProdutoRepository;
+        private IMovimentacaoEstoqueProdutoRepository<MovimentacaoEstoqueProdutoEntity, FiltroBase>? _movimentacaoEstoqueProdutoImplementacao;
 
 
         public UnitOfWork(MyContext context)
@@ -169,6 +175,8 @@ namespace EasyLoginBase.InfrastructureData.Repository
             }
         }
 
+
+        //MOVIMENTACAO ESTOQUE
         public IBaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity> MovimentacaoEstoqueProdutoRepository
         {
             get
@@ -177,6 +185,16 @@ namespace EasyLoginBase.InfrastructureData.Repository
                     _movimentacaoEstoqueProdutoRepository = new BaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity>(_context);
 
                 return _movimentacaoEstoqueProdutoRepository;
+            }
+        }
+
+        public IMovimentacaoEstoqueProdutoRepository<MovimentacaoEstoqueProdutoEntity, FiltroBase> MovimentacaoEstoqueProdutoImplementacao
+        {
+            get
+            {
+                if (_movimentacaoEstoqueProdutoImplementacao == null)
+                    _movimentacaoEstoqueProdutoImplementacao = new MovimentacaoEstoqueProdutoImplementacao(_context);
+                return _movimentacaoEstoqueProdutoImplementacao;
             }
         }
     }

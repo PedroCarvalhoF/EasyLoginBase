@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 namespace EasyLoginBase.InfrastructureData.Implementacao;
 public class ProdutoEstoqueImplementacao : BaseClienteRepository_REFACTOR<EstoqueProdutoEntity>, IEstoqueProdutoRepository<EstoqueProdutoEntity>
 {
-    private readonly MyContext _context;
+    //private readonly MyContext _context;
     private readonly DbSet<EstoqueProdutoEntity> _dbSet;
 
     public ProdutoEstoqueImplementacao(MyContext context) : base(context)
     {
-        _context = context;
-        _dbSet = _context.Set<EstoqueProdutoEntity>();
+        //_context = context;
+        _dbSet = context.Set<EstoqueProdutoEntity>();
     }
 
     private IQueryable<EstoqueProdutoEntity> IncludeQuery(IQueryable<EstoqueProdutoEntity> query)

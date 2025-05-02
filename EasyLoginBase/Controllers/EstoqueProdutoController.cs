@@ -1,11 +1,10 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Produto;
-using EasyLoginBase.Application.Dto;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Produto.Estoque.Estoque;
+using EasyLoginBase.Application.Dto.Produto.Produto;
+using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.Application.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using EasyLoginBase.Application.Dto.Produto.Estoque.Estoque;
-using EasyLoginBase.Application.Services.Intefaces.Produto;
 
 namespace EasyLoginBase.Controllers;
 
@@ -36,6 +35,21 @@ public class EstoqueProdutoController : ControllerBase
             return new ReturnActionResult<IEnumerable<ProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<ProdutoDto>>.BadRequest(ex.Message));
         }
     }
+
+    [HttpPost("multiplos-produtos")]
+    public async Task<ActionResult<RequestResult<EstoqueProdutoDto>>> MovimentarEstoqueMultiplosAsync([FromBody] EstoqueProdutoDtoManterMultiplosProdutos estoqueProdutoDtoManterMultiplos)
+    {
+        try
+        {
+            throw new NotImplementedException();
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<IEnumerable<ProdutoDto>>().ParseToActionResult(RequestResult<IEnumerable<ProdutoDto>>.BadRequest(ex.Message));
+        }
+    }
+
+
     [HttpGet]
     public async Task<ActionResult<RequestResult<EstoqueProdutoDto>>> SelectAllAsync()
     {

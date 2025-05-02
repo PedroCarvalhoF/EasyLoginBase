@@ -56,7 +56,6 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
 
                 }
 
-
                 estoqueProdutoExists.AtualizarQuantidade(quantidade);
 
                 _repository.EstoqueProdutoRepository.UpdateAsync(estoqueProdutoExists);
@@ -69,7 +68,6 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
                     var dto = estoqueProdutoExists.EstoqueProdutoEntityToDto();
                     return new RequestResult<EstoqueProdutoDto>(dto);
                 }
-
 
                 throw new Exception("Erro ao criar o estoque do produto.");
             }
@@ -118,6 +116,18 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
 
 
     }
+    public async Task<RequestResult<IEnumerable<EstoqueProdutoDto>>> MovimentarEstoqueMultiplos(EstoqueProdutoDtoManterMultiplosProdutos estoqueProdutoDtoManterMultiplos, ClaimsPrincipal user)
+    {
+        try
+        {
+            throw new NotImplementedException();
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
 
     public async Task<RequestResult<IEnumerable<EstoqueProdutoDto>>> SelectAllAsync(ClaimsPrincipal user, bool include = true)
     {
@@ -139,7 +149,6 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
             return new RequestResult<IEnumerable<EstoqueProdutoDto>>(ex);
         }
     }
-
     public async Task<RequestResult<IEnumerable<EstoqueProdutoDto>>> SelectByFiliaId(Guid clienteId, Guid filialId, bool include = true)
     {
         try
@@ -156,7 +165,6 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
             return new RequestResult<IEnumerable<EstoqueProdutoDto>>(ex);
         }
     }
-
     public async Task<RequestResult<IEnumerable<EstoqueProdutoDto>>> SelectByProdutoId(Guid clienteId, Guid produtoId, bool include = true)
     {
         try
@@ -173,4 +181,5 @@ public class EstoqueProdutoServices : IEstoqueProdutoServices<EstoqueProdutoDto>
             return new RequestResult<IEnumerable<EstoqueProdutoDto>>(ex);
         }
     }
+
 }

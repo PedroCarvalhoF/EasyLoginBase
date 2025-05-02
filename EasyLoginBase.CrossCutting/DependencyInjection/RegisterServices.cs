@@ -1,4 +1,5 @@
 ﻿using EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
+using EasyLoginBase.Domain.Entities;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
@@ -10,6 +11,7 @@ using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Produto;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
+using EasyLoginBase.Domain.Interfaces.Produto.MovimentacaoEstoque;
 using EasyLoginBase.InfrastructureData.Implementacao;
 using EasyLoginBase.InfrastructureData.Repository;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
@@ -44,9 +46,13 @@ public static class RegisterServices
         serviceCollection.AddScoped<IBaseClienteRepository_REFACTOR<ProdutoEntity>, BaseClienteRepository_REFACTOR<ProdutoEntity>>();
         serviceCollection.AddScoped<IProdutoRepository_REFACTOR, ProdutoRepository_REFACTOR>();
 
+        //ESTOQUE
         serviceCollection.AddScoped<IBaseClienteRepository_REFACTOR<EstoqueProdutoEntity>, BaseClienteRepository_REFACTOR<EstoqueProdutoEntity>>();
         serviceCollection.AddScoped<IEstoqueProdutoRepository<EstoqueProdutoEntity>, ProdutoEstoqueImplementacao>();
+
+        //MOVIMENTACAO ESTOQUE
         serviceCollection.AddScoped<IBaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity>, BaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity>>();
+        serviceCollection.AddScoped<IMovimentacaoEstoqueProdutoRepository<MovimentacaoEstoqueProdutoEntity, FiltroBase>, MovimentacaoEstoqueProdutoImplementacao>();
 
 
         // Alterado para Scoped para melhor uso do DbContext

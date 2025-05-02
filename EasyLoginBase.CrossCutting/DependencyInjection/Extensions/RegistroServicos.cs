@@ -1,5 +1,6 @@
 ﻿using EasyLoginBase.Application.Dto.PessoaCliente;
 using EasyLoginBase.Application.Dto.Produto.Estoque.Estoque;
+using EasyLoginBase.Application.Dto.Produto.Estoque.Movimento;
 using EasyLoginBase.Application.Services.Intefaces.Filial;
 using EasyLoginBase.Application.Services.Intefaces.PDV;
 using EasyLoginBase.Application.Services.Intefaces.PessoaCliente;
@@ -16,6 +17,7 @@ using EasyLoginBase.Services.Services.Preco.Produto;
 using EasyLoginBase.Services.Services.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Services.Services.Produto;
 using EasyLoginBase.Services.Services.Produto.Estoque.Estoque;
+using EasyLoginBase.Services.Services.Produto.Estoque.Movimento;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
@@ -35,5 +37,6 @@ public static class RegistroServicos
         serviceCollection.AddTransient<IPontoVendaServices, PontoVendaServices>();
         serviceCollection.AddTransient<IUnidadeMedidaProdutoServices, UnidadeMedidaProdutoServices>();
         serviceCollection.AddTransient<IEstoqueProdutoServices<EstoqueProdutoDto>, EstoqueProdutoServices>();
+        serviceCollection.AddTransient<IMovimentoEstoqueServices<MovimentoEstoqueDto>, MovimentoEstoqueServices>();
     }
 }

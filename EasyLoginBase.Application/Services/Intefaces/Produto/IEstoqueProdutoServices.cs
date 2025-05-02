@@ -9,5 +9,5 @@ public interface IEstoqueProdutoServices<E> where E : EstoqueProdutoDto
     Task<RequestResult<IEnumerable<E>>> SelectAllAsync(ClaimsPrincipal user, bool include = true);
     Task<RequestResult<IEnumerable<E>>> SelectByProdutoId(Guid clienteId, Guid produtoId, bool include = true);
     Task<RequestResult<IEnumerable<E>>> SelectByFiliaId(Guid clienteId, Guid filialId, bool include = true);
-
+    Task<RequestResult<IEnumerable<EstoqueProdutoDto>>> MovimentarEstoqueMultiplos(EstoqueProdutoDtoManterMultiplosProdutos estoqueProdutoDtoManterMultiplos, ClaimsPrincipal user);
 }

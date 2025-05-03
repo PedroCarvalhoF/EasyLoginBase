@@ -33,4 +33,17 @@ public class MovimentoEstoqueController : ControllerBase
             return new ReturnActionResult<IEnumerable<MovimentoEstoqueDto>>().ParseToActionResult(RequestResult<IEnumerable<MovimentoEstoqueDto>>.BadRequest(ex.Message));
         }
     }
+
+    [HttpPost("select-filtro-movimentacao-produto-estoque")]
+    public async Task<ActionResult<RequestResult<IEnumerable<MovimentoEstoqueDto>>>> SelectByFiltroAsync([FromBody] MovimentoEstoqueDtoFiltro filtroS)
+    {
+        try
+        {
+            return new ReturnActionResult<IEnumerable<MovimentoEstoqueDto>>().ParseToActionResult(await _estoqueProdutoServices.SelectByFiltroAsync(filtroS, User, true));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<IEnumerable<MovimentoEstoqueDto>>().ParseToActionResult(RequestResult<IEnumerable<MovimentoEstoqueDto>>.BadRequest(ex.Message));
+        }
+    }
 }

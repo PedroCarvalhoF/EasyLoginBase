@@ -12,6 +12,7 @@ public static class ParseMovimentacaoEstoque
 
         return new MovimentoEstoqueDto
         {
+
             ProdutoId = movimentacao.ProdutoId,
             NomeProduto = movimentacao.Produto?.NomeProduto,
             FilialId = movimentacao.FilialId,
@@ -34,4 +35,17 @@ public static class ParseMovimentacaoEstoque
         return movimentacoes.Select(e => EstoqueProdutoEntityForDto(e, usuarios));
     }
 
+    public static MovimentacaoEstoqueProdutoEntityFiltro DtoForEntity(MovimentoEstoqueDtoFiltro filtro)
+    {
+        return new MovimentacaoEstoqueProdutoEntityFiltro
+        {
+            IdMovimento = filtro.IdMovimento,
+            ProdutoId = filtro.ProdutoId,
+            FilialId = filtro.FilialId,
+            Tipo = filtro.Tipo,
+            DataMovimentacaoInicial = filtro.DataMovimentacaoInicial,
+            DataMovimentacaoFinal = filtro.DataMovimentacaoFinal,
+            UsuarioRegistroId = filtro.UsuarioRegistroId
+        };
+    }
 }

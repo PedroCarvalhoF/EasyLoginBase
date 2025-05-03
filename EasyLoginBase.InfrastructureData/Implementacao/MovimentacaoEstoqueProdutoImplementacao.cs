@@ -15,19 +15,73 @@ public class MovimentacaoEstoqueProdutoImplementacao : BaseClienteRepository_REF
         _dbSet = context.Set<MovimentacaoEstoqueProdutoEntity>();
     }
 
+    private IQueryable<MovimentacaoEstoqueProdutoEntity> IncludeQuery(IQueryable<MovimentacaoEstoqueProdutoEntity> query)
+    {
+        query = query
+            .Include(e => e.Produto)
+            .Include(e => e.Filial);
+
+        return query;
+    }
+
     public async Task<IEnumerable<MovimentacaoEstoqueProdutoEntity>> SelectAllAsync(FiltroBase users)
     {
         try
         {
             var clienteId = users.clienteId;
 
-            var entities = await
-                _dbSet
+            var query = _dbSet
                 .AsNoTracking()
-                .Where(e => e.ClienteId == clienteId)
-                .Include(e => e.Produto)
-                .Include(e => e.Filial)
-                .ToArrayAsync();
+                .Where(e => e.ClienteId == clienteId);
+
+            query = IncludeQuery(query);
+
+            var entities = await query.ToArrayAsync();
+
+            return entities;
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task<IEnumerable<MovimentacaoEstoqueProdutoEntity>> SelectByFiltroAsync(MovimentacaoEstoqueProdutoEntityFiltro filtro, FiltroBase user, bool include)
+    {
+        try
+        {
+            var clienteId = user.clienteId;
+
+            var query = _dbSet
+                .AsNoTracking()
+                .Where(e => e.ClienteId == clienteId);
+
+            query = IncludeQuery(query);
+
+            if (filtro.IdMovimento.HasValue)
+            {
+                query = query.Where(mov => mov.Id == filtro.IdMovimento);
+            }
+            else
+            {
+                if (filtro.ProdutoId.HasValue)
+                    query = query.Where(mov => mov.ProdutoId == filtro.ProdutoId);
+
+                if (filtro.FilialId.HasValue)
+                    query = query.Where(mov => mov.FilialId == filtro.FilialId);
+
+                if (filtro.UsuarioRegistroId.HasValue)
+                    query = query.Where(mov => mov.UsuarioRegistroId == filtro.UsuarioRegistroId);
+
+                if (filtro.DataMovimentacaoInicial != null && filtro.DataMovimentacaoFinal != null)
+                    query = query.Where(mov => mov.DataMovimentacao.Date >= filtro.DataMovimentacaoInicial.Value.Date && mov.DataMovimentacao <= filtro.DataMovimentacaoFinal.Value.Date);
+
+            }
+
+
+
+            var entities = await query.ToArrayAsync();
 
             return entities;
         }

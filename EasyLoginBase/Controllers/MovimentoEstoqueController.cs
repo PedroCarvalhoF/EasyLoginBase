@@ -1,11 +1,9 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Estoque.Estoque;
-using EasyLoginBase.Application.Dto.Produto.Produto;
-using EasyLoginBase.Application.Dto;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Produto.Estoque.Movimento;
+using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.Application.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EasyLoginBase.Application.Dto.Produto.Estoque.Movimento;
-using EasyLoginBase.Application.Services.Intefaces.Produto;
 
 namespace EasyLoginBase.Controllers;
 

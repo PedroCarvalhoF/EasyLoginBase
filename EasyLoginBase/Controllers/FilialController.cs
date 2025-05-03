@@ -35,7 +35,7 @@ public class FilialController(IFilialServices _services) : ControllerBase
     public async Task<ActionResult<RequestResult<IEnumerable<FilialDto>>>> ConsultarFiliais()
     {
         try
-        {            
+        {
             var result = await _services.ConsultarFiliais(User);
 
             return new ReturnActionResult<IEnumerable<FilialDto>>().ParseToActionResult(RequestResult<IEnumerable<FilialDto>>.Ok(result));

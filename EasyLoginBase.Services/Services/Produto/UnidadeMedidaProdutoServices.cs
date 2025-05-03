@@ -3,7 +3,6 @@ using EasyLoginBase.Application.Dto.Produto.UnidadeMedidaProduto;
 using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Interfaces;
-using System.Threading.Tasks;
 
 namespace EasyLoginBase.Services.Services.Produto;
 

@@ -15,6 +15,6 @@ public class ProdutoRepository : BaseClienteRepository<ProdutoEntity>, IProdutoR
     public async Task<bool> NomeProdutoUso(string nomeProduto)
     {
         return await _dataset.AnyAsync(c => c.NomeProduto!.Equals(nomeProduto));
-    }   
+    }
 }
 

@@ -17,13 +17,13 @@ public class GenericRepository<T> : IGerenericRepository<T> where T : class
 
     public async Task<T> InsertAsync(T item)
     {
-        await _dataset.AddAsync(item);        
+        await _dataset.AddAsync(item);
         return item;
     }
 
     public T Update(T item)
     {
-        _dataset.Update(item);       
+        _dataset.Update(item);
         return item;
     }
 

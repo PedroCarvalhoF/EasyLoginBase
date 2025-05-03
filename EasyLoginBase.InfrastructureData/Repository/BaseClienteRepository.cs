@@ -107,7 +107,8 @@ public class BaseClienteRepository<T> : IBaseClienteRepository<T> where T : Base
         }
     }
 
-    public async Task<IEnumerable<T>> ConsultarTodosAsync(Guid clienteId){
+    public async Task<IEnumerable<T>> ConsultarTodosAsync(Guid clienteId)
+    {
         try
         {
             return await IncludeProperties(_dataset.AsNoTracking())
@@ -148,5 +149,5 @@ public class BaseClienteRepository<T> : IBaseClienteRepository<T> where T : Base
             throw new Exception($"Erro ao remover entidade: {ex.Message}", ex);
         }
     }
-   
+
 }

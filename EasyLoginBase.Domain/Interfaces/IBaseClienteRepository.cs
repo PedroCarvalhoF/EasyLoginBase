@@ -1,5 +1,4 @@
 ﻿using EasyLoginBase.Domain.Entities.Base;
-using EasyLoginBase.Domain.Entities.PDV;
 using System.Linq.Expressions;
 
 namespace EasyLoginBase.Domain.Interfaces;

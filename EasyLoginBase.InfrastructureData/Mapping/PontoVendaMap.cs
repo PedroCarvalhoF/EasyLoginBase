@@ -9,7 +9,7 @@ public class PontoVendaMap : BaseClienteEntityMap<PontoVendaEntity>, IEntityType
     public void Configure(EntityTypeBuilder<PontoVendaEntity> builder)
     {
         // Define o nome da tabela
-        ConfigureBaseProperties(builder, "PontosVendas");       
+        ConfigureBaseProperties(builder, "PontosVendas");
 
         // Índices para otimização de busca
         builder.HasIndex(p => p.FilialPdvId);

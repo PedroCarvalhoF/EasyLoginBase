@@ -28,6 +28,6 @@ public class PessoaClienteVinculadaMap : IEntityTypeConfiguration<PessoaClienteV
         // Configuração da coluna AcessoPermitido
         builder.Property(pcv => pcv.AcessoPermitido)
             .IsRequired()
-            .HasDefaultValue(false);        
+            .HasDefaultValue(false);
     }
 }

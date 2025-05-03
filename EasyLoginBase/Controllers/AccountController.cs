@@ -12,11 +12,11 @@ namespace EasyLoginBase.Controllers;
 [ApiController]
 [Authorize]
 public class AccountController(IMediator _mediator) : ControllerBase
-{ 
+{
     /// <summary>
     /// Login de usuário
     /// </summary>
-    
+
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult<RequestResult<UserDtoLoginResponse>>> Login([FromBody] UserLoginCommand command)

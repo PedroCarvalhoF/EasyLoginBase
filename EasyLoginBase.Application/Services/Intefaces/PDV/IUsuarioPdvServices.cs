@@ -9,5 +9,5 @@ public interface IUsuarioPdvServices
     Task<UsuarioPdvDto> CadastrarUsuarioPdv(UsuarioPdvDtoCreate newUserPdv, ClaimsPrincipal user);
     Task<UsuarioPdvDto> ConsultarUsuarioPorId(UsuarioPdvDtoRequestId usuarioPdvDtoRequestId, ClaimsPrincipal user);
     Task<UsuarioPdvDto> AtivarAcessoCaixa(UsuarioPdvDtoRequestId usuarioPdvDtoRequestId, ClaimsPrincipal user);
-    Task<UsuarioPdvDto> DesativarAcessoCaixa(UsuarioPdvDtoRequestId usuarioPdvDtoRequestId, ClaimsPrincipal user);    
+    Task<UsuarioPdvDto> DesativarAcessoCaixa(UsuarioPdvDtoRequestId usuarioPdvDtoRequestId, ClaimsPrincipal user);
 }

@@ -1,10 +1,9 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Produto;
-using EasyLoginBase.Application.Dto;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.Preco.Produto.CategoriaPrecoProduto;
+using EasyLoginBase.Application.Services.Intefaces.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Application.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EasyLoginBase.Application.Dto.Preco.Produto.CategoriaPrecoProduto;
-using EasyLoginBase.Application.Services.Intefaces.Preco.Produto.CategoriaPreco;
 
 namespace EasyLoginBase.Controllers;
 

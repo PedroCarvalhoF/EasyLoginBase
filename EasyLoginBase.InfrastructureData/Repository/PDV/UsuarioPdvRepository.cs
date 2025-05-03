@@ -36,7 +36,7 @@ public class UsuarioPdvRepository : IUsuarioPdvRepository
         {
             var entity = await _dbSet
                 .Where(_dbSet => _dbSet.UsuarioCaixaPdvEntityId == usuarioCaixaPdvEntityId && _dbSet.ClienteId == clienteId)
-                .Include(user=>user.UserCaixaPdvEntity)
+                .Include(user => user.UserCaixaPdvEntity)
                 .FirstOrDefaultAsync();
 
             return entity ?? throw new Exception("Usuário pdv não localizado");

@@ -19,7 +19,7 @@ public class EstoqueProdutoEntity : BaseClienteEntity
             throw new ArgumentException("ProdutoId não pode ser vazio.", nameof(produtoId));
 
         if (filialId == Guid.Empty)
-            throw new ArgumentException("FilialId não pode ser vazio.", nameof(filialId));        
+            throw new ArgumentException("FilialId não pode ser vazio.", nameof(filialId));
 
         ProdutoId = produtoId;
         FilialId = filialId;

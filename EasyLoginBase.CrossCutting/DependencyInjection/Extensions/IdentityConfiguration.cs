@@ -17,7 +17,7 @@ public static class IdentityConfiguration
 
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
         var serverVersionAutoDetec = ServerVersion.AutoDetect(connectionString);
-        
+
         serviceCollection.
         AddDbContext<MyContext>(options =>
                      options.UseMySql(connectionString, serverVersionAutoDetec));

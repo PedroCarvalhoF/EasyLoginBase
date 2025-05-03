@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using EasyLoginBase.Domain.Entities.PessoaCliente;
+﻿using EasyLoginBase.Domain.Entities.PessoaCliente;
 
 namespace EasyLoginBase.Domain.Interfaces.PessoaCliente;
 

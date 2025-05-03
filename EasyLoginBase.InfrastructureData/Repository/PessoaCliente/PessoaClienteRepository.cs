@@ -31,7 +31,7 @@ public class PessoaClienteRepository : IPessoaClienteRepository<PessoaClienteEnt
     {
         try
         {
-            return await _context.PessoaClientes.Include(p=>p.UsuarioEntityCliente).OrderBy(ps => ps.NomeFantasia).ToListAsync();
+            return await _context.PessoaClientes.Include(p => p.UsuarioEntityCliente).OrderBy(ps => ps.NomeFantasia).ToListAsync();
         }
         catch (Exception ex)
         {

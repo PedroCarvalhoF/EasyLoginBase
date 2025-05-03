@@ -37,7 +37,7 @@ public class PrecoProdutoMap : BaseClienteEntityMap<PrecoProdutoEntity>, IEntity
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(p => p.CategoriaPrecoProdutoEntity)
-               .WithMany(cat_preco=>cat_preco.PrecoProdutoEntities)
+               .WithMany(cat_preco => cat_preco.PrecoProdutoEntities)
                .HasForeignKey(p => p.CategoriaPrecoProdutoEntityId)
                .OnDelete(DeleteBehavior.Restrict);
     }

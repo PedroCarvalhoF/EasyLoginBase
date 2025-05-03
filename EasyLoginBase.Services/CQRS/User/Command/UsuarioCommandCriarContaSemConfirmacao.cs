@@ -1,12 +1,9 @@
-﻿using EasyLoginBase.Application.Constants;
-using EasyLoginBase.Application.Dto.Email;
+﻿using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.User;
-using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Domain.Entities.User;
-using EasyLoginBase.Services.Services.Email;
+using EasyLoginBase.Services.Tools.UseCase;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using EasyLoginBase.Services.Tools.UseCase;
 
 namespace EasyLoginBase.Services.CQRS.User.Command;
 
@@ -31,16 +28,16 @@ public class UsuarioCommandCriarContaSemConfirmacao : IRequest<RequestResult<Use
                     request.UserDtoCriarContaRequest.SobreNome,
                     request.UserDtoCriarContaRequest.Email,
                     request.UserDtoCriarContaRequest.Email
-                );               
+                );
 
                 userCreateEntity.EmailConfirmed = false; // Não confirmado
                 userCreateEntity.LockoutEnabled = false; // NÃO permite bloqueio automático
-                
+
 
                 var userCreateResult = await _userManager.CreateAsync(userCreateEntity, request.UserDtoCriarContaRequest.Senha);
                 if (!userCreateResult.Succeeded)
                     return RequestResult<UserDto>.BadRequest(userCreateResult.Errors.Select(r => r.Description).FirstOrDefault()!);
-                
+
                 // **Garantir que o usuário está desbloqueado**
                 await _userManager.SetLockoutEndDateAsync(userCreateEntity, null);
 
@@ -56,7 +53,7 @@ public class UsuarioCommandCriarContaSemConfirmacao : IRequest<RequestResult<Use
                 }
 
 
-                
+
 
                 var userDto = DtoMapper.ParseUserDto(userCreateEntity);
                 return RequestResult<UserDto>.Ok(userDto, "Cadastro realizado com sucesso, sem confirmação de e-email.");

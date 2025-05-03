@@ -4,7 +4,6 @@ using EasyLoginBase.Application.Dto.Produto.Produto;
 using EasyLoginBase.Application.Services.Intefaces.Produto;
 using EasyLoginBase.Application.Tools;
 using EasyLoginBase.Domain.Entities.Produto;
-using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Services.Tools.UseCase;
 using System.Security.Claims;

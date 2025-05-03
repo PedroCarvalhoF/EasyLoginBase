@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace EasyLoginBase.Application.Dto;
+﻿namespace EasyLoginBase.Application.Dto;
 
 public class RequestResult<T>
 {

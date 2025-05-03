@@ -1,7 +1,5 @@
 ﻿using EasyLoginBase.Application.Dto.PessoaCliente;
-using EasyLoginBase.Application.Dto.User;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
-using EasyLoginBase.Domain.Entities.User;
 
 namespace EasyLoginBase.Services.Tools.UseCase;
 

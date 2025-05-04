@@ -25,6 +25,8 @@ public class ProdutoEstoqueImplementacao : BaseClienteRepository_REFACTOR<Estoqu
 
                 .Include(e => e.Filial);
 
+        query = query.OrderBy(e => e.Produto.NomeProduto);
+
         return query;
     }
     public async Task<IEnumerable<EstoqueProdutoEntity>> SelectAllAsync(Guid clienteId, bool include = false)

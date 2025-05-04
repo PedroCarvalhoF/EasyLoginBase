@@ -10,6 +10,31 @@ public static class ParseMovimentacaoEstoque
         var nome_usuario = usuarios.FirstOrDefault(p => p.Id == movimentacao.UsuarioRegistroId).Nome;
         var sobre_nome = usuarios.FirstOrDefault(p => p.Id == movimentacao.UsuarioRegistroId).SobreNome;
 
+        var operacao = movimentacao.Tipo;
+
+        string operacaoDescricao = string.Empty;
+
+        switch (operacao)
+        {
+            case TipoMovimentacaoEstoque.Entrada:
+                operacaoDescricao = "Entrada";
+                break;
+            case TipoMovimentacaoEstoque.Saida:
+                operacaoDescricao = "Saída";
+                break;
+            case TipoMovimentacaoEstoque.AjustePositivo:
+                break;
+            case TipoMovimentacaoEstoque.AjusteNegativo:
+                break;
+            case TipoMovimentacaoEstoque.TransferenciaEntrada:
+                break;
+            case TipoMovimentacaoEstoque.TransferenciaSaida:
+                break;
+            default:
+                operacaoDescricao = "Não identificada";
+                break;
+        }
+
         return new MovimentoEstoqueDto
         {
 
@@ -18,7 +43,7 @@ public static class ParseMovimentacaoEstoque
             FilialId = movimentacao.FilialId,
             NomeFilial = movimentacao.Filial?.NomeFilial,
             Quantidade = movimentacao.Quantidade,
-            Tipo = movimentacao.Tipo.ToString(),
+            Tipo = operacaoDescricao,
             Observacao = movimentacao.Observacao,
             DataMovimentacao = movimentacao.DataMovimentacao,
             UsuarioRegistroId = movimentacao.UsuarioRegistroId,

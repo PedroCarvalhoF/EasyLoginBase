@@ -21,6 +21,7 @@ public class MovimentacaoEstoqueProdutoImplementacao : BaseClienteRepository_REF
             .Include(e => e.Produto)
             .Include(e => e.Filial);
 
+        query = query.OrderByDescending(e => e.DataMovimentacao);
         return query;
     }
 

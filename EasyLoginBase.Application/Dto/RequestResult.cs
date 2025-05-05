@@ -6,7 +6,6 @@ public class RequestResult<T>
     public int StatusCode { get; }
     public string? Mensagem { get; }
     public T? Data { get; }
-
     public RequestResult(T dados)
     {
         Status = true;
@@ -14,16 +13,13 @@ public class RequestResult<T>
         Data = dados;
         Mensagem = "Requisição realizada com sucesso.";
     }
-
-    public RequestResult(Exception ex)
+        public RequestResult(Exception ex)
     {
         Status = false;
         StatusCode = 400;
         Data = default;
         Mensagem = ex.Message;
     }
-
-
     private RequestResult(bool status, int statusCode, string? mensagem, T? data = default)
     {
         Status = status;

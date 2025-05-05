@@ -53,6 +53,8 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
 
                 var usuarioVinculado = await _iPessoaClienteVinculadaServices.GetVinculosPessoa(userSelecionado.Id);
 
+                if (usuarioVinculado == null || !usuarioVinculado.Any())
+                    return RequestResult<UserDtoLoginResponse>.BadRequest(usuarioLoginResponse, "Seja um cliente ou solite uma acesso");
 
                 usuarioLoginResponse = await GerarCredenciais(userSelecionado, usuarioVinculado);
                 usuarioLoginResponse.DefinirDetalhesUsuario(userSelecionado.Id, userSelecionado.Nome!, userSelecionado.Email!);

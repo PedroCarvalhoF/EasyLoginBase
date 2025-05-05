@@ -15,10 +15,6 @@ public class CategoriaProdutoMap : BaseClienteEntityMap<CategoriaProdutoEntity>,
         builder
             .Property(x => x.NomeCategoria)
             .IsRequired()
-            .HasMaxLength(100); // Limite de tamanho para o nome da categoria       
-
-        // Adicione outras configurações específicas, se necessário
-        builder
-            .HasIndex(x => x.NomeCategoria).IsUnique(); // Exemplo de índice único para NomeCategoria
+            .HasMaxLength(100); // Limite de tamanho para o nome da categoria             
     }
 }

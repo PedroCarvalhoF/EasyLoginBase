@@ -10,4 +10,5 @@ public interface IUserRoleServices<E, RU> where E : RoleDto where RU : RoleUserD
     Task<RequestResult<E>> CreateRoleAsync(RoleDtoCreate roleDtoCreate);
     Task<RequestResult<RU>> AdcionarRoleUser(RoleDtoAddRoleUser roleDtoAddRoleUser);
     Task<RequestResult<RU>> RemovarRoleUser(RoleDtoRemoverRoleUser roleDtoRemoverRoleUser);
+    Task CriarRoles();
 }

@@ -1,6 +1,7 @@
 ﻿using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.User;
 using EasyLoginBase.Application.Dto.User.Role;
+using EasyLoginBase.Application.Tools.Roles;
 using EasyLoginBase.Domain.Entities.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -191,5 +192,28 @@ public class UserRoleServices : IUserRoleServices<RoleDto, RoleUserDto>
             return new RequestResult<IEnumerable<RoleUserDto>>(ex);
         }
     }
+    public async Task CriarRoles()
+    {
+        foreach (var roleName in Enum.GetNames(typeof(RolesEnum)))
+        {
+            var exists = await _roleManager.RoleExistsAsync(roleName);
+            if (!exists)
+            {
+                var role = new RoleEntity
+                {
+                    Id = Guid.NewGuid(),
+                    Name = roleName,
+                    NormalizedName = roleName.ToUpper()
+                };
 
+                var result = await _roleManager.CreateAsync(role);
+
+                if (!result.Succeeded)
+                {
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    throw new Exception($"Erro ao criar role '{roleName}': {errors}");
+                }
+            }
+        }
+    }
 }

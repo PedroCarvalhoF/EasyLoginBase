@@ -51,4 +51,6 @@ app.UseStaticFiles(new StaticFileOptions()
     RequestPath = new PathString("/Resources")
 });
 
+await app.SeedRolesAsync();
+
 app.Run();

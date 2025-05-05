@@ -1,4 +1,5 @@
 ﻿using EasyLoginBase.Application.Dto.PessoaCliente;
+using EasyLoginBase.Application.Dto.User;
 using EasyLoginBase.Application.Services.Intefaces.PessoaCliente;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.Domain.Interfaces;
@@ -56,9 +57,27 @@ public class PessoaClienteServices : IPessoaClienteServices<PessoaClienteDto>
         {
             var entities = await _repository.PessoaClienteRepository.ConsultarClientes(idCliente);
 
-            var dtos = DtoMapper.ParcePessoaCliente(entities);
+            if (entities == null)
+                throw new Exception("Cliente não localizado.");
+
+            var dtos = new PessoaClienteDto
+            {
+                Id = entities.Id,
+                UsuarioEntityClienteId = entities.UsuarioEntityClienteId,
+                NomeFantasia = entities.NomeFantasia,
+                DataAbertura = entities.DataAbertura,
+                DataVencimentoUso = entities.DataVencimentoUso,
+                NomeUsuarioCliente = entities.UsuarioEntityCliente?.UserName,
+                UsuariosVinculadosDtos = new List<UserDto>(entities.UsuariosVinculados.Select(userVinculado => new UserDto
+                {
+                    Id = userVinculado.UsuarioVinculado.Id,
+                    Nome = userVinculado.UsuarioVinculado.UserName,
+                    Email = userVinculado.UsuarioVinculado.Email
+                }))
+            };
 
             return dtos;
+
         }
         catch (Exception ex)
         {

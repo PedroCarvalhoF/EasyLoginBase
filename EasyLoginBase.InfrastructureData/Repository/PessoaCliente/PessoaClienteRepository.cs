@@ -31,7 +31,13 @@ public class PessoaClienteRepository : IPessoaClienteRepository<PessoaClienteEnt
     {
         try
         {
-            return await _context.PessoaClientes.Include(p => p.UsuarioEntityCliente).OrderBy(ps => ps.NomeFantasia).ToListAsync();
+            var entities = await
+                 _context.PessoaClientes
+                 .Include(p => p.UsuarioEntityCliente)
+                 .Include(p => p.UsuariosVinculados).ThenInclude(user_vinculado => user_vinculado.UsuarioVinculado)
+                 .OrderBy(ps => ps.NomeFantasia).ToListAsync();
+
+            return entities;
         }
         catch (Exception ex)
         {
@@ -44,7 +50,14 @@ public class PessoaClienteRepository : IPessoaClienteRepository<PessoaClienteEnt
     {
         try
         {
-            return await _context.PessoaClientes.Include(p => p.UsuarioEntityCliente).SingleOrDefaultAsync(ps => ps.Id == idCliente) ?? new PessoaClienteEntity();
+            var entity = await
+                 _context.PessoaClientes
+                 .Include(p => p.UsuarioEntityCliente)
+                 .Include(p => p.UsuariosVinculados).ThenInclude(user_vinculado => user_vinculado.UsuarioVinculado)
+                 .Where(p => p.UsuarioEntityClienteId == idCliente)
+                 .OrderBy(ps => ps.NomeFantasia).SingleOrDefaultAsync();
+
+            return entity;
         }
         catch (Exception ex)
         {

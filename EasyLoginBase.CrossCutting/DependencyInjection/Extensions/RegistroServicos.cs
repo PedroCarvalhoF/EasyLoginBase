@@ -1,6 +1,7 @@
 ﻿using EasyLoginBase.Application.Dto.PessoaCliente;
 using EasyLoginBase.Application.Dto.Produto.Estoque.Estoque;
 using EasyLoginBase.Application.Dto.Produto.Estoque.Movimento;
+using EasyLoginBase.Application.Dto.User.Role;
 using EasyLoginBase.Application.Services.Intefaces.Filial;
 using EasyLoginBase.Application.Services.Intefaces.PDV;
 using EasyLoginBase.Application.Services.Intefaces.PessoaCliente;
@@ -8,6 +9,7 @@ using EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
 using EasyLoginBase.Application.Services.Intefaces.Preco.Produto;
 using EasyLoginBase.Application.Services.Intefaces.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Application.Services.Intefaces.Produto;
+using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.Services.Services.Email;
 using EasyLoginBase.Services.Services.Filial;
 using EasyLoginBase.Services.Services.PDV;
@@ -18,6 +20,7 @@ using EasyLoginBase.Services.Services.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Services.Services.Produto;
 using EasyLoginBase.Services.Services.Produto.Estoque.Estoque;
 using EasyLoginBase.Services.Services.Produto.Estoque.Movimento;
+using EasyLoginBase.Services.Services.User.Roles;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
@@ -38,5 +41,7 @@ public static class RegistroServicos
         serviceCollection.AddTransient<IUnidadeMedidaProdutoServices, UnidadeMedidaProdutoServices>();
         serviceCollection.AddTransient<IEstoqueProdutoServices<EstoqueProdutoDto>, EstoqueProdutoServices>();
         serviceCollection.AddTransient<IMovimentoEstoqueServices<MovimentoEstoqueDto>, MovimentoEstoqueServices>();
+
+        serviceCollection.AddTransient<IUserRoleServices<RoleDto, RoleUserDto>, UserRoleServices>();
     }
 }

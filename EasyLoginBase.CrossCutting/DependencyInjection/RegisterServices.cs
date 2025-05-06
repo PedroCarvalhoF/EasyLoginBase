@@ -27,8 +27,7 @@ public static class RegisterServices
     public static void ConfigureRepositories(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         IdentityConfiguration.Configurar(serviceCollection, configuration);
-        serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-        serviceCollection.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
+        serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));        
         serviceCollection.AddScoped(typeof(IBaseClienteRepository<>), typeof(BaseClienteRepository<>));
         serviceCollection.AddScoped(typeof(IGerenericRepository<>), typeof(GenericRepository<>));
 

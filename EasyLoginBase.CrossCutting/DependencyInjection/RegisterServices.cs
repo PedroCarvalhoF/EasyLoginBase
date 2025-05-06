@@ -2,13 +2,11 @@
 using EasyLoginBase.Domain.Entities;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
-using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
-using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Produto;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces.Produto.MovimentacaoEstoque;
@@ -16,7 +14,6 @@ using EasyLoginBase.InfrastructureData.Implementacao;
 using EasyLoginBase.InfrastructureData.Repository;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PDV;
-using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 using EasyLoginBase.InfrastructureData.Repository.Produto;
 using EasyLoginBase.Services.Tools.Email;
 using Microsoft.Extensions.Configuration;
@@ -57,8 +54,7 @@ public static class RegisterServices
 
         // Alterado para Scoped para melhor uso do DbContext
         serviceCollection.AddScoped<IFilialRepository<FilialEntity, ClaimsPrincipal>, FilialRepository>();
-        serviceCollection.AddScoped<IPessoaClienteRepository<PessoaClienteEntity>, PessoaClienteRepository>();
-        serviceCollection.AddScoped<IPessoaClienteVinculadaRepository, PessoaClienteVinculadaRepository>();
+
         serviceCollection.AddScoped<IBaseClienteRepository<ProdutoEntity>, BaseClienteRepository<ProdutoEntity>>();
         serviceCollection.AddScoped<IUsuarioPdvRepository, UsuarioPdvRepository>();
 

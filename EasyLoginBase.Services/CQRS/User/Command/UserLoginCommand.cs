@@ -1,7 +1,5 @@
 ﻿using EasyLoginBase.Application.Dto;
-using EasyLoginBase.Application.Dto.PessoaClienteVinculada;
 using EasyLoginBase.Application.Dto.User;
-using EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.InfrastructureData.Configuration;
 using EasyLoginBase.Services.CQRS;
@@ -21,16 +19,14 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
         private readonly SignInManager<UserEntity> _signInManager;
         private readonly UserManager<UserEntity> _userManager;
         private readonly JwtOptions _jwtOptions;
-        private readonly IPessoaClienteVinculadaServices _iPessoaClienteVinculadaServices;
+
         public UserLoginCommandHandler(SignInManager<UserEntity> signInManager,
                            UserManager<UserEntity> userManager,
-                           IOptions<JwtOptions> jwtOptions,
-                           IPessoaClienteVinculadaServices iIPessoaClienteVinculadaServices)
+                           IOptions<JwtOptions> jwtOptions)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _jwtOptions = jwtOptions.Value;
-            _iPessoaClienteVinculadaServices = iIPessoaClienteVinculadaServices;
         }
         public async Task<RequestResult<UserDtoLoginResponse>> Handle(UserLoginCommand request, CancellationToken cancellationToken)
         {
@@ -51,12 +47,11 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
 
                 var userSelecionado = await _userManager.FindByEmailAsync(request.UserLoginDtoRequest.Email) ?? throw new Exception("Usuário não encontrado.");
 
-                var usuarioVinculado = await _iPessoaClienteVinculadaServices.GetVinculosPessoa(userSelecionado.Id);
 
-                if (usuarioVinculado == null || !usuarioVinculado.Any())
-                    return RequestResult<UserDtoLoginResponse>.BadRequest(usuarioLoginResponse, "Seja um cliente ou solite uma acesso");
 
-                usuarioLoginResponse = await GerarCredenciais(userSelecionado, usuarioVinculado);
+
+
+                usuarioLoginResponse = await GerarCredenciais(userSelecionado);
                 usuarioLoginResponse.DefinirDetalhesUsuario(userSelecionado.Id, userSelecionado.Nome!, userSelecionado.Email!);
 
                 return RequestResult<UserDtoLoginResponse>.Ok(usuarioLoginResponse, "Login realizado com sucesso.");
@@ -66,9 +61,9 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
                 return RequestResult<UserDtoLoginResponse>.BadRequest(ex.Message);
             }
         }
-        private async Task<UserDtoLoginResponse> GerarCredenciais(UserEntity user, IEnumerable<PessoaClienteVinculadaDto>? pessoaClienteVinculo = null)
+        private async Task<UserDtoLoginResponse> GerarCredenciais(UserEntity user)
         {
-            var accessTokenClaims = await ObterClaims(user, true, pessoaClienteVinculo);
+            var accessTokenClaims = await ObterClaims(user, true);
             var refreshTokenClaims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
@@ -80,7 +75,7 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
 
             return new UserDtoLoginResponse(accessToken, refreshToken);
         }
-        private async Task<IList<Claim>> ObterClaims(UserEntity user, bool adicionarClaimsUsuario, IEnumerable<PessoaClienteVinculadaDto>? pessoaClienteVinculo = null)
+        private async Task<IList<Claim>> ObterClaims(UserEntity user, bool adicionarClaimsUsuario)
         {
             var claims = new List<Claim>
             {
@@ -98,14 +93,6 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
                 claims.AddRange(await _userManager.GetClaimsAsync(user));
                 foreach (var role in await _userManager.GetRolesAsync(user))
                     claims.Add(new Claim("roles", role));
-            }
-
-            if (pessoaClienteVinculo != null)
-            {
-                foreach (var pessoaVinculo in pessoaClienteVinculo)
-                {
-                    claims.Add(new Claim("ClienteIdVinculo", pessoaVinculo.PessoaClienteEntityId.ToString()));
-                }
             }
 
             return claims;

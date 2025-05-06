@@ -2,12 +2,10 @@
 using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
-using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
-using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces.Produto.MovimentacaoEstoque;
 using System.Security.Claims;
@@ -20,8 +18,7 @@ public interface IUnitOfWork
     void FinalizarContexto();
 
     IFilialRepository<FilialEntity, ClaimsPrincipal> FilialRepository { get; }
-    IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository { get; }
-    IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository { get; }
+
     IUsuarioPdvRepository UsuarioPdvRepository { get; }
 
     IPontoVendaRepository<PontoVendaEntity> PontoVendaRepository { get; }

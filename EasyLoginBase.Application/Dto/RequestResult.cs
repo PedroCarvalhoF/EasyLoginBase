@@ -13,7 +13,7 @@ public class RequestResult<T>
         Data = dados;
         Mensagem = "Requisição realizada com sucesso.";
     }
-        public RequestResult(Exception ex)
+    public RequestResult(Exception ex)
     {
         Status = false;
         StatusCode = 400;

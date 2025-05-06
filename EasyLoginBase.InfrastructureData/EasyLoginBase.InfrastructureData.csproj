@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Repository\PessoaCliente\" />
     <Folder Include="Tools\" />
     <Folder Include="Seeds\" />
   </ItemGroup>

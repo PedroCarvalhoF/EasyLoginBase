@@ -28,12 +28,9 @@ public class FilialServices : IFilialServices
                 throw new Exception("Nome da filial já está em uso.");
 
 
-            var pessoaCliente = await _repository.PessoaClienteVinculadaRepository.ObterClientesVinculadosPorUsuarioAsync(user_logado);
 
-            if (pessoaCliente is null)
-                throw new Exception("Cliente não localizado.");
 
-            var filialEntity = FilialEntity.CriarFilial(pessoaCliente.Single().PessoaClienteEntity!.Id, filialDtoCreate.NomeFilial, clienteId, user_logado);
+            var filialEntity = FilialEntity.CriarFilial(Guid.NewGuid(), filialDtoCreate.NomeFilial, clienteId, user_logado);
 
             await _repository.GetRepository<FilialEntity>().CadastrarAsync(filialEntity);
 

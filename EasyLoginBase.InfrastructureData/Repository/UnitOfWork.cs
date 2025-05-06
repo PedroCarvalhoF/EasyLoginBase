@@ -2,20 +2,17 @@
 using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
-using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
-using EasyLoginBase.Domain.Interfaces.PessoaCliente;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces.Produto.MovimentacaoEstoque;
 using EasyLoginBase.InfrastructureData.Context;
 using EasyLoginBase.InfrastructureData.Implementacao;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PDV;
-using EasyLoginBase.InfrastructureData.Repository.PessoaCliente;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 using System.Security.Claims;
@@ -28,8 +25,6 @@ namespace EasyLoginBase.InfrastructureData.Repository
         private readonly ConcurrentDictionary<Type, object> _repositories = new();
 
         private IFilialRepository<FilialEntity, ClaimsPrincipal>? _filialRepository;
-        private IPessoaClienteRepository<PessoaClienteEntity>? _pessoaClienteRepository;
-        private IPessoaClienteVinculadaRepository? _pessoaClienteVinculadaRepository;
         private IUsuarioPdvRepository? _usuarioPdvRepository;
 
         private IPontoVendaRepository<PontoVendaEntity>? _pontoVendaRepository;
@@ -119,21 +114,7 @@ namespace EasyLoginBase.InfrastructureData.Repository
         public IFilialRepository<FilialEntity, ClaimsPrincipal> FilialRepository
             => _filialRepository ??= new FilialRepository(_context);
 
-        /// <summary>
-        /// Repositório para Pessoas Clientes.
-        /// </summary>
-        public IPessoaClienteRepository<PessoaClienteEntity> PessoaClienteRepository
-            => _pessoaClienteRepository ??= new PessoaClienteRepository(_context);
 
-        /// <summary>
-        /// Repositório para Pessoas Clientes Vinculadas.
-        /// </summary>
-        public IPessoaClienteVinculadaRepository PessoaClienteVinculadaRepository
-            => _pessoaClienteVinculadaRepository ??= new PessoaClienteVinculadaRepository(_context);
-
-        /// <summary>
-        /// Repositório para Usuários PDV.
-        /// </summary>
         public IUsuarioPdvRepository UsuarioPdvRepository
             => _usuarioPdvRepository ??= new UsuarioPdvRepository(_context);
 

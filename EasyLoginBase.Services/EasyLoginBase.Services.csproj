@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\PessoaClienteVinculada\" />
+    <Folder Include="Services\PessoaCliente\" />
     <Folder Include="Tools\UseCase\DtoForEntity\Filial\" />
     <Folder Include="Tools\UseCase\EntityForDto\" />
   </ItemGroup>

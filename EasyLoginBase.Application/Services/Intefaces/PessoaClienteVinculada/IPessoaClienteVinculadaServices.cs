@@ -1,4 +1,7 @@
-﻿using EasyLoginBase.Application.Dto.PessoaClienteVinculada;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.PessoaCliente;
+using EasyLoginBase.Application.Dto.PessoaClienteVinculada;
+using System.Security.Claims;
 
 namespace EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
 
@@ -25,4 +28,5 @@ public interface IPessoaClienteVinculadaServices
     Task<List<PessoaClienteVinculadaDto>> ObterClientesVinculadosPorUsuarioAsync(Guid usuarioVinculadoId);
     Task<IEnumerable<PessoaClienteVinculadaDto>> GetPessoasVinculadas();
     Task<IEnumerable<PessoaClienteVinculadaDto>> GetVinculosPessoa(Guid idPessoaVinculada);
+    Task<RequestResult<PessoaClienteDto>> VincularUsuarioClienteByEmail(PessoaClienteVinculadaDtoCreateByEmail pessoaClienteVinculadaDto, ClaimsPrincipal user);
 }

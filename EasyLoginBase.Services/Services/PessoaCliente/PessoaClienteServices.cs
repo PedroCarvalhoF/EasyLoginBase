@@ -1,6 +1,7 @@
 ﻿using EasyLoginBase.Application.Dto.PessoaCliente;
 using EasyLoginBase.Application.Dto.User;
 using EasyLoginBase.Application.Services.Intefaces.PessoaCliente;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Services.Tools.UseCase;
@@ -13,6 +14,7 @@ public class PessoaClienteServices : IPessoaClienteServices<PessoaClienteDto>
 {
     private readonly IUnitOfWork _repository;
     private readonly UserManager<UserEntity> _userManager;
+
     public PessoaClienteServices(IUnitOfWork repository, UserManager<UserEntity> userManager)
     {
         _repository = repository;
@@ -29,7 +31,7 @@ public class PessoaClienteServices : IPessoaClienteServices<PessoaClienteDto>
 
             var usuarioClienteExists = await _repository.PessoaClienteRepository.ConsultarClientes(pessoaClienteCreate.UsuarioEntityClienteId);
 
-            if (usuarioClienteExists.Id != Guid.Empty)
+            if (usuarioClienteExists != null)
                 throw new Exception("Usuário já é um cliente.");
 
             bool nomeFantasioEmUso = await _repository.PessoaClienteRepository.VerificarUsoNomeFantasia(pessoaClienteCreate.NomeFantasia);
@@ -42,7 +44,12 @@ public class PessoaClienteServices : IPessoaClienteServices<PessoaClienteDto>
             if (!await _repository.CommitAsync())
                 throw new Exception("Erro ao salvar cliente");
 
-            return DtoMapper.ParcePessoaCliente(resultCreate);
+            var pessoaVinculo = await _repository.PessoaClienteVinculadaRepository.AdicionarUsuarioVinculadoAsync(PessoaClienteVinculadaEntity.Create(pessoaEntity.Id, usuarioExist.Id));
+
+            if (!await _repository.CommitAsync())
+                throw new Exception("Erro ao vincular cliente");
+
+            return await ConsultarClientes(usuarioExist.Id);
         }
         catch (Exception ex)
         {

@@ -1,19 +1,19 @@
 ﻿using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.PessoaCliente;
 using EasyLoginBase.Application.Dto.PessoaClienteVinculada;
-using EasyLoginBase.Application.Dto.User.Role;
 using EasyLoginBase.Application.Services.Intefaces.PessoaClienteVinculada;
 using EasyLoginBase.Application.Tools;
-using EasyLoginBase.Services.Services.User.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EasyLoginBase.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class PessoaClienteVinculadaController(IPessoaClienteVinculadaServices _services) : ControllerBase
 {
-   
+
 
     [HttpPost("vincular-usuario-ao-cliente")]
     public async Task<ActionResult<RequestResult<PessoaClienteVinculadaDto>>> VincularUsuarioCliente([FromBody] PessoaClienteVinculadaDtoCreate command)
@@ -23,7 +23,7 @@ public class PessoaClienteVinculadaController(IPessoaClienteVinculadaServices _s
             if (command == null)
                 return new ReturnActionResult<PessoaClienteDto>().BadRequest("Parametros inváidos.");
 
-            var result = await _services.AdicionarUsuarioVinculadoAsync(command);          
+            var result = await _services.AdicionarUsuarioVinculadoAsync(command);
 
             return new ReturnActionResult<PessoaClienteVinculadaDto>().ParseToActionResult(RequestResult<PessoaClienteVinculadaDto>.Ok(result));
         }
@@ -33,6 +33,28 @@ public class PessoaClienteVinculadaController(IPessoaClienteVinculadaServices _s
             return new ReturnActionResult<PessoaClienteVinculadaDto>().ParseToActionResult(RequestResult<PessoaClienteVinculadaDto>.BadRequest(ex.Message));
         }
     }
+
+    [HttpPost("vincular-usuario-ao-cliente-by-email")]
+    public async Task<ActionResult<RequestResult<PessoaClienteDto>>> VincularUsuarioClienteByEmail([FromBody] PessoaClienteVinculadaDtoCreateByEmail pessoaClienteVinculadaDto)
+    {
+        try
+        {
+            if (pessoaClienteVinculadaDto == null)
+                return new ReturnActionResult<PessoaClienteDto>().BadRequest("Parametros inváidos.");          
+
+        
+
+            return new ReturnActionResult<PessoaClienteDto>()
+                .ParseToActionResult(await _services.VincularUsuarioClienteByEmail(pessoaClienteVinculadaDto, User));
+        }
+        catch (Exception ex)
+        {
+
+            return new ReturnActionResult<PessoaClienteDto>().ParseToActionResult(RequestResult<PessoaClienteDto>.BadRequest(ex.Message));
+        }
+    }
+
+
 
     [HttpGet("pessoas-vinculadas")]
     public async Task<ActionResult<RequestResult<IEnumerable<PessoaClienteVinculadaDto>>>> GetPessoasVinculadas()

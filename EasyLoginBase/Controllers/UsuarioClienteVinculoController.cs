@@ -21,6 +21,21 @@ public class UsuarioClienteVinculoController : ControllerBase
         _usuarioClienteVinculoServices = usuarioClienteVinculoServices;
     }
 
+
+    [HttpGet("select-usuarios-vinculados-by-cliente-id")]
+    public async Task<ActionResult<RequestResult<IEnumerable<UsuarioVinculadoClienteDto>>>> SelectUsuariosVinculadosByClienteAsync()
+    {
+        try
+        {
+            return new ReturnActionResult<IEnumerable<UsuarioVinculadoClienteDto>>()
+                .ParseToActionResult(await _usuarioClienteVinculoServices.SelectUsuariosVinculadosByClienteAsync(User));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<IEnumerable<UsuarioVinculadoClienteDto>>().ParseToActionResult(RequestResult<IEnumerable<UsuarioVinculadoClienteDto>>.BadRequest(ex.Message));
+        }
+    }
+
     [HttpPost]
     public async Task<ActionResult<RequestResult<UsuarioVinculadoClienteDto>>> VincularUsuarioAoCliente([FromBody] UsuarioVinculadoClienteDtoRegistrarVinculo dtoRegistrarVinculo)
     {

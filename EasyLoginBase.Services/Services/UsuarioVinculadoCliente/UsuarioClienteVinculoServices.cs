@@ -123,7 +123,7 @@ public class UsuarioClienteVinculoServices : IUsuarioClienteVinculoServices<Usua
             if (!await _repository.CommitAsync())
                 throw new Exception("Erro ao atualizar acesso do usuário");
 
-            var usuarioVinculadoCreateResult = await _repository.UsuarioClienteVinculoImplementacao.SelectUsuarioClienteVinculo(clienteId, userEntityParaVincularAoCliente.Id);           
+            var usuarioVinculadoCreateResult = await _repository.UsuarioClienteVinculoImplementacao.SelectUsuarioClienteVinculo(clienteId, userEntityParaVincularAoCliente.Id);
 
             var dto = new UsuarioVinculadoClienteDto
             {
@@ -141,6 +141,32 @@ public class UsuarioClienteVinculoServices : IUsuarioClienteVinculoServices<Usua
         {
 
             return new RequestResult<UsuarioVinculadoClienteDto>(ex);
+        }
+    }
+    public async Task<RequestResult<IEnumerable<UsuarioVinculadoClienteDto>>> SelectUsuariosVinculadosByClienteAsync(ClaimsPrincipal user)
+    {
+        try
+        {
+            var clienteId = user.GetClienteIdVinculo();
+
+            IEnumerable<PessoaClienteVinculadaEntity> entitiies = await _repository.UsuarioClienteVinculoImplementacao.SelectUsuariosVinculadosByClienteAsync(clienteId);
+
+            IEnumerable<UsuarioVinculadoClienteDto> usuarioVinculadoClienteDtos = entitiies.Select(x => new UsuarioVinculadoClienteDto
+            {
+                ClienteId = x.PessoaClienteEntityId,
+                ClienteNome = x.PessoaClienteEntity.NomeFantasia,
+                IdUsuarioVinculado = x.UsuarioVinculadoId,
+                NomeUsuarioVinculado = x.UsuarioVinculado.Nome,
+                EmailUsuarioVinculado = x.UsuarioVinculado.Email,
+                AcessoPermitido = x.AcessoPermitido,
+            });
+
+            return new RequestResult<IEnumerable<UsuarioVinculadoClienteDto>>(usuarioVinculadoClienteDtos);
+        }
+        catch (Exception ex)
+        {
+
+            return new RequestResult<IEnumerable<UsuarioVinculadoClienteDto>>(ex);
         }
     }
 }

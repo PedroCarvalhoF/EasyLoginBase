@@ -5,4 +5,5 @@ public interface IUsuarioClienteVinculoRepository<U> where U : PessoaClienteVinc
 {
     Task<U?> SelectUsuarioClienteVinculo(Guid clienteId, Guid usuarioId, bool include = true);
     Task<U?> SelectUsuarioClienteVinculoByUsuarioId(Guid usuarioId, bool include = true);
+    Task<IEnumerable<U>> SelectUsuariosVinculadosByClienteAsync(Guid clienteId, bool include = true);
 }

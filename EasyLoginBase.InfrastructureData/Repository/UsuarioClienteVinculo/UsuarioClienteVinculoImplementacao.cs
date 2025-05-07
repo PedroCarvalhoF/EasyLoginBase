@@ -38,7 +38,6 @@ public class UsuarioClienteVinculoImplementacao : GenericRepository<PessoaClient
             throw new Exception(ex.Message);
         }
     }
-
     public async Task<PessoaClienteVinculadaEntity?> SelectUsuarioClienteVinculoByUsuarioId(Guid usuarioId, bool include = true)
     {
         try
@@ -51,6 +50,28 @@ public class UsuarioClienteVinculoImplementacao : GenericRepository<PessoaClient
             query = query.Where(x => x.UsuarioVinculadoId == usuarioId);
 
             var entity = await query.SingleOrDefaultAsync() ?? null;
+
+            return entity;
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task<IEnumerable<PessoaClienteVinculadaEntity>> SelectUsuariosVinculadosByClienteAsync(Guid clienteId, bool include = true)
+    {
+        try
+        {
+            var query = _dbSet.AsQueryable();
+            
+            if (include)
+                query = Include(query);
+
+            query = query.Where(x => x.PessoaClienteEntityId == clienteId);
+
+            var entity = await query.ToArrayAsync();
 
             return entity;
         }

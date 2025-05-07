@@ -1,4 +1,39 @@
-﻿namespace EasyLoginBase.Controllers;
-public class UsuarioClienteVinculoController
+﻿using EasyLoginBase.Application.Dto.Produto.Produto;
+using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Tools;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using EasyLoginBase.Application.Dto.UsuarioVinculadoCliente;
+using EasyLoginBase.Application.Services.Intefaces.UsuarioClienteVinculo;
+
+namespace EasyLoginBase.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize]
+
+public class UsuarioClienteVinculoController : ControllerBase
 {
+    private readonly IUsuarioClienteVinculoServices<UsuarioVinculadoClienteDto> _usuarioClienteVinculoServices;
+
+    public UsuarioClienteVinculoController(IUsuarioClienteVinculoServices<UsuarioVinculadoClienteDto> usuarioClienteVinculoServices)
+    {
+        _usuarioClienteVinculoServices = usuarioClienteVinculoServices;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<RequestResult<UsuarioVinculadoClienteDto>>> VincularUsuarioAoCliente([FromBody] UsuarioVinculadoClienteDtoRegistrarVinculo dtoRegistrarVinculo)
+    {
+        try
+        {
+            if (dtoRegistrarVinculo == null)
+                return BadRequest("Requisição inválida.");           
+
+            return new ReturnActionResult<UsuarioVinculadoClienteDto>().ParseToActionResult(await _usuarioClienteVinculoServices.VincularUsuarioAoClienteAsync(dtoRegistrarVinculo,User));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<UsuarioVinculadoClienteDto>().ParseToActionResult(RequestResult<UsuarioVinculadoClienteDto>.BadRequest(ex.Message));
+        }
+    }
 }

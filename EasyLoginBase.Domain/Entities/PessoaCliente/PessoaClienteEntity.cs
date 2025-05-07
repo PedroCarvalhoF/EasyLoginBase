@@ -1,5 +1,6 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.User;
+using System.Runtime.InteropServices;
 
 namespace EasyLoginBase.Domain.Entities.PessoaCliente;
 
@@ -11,6 +12,28 @@ public class PessoaClienteEntity
     public string? NomeFantasia { get; set; }
     public DateTime DataAbertura { get; set; }
     public DateTime DataVencimentoUso { get; set; }
+    public bool AcessoLiberado => ValidarAcessoClienteUsuarios();
+    public string StatusCliente => GetStatusCliente();
+    private string GetStatusCliente()
+    {
+        var qtd_dias_restantes = (DataVencimentoUso - DateTime.Now).TotalDays;
+
+        if (!AcessoLiberado)
+        {
+            if (qtd_dias_restantes < 0)
+                return $"Acesso bloqueado. Verifquei as pendencias com financeiro.";
+        }
+
+        return $"Acesso liberado: dias restantes {qtd_dias_restantes}";
+    }
+    private bool ValidarAcessoClienteUsuarios()
+    {
+        if (DataVencimentoUso < DateTime.Now)
+            return false;
+
+        return true;
+    }
+
     public virtual ICollection<PessoaClienteVinculadaEntity>? UsuariosVinculados { get; set; }
     public virtual ICollection<FilialEntity>? Filiais { get; set; }
     public bool EntidadeValidada => ValidarEntidade();

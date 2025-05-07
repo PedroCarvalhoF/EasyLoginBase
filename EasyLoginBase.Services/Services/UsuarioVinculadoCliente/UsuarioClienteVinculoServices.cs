@@ -31,11 +31,15 @@ public class UsuarioClienteVinculoServices : IUsuarioClienteVinculoServices<Usua
 
             var pessoaVincularCliente = PessoaClienteVinculadaEntity.Create(clienteId, userEntityParaVincularAoCliente.Id);
 
+            var usuarioVinculadoExists = await _repository.UsuarioClienteVinculoImplementacao.SelectUsuarioClienteVinculo(clienteId, userEntityParaVincularAoCliente.Id);
+
+            if (usuarioVinculadoExists != null)
+                throw new ArgumentException("Usuário já é vinculado.");
+
             var usuarioVinculadoCliente = await _repository.UsuarioClienteVinculoRepostory.InsertAsync(pessoaVincularCliente);
 
             if (!await _repository.CommitAsync())
                 throw new Exception("Erro ao vincular usuario ao cliente");
-
 
             var usuarioVinculadoCreateResult = await _repository.UsuarioClienteVinculoImplementacao.SelectUsuarioClienteVinculo(clienteId, userEntityParaVincularAoCliente.Id);
 
@@ -44,11 +48,12 @@ public class UsuarioClienteVinculoServices : IUsuarioClienteVinculoServices<Usua
 
             var dto = new UsuarioVinculadoClienteDto
             {
+                ClienteId = usuarioVinculadoCreateResult.PessoaClienteEntityId,
+                ClienteNome = usuarioVinculadoCreateResult.PessoaClienteEntity.NomeFantasia,
                 IdUsuarioVinculado = usuarioVinculadoCreateResult.UsuarioVinculadoId,
-                NomeUsuarioVinculado = userEntityParaVincularAoCliente.Nome,
-                EmailUsuarioVinculado = userEntityParaVincularAoCliente.Email,
+                NomeUsuarioVinculado = usuarioVinculadoCreateResult.UsuarioVinculado.Nome,
+                EmailUsuarioVinculado = usuarioVinculadoCreateResult.UsuarioVinculado.Email,
                 AcessoPermitido = usuarioVinculadoCreateResult.AcessoPermitido,
-
             };
 
             return new RequestResult<UsuarioVinculadoClienteDto>(dto);

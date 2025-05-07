@@ -7,5 +7,4 @@ public interface IUsuarioClienteVinculoServices<DTO> where DTO : UsuarioVinculad
 {
     Task<RequestResult<DTO>> VincularUsuarioAoClienteAsync(UsuarioVinculadoClienteDtoRegistrarVinculo dtoRegistrarVinculo, ClaimsPrincipal users);
     Task<RequestResult<DTO>> VincularClienteAoClienteAsync(Guid clienteId, Guid usuarioId);
-
 }

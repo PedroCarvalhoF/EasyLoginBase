@@ -61,6 +61,9 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
                     throw new ArgumentException("Solicite sua permissão para continuar");
 
 
+                if (!usuarioVinculo.PessoaClienteEntity.AcessoLiberado)
+                    throw new ArgumentException(usuarioVinculo.PessoaClienteEntity.StatusCliente);
+
                 usuarioLoginResponse = await GerarCredenciais(userSelecionado, usuarioVinculo);
                 usuarioLoginResponse.DefinirDetalhesUsuario(userSelecionado.Id, userSelecionado.Nome!, userSelecionado.Email!);
 
@@ -98,6 +101,7 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
 
             claims.Add(new Claim("UserId", user.Id.ToString()));
             claims.Add(new Claim("ClienteIdVinculo", usuarioVinculo.PessoaClienteEntityId.ToString()));
+            claims.Add(new Claim("ClienteNome", usuarioVinculo.PessoaClienteEntity.NomeFantasia.ToString()));
 
             if (adicionarClaimsUsuario)
             {

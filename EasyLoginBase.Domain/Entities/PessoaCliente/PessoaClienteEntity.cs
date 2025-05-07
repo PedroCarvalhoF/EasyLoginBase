@@ -11,20 +11,12 @@ public class PessoaClienteEntity
     public string? NomeFantasia { get; set; }
     public DateTime DataAbertura { get; set; }
     public DateTime DataVencimentoUso { get; set; }
-
     public virtual ICollection<PessoaClienteVinculadaEntity>? UsuariosVinculados { get; set; }
-    //uma pessoa cliente pode ter varias filiais
     public virtual ICollection<FilialEntity>? Filiais { get; set; }
-
     public bool EntidadeValidada => ValidarEntidade();
-
     private bool ValidarEntidade()
-    {
-        return true;
-    }
-
+    => true;
     public PessoaClienteEntity() { }
-
     public PessoaClienteEntity(Guid usuarioEntityClienteId, string nomeFantasia)
     {
         Id = Guid.NewGuid();
@@ -33,7 +25,6 @@ public class PessoaClienteEntity
         DataAbertura = DateTime.Now;
         DataVencimentoUso = DateTime.Now.AddMonths(1);
     }
-
     public static PessoaClienteEntity CriarUsuarioPessoaCliente(Guid usuarioEntityClienteId, string nomeFantasia)
     => new PessoaClienteEntity(usuarioEntityClienteId, nomeFantasia);
 }

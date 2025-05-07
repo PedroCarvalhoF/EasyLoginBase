@@ -5,14 +5,13 @@ using Microsoft.EntityFrameworkCore;
 namespace EasyLoginBase.InfrastructureData.Repository;
 
 public class GenericRepository<T> : IGerenericRepository<T> where T : class
-{
-    private readonly MyContext _context;
+{    
     private readonly DbSet<T> _dataset;
 
     public GenericRepository(MyContext context)
     {
-        _context = context;
-        _dataset = _context.Set<T>();
+        
+        _dataset = context.Set<T>();
     }
 
     public async Task<T> InsertAsync(T item)

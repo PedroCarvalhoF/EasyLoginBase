@@ -1,11 +1,19 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Estoque.Estoque;
+﻿using EasyLoginBase.Application.Dto.Cliente;
+using EasyLoginBase.Application.Dto.Produto.Estoque.Estoque;
 using EasyLoginBase.Application.Dto.Produto.Estoque.Movimento;
 using EasyLoginBase.Application.Dto.User.Role;
+using EasyLoginBase.Application.Services.Intefaces.Cliente;
 using EasyLoginBase.Application.Services.Intefaces.Filial;
 using EasyLoginBase.Application.Services.Intefaces.PDV;
 using EasyLoginBase.Application.Services.Intefaces.Preco.Produto;
 using EasyLoginBase.Application.Services.Intefaces.Preco.Produto.CategoriaPreco;
 using EasyLoginBase.Application.Services.Intefaces.Produto;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
+using EasyLoginBase.Domain.Interfaces;
+using EasyLoginBase.Domain.Interfaces.Cliente;
+using EasyLoginBase.InfrastructureData.Repository;
+using EasyLoginBase.InfrastructureData.Repository.Cliente;
+using EasyLoginBase.Services.Services.Cliente;
 using EasyLoginBase.Services.Services.Email;
 using EasyLoginBase.Services.Services.Filial;
 using EasyLoginBase.Services.Services.PDV;
@@ -22,6 +30,11 @@ public static class RegistroServicos
 {
     public static void ConfigurarServicos(this IServiceCollection serviceCollection)
     {
+        serviceCollection.AddScoped<IClienteRepository<PessoaClienteEntity>, ClienteImplementacao>();
+        serviceCollection.AddScoped<IGerenericRepository<PessoaClienteEntity>, GenericRepository<PessoaClienteEntity>>();
+
+        serviceCollection.AddScoped< IClienteServices<ClienteDto>, ClienteServices>();
+
         serviceCollection.AddTransient<IEmailService, EmailService>();
         serviceCollection.AddTransient<IFilialServices, FilialServices>();
         serviceCollection.AddTransient<ICategoriaProdutoServices, CategoriaProdutoServices>();

@@ -2,15 +2,18 @@
 using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces;
+using EasyLoginBase.Domain.Interfaces.Cliente;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces.Produto.MovimentacaoEstoque;
 using EasyLoginBase.InfrastructureData.Context;
 using EasyLoginBase.InfrastructureData.Implementacao;
+using EasyLoginBase.InfrastructureData.Repository.Cliente;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PDV;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +26,10 @@ namespace EasyLoginBase.InfrastructureData.Repository
     {
         private readonly MyContext _context;
         private readonly ConcurrentDictionary<Type, object> _repositories = new();
+
+        private IGerenericRepository<PessoaClienteEntity> _clienteRepostory;
+        private IClienteRepository<PessoaClienteEntity> _clienteImplementacao;
+
 
         private IFilialRepository<FilialEntity, ClaimsPrincipal>? _filialRepository;
         private IUsuarioPdvRepository? _usuarioPdvRepository;
@@ -108,22 +115,15 @@ namespace EasyLoginBase.InfrastructureData.Repository
                 ?? throw new InvalidOperationException($"Falha ao criar repositório genérico para {typeof(T).Name}"));
         }
 
-        /// <summary>
-        /// Repositório para Filiais.
-        /// </summary>
         public IFilialRepository<FilialEntity, ClaimsPrincipal> FilialRepository
             => _filialRepository ??= new FilialRepository(_context);
-
-
         public IUsuarioPdvRepository UsuarioPdvRepository
             => _usuarioPdvRepository ??= new UsuarioPdvRepository(_context);
-
         public IPontoVendaRepository<PontoVendaEntity> PontoVendaRepository
         => _pontoVendaRepository ??= new PontoVendaRepository(_context);
 
         public IBaseClienteRepository<PontoVendaEntity> PontoVendaRepositoryBase
         => _pontoVendaRepositoryBase ??= new BaseClienteRepository<PontoVendaEntity>(_context);
-
 
         //NOVOS REPOSITORIOS
         public IBaseClienteRepository_REFACTOR<ProdutoEntity> ProdutoRepository
@@ -156,8 +156,6 @@ namespace EasyLoginBase.InfrastructureData.Repository
             }
         }
 
-
-        //MOVIMENTACAO ESTOQUE
         public IBaseClienteRepository_REFACTOR<MovimentacaoEstoqueProdutoEntity> MovimentacaoEstoqueProdutoRepository
         {
             get
@@ -176,6 +174,26 @@ namespace EasyLoginBase.InfrastructureData.Repository
                 if (_movimentacaoEstoqueProdutoImplementacao == null)
                     _movimentacaoEstoqueProdutoImplementacao = new MovimentacaoEstoqueProdutoImplementacao(_context);
                 return _movimentacaoEstoqueProdutoImplementacao;
+            }
+        }
+
+        public IGerenericRepository<PessoaClienteEntity> ClienteRepostory
+        {
+            get
+            {
+                if (_clienteRepostory == null)
+                    _clienteRepostory = new GenericRepository<PessoaClienteEntity>(_context);
+
+                return _clienteRepostory;
+            }
+        }
+        public IClienteRepository<PessoaClienteEntity> ClienteImplementacao
+        {
+            get
+            {
+                if (_clienteImplementacao == null)
+                    _clienteImplementacao = new ClienteImplementacao(_context);
+                return _clienteImplementacao;
             }
         }
     }

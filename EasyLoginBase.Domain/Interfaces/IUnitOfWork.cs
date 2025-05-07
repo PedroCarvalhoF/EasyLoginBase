@@ -2,8 +2,10 @@
 using EasyLoginBase.Domain.Entities.Base;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.Produto.Estoque;
+using EasyLoginBase.Domain.Interfaces.Cliente;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
@@ -20,6 +22,9 @@ public interface IUnitOfWork
     IFilialRepository<FilialEntity, ClaimsPrincipal> FilialRepository { get; }
 
     IUsuarioPdvRepository UsuarioPdvRepository { get; }
+
+    IGerenericRepository<PessoaClienteEntity> ClienteRepostory { get; }
+    IClienteRepository<PessoaClienteEntity> ClienteImplementacao { get; }
 
     IPontoVendaRepository<PontoVendaEntity> PontoVendaRepository { get; }
     IBaseClienteRepository<PontoVendaEntity> PontoVendaRepositoryBase { get; }

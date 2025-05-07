@@ -27,9 +27,26 @@ public class UsuarioClienteVinculoController : ControllerBase
         try
         {
             if (dtoRegistrarVinculo == null)
-                return BadRequest("Requisição inválida.");           
+                return BadRequest("Requisição inválida.");
 
-            return new ReturnActionResult<UsuarioVinculadoClienteDto>().ParseToActionResult(await _usuarioClienteVinculoServices.VincularUsuarioAoClienteAsync(dtoRegistrarVinculo,User));
+            return new ReturnActionResult<UsuarioVinculadoClienteDto>().ParseToActionResult(await _usuarioClienteVinculoServices.VincularUsuarioAoClienteAsync(dtoRegistrarVinculo, User));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnActionResult<UsuarioVinculadoClienteDto>().ParseToActionResult(RequestResult<UsuarioVinculadoClienteDto>.BadRequest(ex.Message));
+        }
+    }
+
+    [HttpPost("liberar-remover-acesso-usuario-vinculado")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<RequestResult<UsuarioVinculadoClienteDto>>> LiberarBloquearAcessoUsuarioVinculadoAsync([FromBody] UsuarioVinculadoClienteDtoLiberarRemoverAcesso liberarRemoverAcesso)
+    {
+        try
+        {
+            if (liberarRemoverAcesso == null)
+                return BadRequest("Requisição inválida.");
+
+            return new ReturnActionResult<UsuarioVinculadoClienteDto>().ParseToActionResult(await _usuarioClienteVinculoServices.LiberarBloquearAcessoUsuarioVinculadoAsync(liberarRemoverAcesso, User));
         }
         catch (Exception ex)
         {

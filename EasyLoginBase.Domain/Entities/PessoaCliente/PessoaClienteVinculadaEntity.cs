@@ -21,4 +21,7 @@ public class PessoaClienteVinculadaEntity
 
     public static PessoaClienteVinculadaEntity Create(Guid pessoaClienteEntityId, Guid usuarioVinculadoId)
         => new(pessoaClienteEntityId, null, usuarioVinculadoId, null, true);
+
+    public void AlterarAcesso(bool liberarAcesso)
+    => AcessoPermitido = liberarAcesso;
 }

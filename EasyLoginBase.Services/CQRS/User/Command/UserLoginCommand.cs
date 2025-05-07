@@ -1,6 +1,8 @@
 ﻿using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.User;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.User;
+using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.InfrastructureData.Configuration;
 using EasyLoginBase.Services.CQRS;
 using MediatR;
@@ -19,14 +21,17 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
         private readonly SignInManager<UserEntity> _signInManager;
         private readonly UserManager<UserEntity> _userManager;
         private readonly JwtOptions _jwtOptions;
+        private readonly IUnitOfWork _repository;
 
         public UserLoginCommandHandler(SignInManager<UserEntity> signInManager,
                            UserManager<UserEntity> userManager,
-                           IOptions<JwtOptions> jwtOptions)
+                           IOptions<JwtOptions> jwtOptions,
+                           IUnitOfWork repository)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _jwtOptions = jwtOptions.Value;
+            _repository = repository;
         }
         public async Task<RequestResult<UserDtoLoginResponse>> Handle(UserLoginCommand request, CancellationToken cancellationToken)
         {
@@ -47,11 +52,16 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
 
                 var userSelecionado = await _userManager.FindByEmailAsync(request.UserLoginDtoRequest.Email) ?? throw new Exception("Usuário não encontrado.");
 
+                var usuarioVinculo = await _repository.UsuarioClienteVinculoImplementacao.SelectUsuarioClienteVinculoByUsuarioId(userSelecionado.Id);
+
+                if (usuarioVinculo == null)
+                    throw new Exception("Solicite sua Credencial");
+
+                if (!usuarioVinculo.AcessoPermitido)
+                    throw new ArgumentException("Solicite sua permissão para continuar");
 
 
-
-
-                usuarioLoginResponse = await GerarCredenciais(userSelecionado);
+                usuarioLoginResponse = await GerarCredenciais(userSelecionado, usuarioVinculo);
                 usuarioLoginResponse.DefinirDetalhesUsuario(userSelecionado.Id, userSelecionado.Nome!, userSelecionado.Email!);
 
                 return RequestResult<UserDtoLoginResponse>.Ok(usuarioLoginResponse, "Login realizado com sucesso.");
@@ -61,9 +71,9 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
                 return RequestResult<UserDtoLoginResponse>.BadRequest(ex.Message);
             }
         }
-        private async Task<UserDtoLoginResponse> GerarCredenciais(UserEntity user)
+        private async Task<UserDtoLoginResponse> GerarCredenciais(UserEntity user, PessoaClienteVinculadaEntity usuarioVinculo)
         {
-            var accessTokenClaims = await ObterClaims(user, true);
+            var accessTokenClaims = await ObterClaims(user, true, usuarioVinculo);
             var refreshTokenClaims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
@@ -75,7 +85,7 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
 
             return new UserDtoLoginResponse(accessToken, refreshToken);
         }
-        private async Task<IList<Claim>> ObterClaims(UserEntity user, bool adicionarClaimsUsuario)
+        private async Task<IList<Claim>> ObterClaims(UserEntity user, bool adicionarClaimsUsuario, PessoaClienteVinculadaEntity usuarioVinculo)
         {
             var claims = new List<Claim>
             {
@@ -87,6 +97,7 @@ public class UserLoginCommand : BaseCommands<UserDtoLoginResponse>
             };
 
             claims.Add(new Claim("UserId", user.Id.ToString()));
+            claims.Add(new Claim("ClienteIdVinculo", usuarioVinculo.PessoaClienteEntityId.ToString()));
 
             if (adicionarClaimsUsuario)
             {

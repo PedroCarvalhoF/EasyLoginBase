@@ -3,5 +3,6 @@
 namespace EasyLoginBase.Domain.Interfaces.UsuarioClienteVinculo;
 public interface IUsuarioClienteVinculoRepository<U> where U : PessoaClienteVinculadaEntity
 {
-    Task<U?> SelectUsuarioClienteVinculo(Guid clienteId, Guid usuarioId, bool include = true);    
+    Task<U?> SelectUsuarioClienteVinculo(Guid clienteId, Guid usuarioId, bool include = true);
+    Task<U?> SelectUsuarioClienteVinculoByUsuarioId(Guid usuarioId, bool include = true);
 }

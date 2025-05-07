@@ -51,7 +51,6 @@ public class UsuarioClienteVinculoServices : IUsuarioClienteVinculoServices<Usua
 
             };
 
-
             return new RequestResult<UsuarioVinculadoClienteDto>(dto);
 
         }

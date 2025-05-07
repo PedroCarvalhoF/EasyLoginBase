@@ -31,7 +31,7 @@ public class ClienteController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("registrar-cliente")]
     public async Task<ActionResult<RequestResult<IEnumerable<ClienteDto>>>> RegistrarClienteAsync([FromBody] ClienteDtoRegistrar clienteRegistro)
     {
         try

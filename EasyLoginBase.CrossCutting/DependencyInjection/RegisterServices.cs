@@ -2,17 +2,22 @@
 using EasyLoginBase.Domain.Entities;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
+using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.Produto;
 using EasyLoginBase.Domain.Entities.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces;
+using EasyLoginBase.Domain.Interfaces.Cliente;
 using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces.Produto.MovimentacaoEstoque;
+using EasyLoginBase.Domain.Interfaces.UsuarioClienteVinculo;
 using EasyLoginBase.InfrastructureData.Implementacao;
 using EasyLoginBase.InfrastructureData.Repository;
+using EasyLoginBase.InfrastructureData.Repository.Cliente;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PDV;
+using EasyLoginBase.InfrastructureData.Repository.UsuarioClienteVinculo;
 using EasyLoginBase.Services.Tools.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +34,17 @@ public static class RegisterServices
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
         serviceCollection.AddScoped(typeof(IBaseClienteRepository<>), typeof(BaseClienteRepository<>));
         serviceCollection.AddScoped(typeof(IGerenericRepository<>), typeof(GenericRepository<>));
-        serviceCollection.AddScoped(typeof(IBaseClienteRepository_REFACTOR<>), typeof(BaseClienteRepository_REFACTOR<>));       
+        serviceCollection.AddScoped(typeof(IBaseClienteRepository_REFACTOR<>), typeof(BaseClienteRepository_REFACTOR<>));
+
+        //Cliente Repository
+        serviceCollection.AddScoped<IClienteRepository<PessoaClienteEntity>, ClienteImplementacao>();
+        serviceCollection.AddScoped<IGerenericRepository<PessoaClienteEntity>, GenericRepository<PessoaClienteEntity>>();
+
+        //Usuario Vinculo Cliente
+        serviceCollection.AddScoped<IUsuarioClienteVinculoRepository<PessoaClienteVinculadaEntity>, UsuarioClienteVinculoImplementacao>();
+        serviceCollection.AddScoped<IGerenericRepository<PessoaClienteVinculadaEntity>, GenericRepository<PessoaClienteVinculadaEntity>>();
+
+
 
         serviceCollection.AddScoped<IBaseClienteRepository_REFACTOR<ProdutoEntity>, BaseClienteRepository_REFACTOR<ProdutoEntity>>();
 

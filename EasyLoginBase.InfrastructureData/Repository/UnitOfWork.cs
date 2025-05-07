@@ -11,11 +11,13 @@ using EasyLoginBase.Domain.Interfaces.Filial;
 using EasyLoginBase.Domain.Interfaces.PDV;
 using EasyLoginBase.Domain.Interfaces.Produto.Estoque;
 using EasyLoginBase.Domain.Interfaces.Produto.MovimentacaoEstoque;
+using EasyLoginBase.Domain.Interfaces.UsuarioClienteVinculo;
 using EasyLoginBase.InfrastructureData.Context;
 using EasyLoginBase.InfrastructureData.Implementacao;
 using EasyLoginBase.InfrastructureData.Repository.Cliente;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PDV;
+using EasyLoginBase.InfrastructureData.Repository.UsuarioClienteVinculo;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 using System.Security.Claims;
@@ -24,11 +26,116 @@ namespace EasyLoginBase.InfrastructureData.Repository
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private readonly MyContext _context;
-        private readonly ConcurrentDictionary<Type, object> _repositories = new();
+        #region Metodos Unit Of Work
+        public async Task<bool> CommitAsync()
+        {
+            try
+            {
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is not null)
+            {
+                throw new Exception($"Erro ao salvar mudanças: {ex.InnerException.Message}", ex);
+            }
+        }
+        public void Rollback()
+        {
+            foreach (var entry in _context.ChangeTracker.Entries().Where(e => e.State != EntityState.Unchanged))
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.State = EntityState.Detached;
+                        break;
+                    case EntityState.Modified:
+                    case EntityState.Deleted:
+                        entry.Reload();
+                        break;
+                }
+            }
+        }
+        public void Dispose()
+        {
+            _context.Dispose();
+            GC.SuppressFinalize(this);
+        }
+        public void FinalizarContexto()
+        {
+            Dispose();
+        }
+        #endregion
 
-        private IGerenericRepository<PessoaClienteEntity> _clienteRepostory;
-        private IClienteRepository<PessoaClienteEntity> _clienteImplementacao;
+        private readonly MyContext? _context;
+        private readonly ConcurrentDictionary<Type, object>? _repositories = new();
+        public UnitOfWork(MyContext context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        //Cliente
+        private IGerenericRepository<PessoaClienteEntity>? _clienteRepostory;
+        private IClienteRepository<PessoaClienteEntity>? _clienteImplementacao;
+
+        //Usuario Vinculo Cliente
+        private IGerenericRepository<PessoaClienteVinculadaEntity>? _pessoaVinculadaRepository;
+        private IUsuarioClienteVinculoRepository<PessoaClienteVinculadaEntity>? _usuarioClienteVinculoImplementacao;
+
+        public IGerenericRepository<PessoaClienteEntity> ClienteRepostory
+        {
+            get
+            {
+                if (_clienteRepostory == null)
+                    _clienteRepostory = new GenericRepository<PessoaClienteEntity>(_context ?? throw new Exception("Não foi possível instanciar contexto"));
+
+                return _clienteRepostory;
+            }
+        }
+        public IClienteRepository<PessoaClienteEntity> ClienteImplementacao
+        {
+            get
+            {
+                if (_clienteImplementacao == null)
+                    _clienteImplementacao = new ClienteImplementacao(_context);
+                return _clienteImplementacao;
+            }
+        }
+
+        public IGerenericRepository<PessoaClienteVinculadaEntity> UsuarioClienteVinculoRepostory
+        {
+            get
+            {
+                if (_pessoaVinculadaRepository == null)
+                    _pessoaVinculadaRepository = new GenericRepository<PessoaClienteVinculadaEntity>(_context);
+                return _pessoaVinculadaRepository;
+            }
+        }
+
+        public IUsuarioClienteVinculoRepository<PessoaClienteVinculadaEntity> UsuarioClienteVinculoImplementacao
+        {
+            get
+            {
+                if (_usuarioClienteVinculoImplementacao == null)
+                    _usuarioClienteVinculoImplementacao = new UsuarioClienteVinculoImplementacao(_context);
+                return _usuarioClienteVinculoImplementacao;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //REFATORAR DAQUI PRA BAIXO
+
+
 
 
         private IFilialRepository<FilialEntity, ClaimsPrincipal>? _filialRepository;
@@ -50,56 +157,9 @@ namespace EasyLoginBase.InfrastructureData.Repository
         private IMovimentacaoEstoqueProdutoRepository<MovimentacaoEstoqueProdutoEntity, FiltroBase>? _movimentacaoEstoqueProdutoImplementacao;
 
 
-        public UnitOfWork(MyContext context)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
 
-        /// <summary>
-        /// Salva as mudanças no banco de dados de forma assíncrona.
-        /// </summary>
-        public async Task<bool> CommitAsync()
-        {
-            try
-            {
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch (DbUpdateException ex) when (ex.InnerException is not null)
-            {
-                throw new Exception($"Erro ao salvar mudanças: {ex.InnerException.Message}", ex);
-            }
-        }
 
-        /// <summary>
-        /// Reverte as mudanças feitas no contexto.
-        /// </summary>
-        public void Rollback()
-        {
-            foreach (var entry in _context.ChangeTracker.Entries().Where(e => e.State != EntityState.Unchanged))
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        entry.State = EntityState.Detached;
-                        break;
-                    case EntityState.Modified:
-                    case EntityState.Deleted:
-                        entry.Reload();
-                        break;
-                }
-            }
-        }
 
-        public void Dispose()
-        {
-            _context.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
-        public void FinalizarContexto()
-        {
-            Dispose();
-        }
 
         public IBaseClienteRepository<T> GetRepository<T>() where T : BaseClienteEntity
         {
@@ -177,24 +237,6 @@ namespace EasyLoginBase.InfrastructureData.Repository
             }
         }
 
-        public IGerenericRepository<PessoaClienteEntity> ClienteRepostory
-        {
-            get
-            {
-                if (_clienteRepostory == null)
-                    _clienteRepostory = new GenericRepository<PessoaClienteEntity>(_context);
 
-                return _clienteRepostory;
-            }
-        }
-        public IClienteRepository<PessoaClienteEntity> ClienteImplementacao
-        {
-            get
-            {
-                if (_clienteImplementacao == null)
-                    _clienteImplementacao = new ClienteImplementacao(_context);
-                return _clienteImplementacao;
-            }
-        }
     }
 }

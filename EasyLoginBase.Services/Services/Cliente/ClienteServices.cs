@@ -1,11 +1,15 @@
 ﻿using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.Cliente;
 using EasyLoginBase.Application.Dto.Filial;
+using EasyLoginBase.Application.Dto.User.Role;
 using EasyLoginBase.Application.Dto.UsuarioVinculadoCliente;
 using EasyLoginBase.Application.Services.Intefaces.Cliente;
+using EasyLoginBase.Application.Services.Intefaces.UsuarioClienteVinculo;
 using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.Domain.Interfaces;
+using EasyLoginBase.Services.Services.User.Roles;
+using EasyLoginBase.Services.Services.UsuarioVinculadoCliente;
 using Microsoft.AspNetCore.Identity;
 
 namespace EasyLoginBase.Services.Services.Cliente;
@@ -13,10 +17,15 @@ public class ClienteServices : IClienteServices<ClienteDto>
 {
     private readonly IUnitOfWork _repository;
     private readonly UserManager<UserEntity> _userManager;
-    public ClienteServices(IUnitOfWork repository, UserManager<UserEntity> userManager)
+    private readonly IUserRoleServices<RoleDto, RoleUserDto> _roleServices;
+
+    private readonly IUsuarioClienteVinculoServices<UsuarioVinculadoClienteDto> _usuarioClienteVinculoServices;
+    public ClienteServices(IUnitOfWork repository, UserManager<UserEntity> userManager, IUsuarioClienteVinculoServices<UsuarioVinculadoClienteDto> usuarioClienteVinculoServices, IUserRoleServices<RoleDto, RoleUserDto> roleServices)
     {
         _repository = repository;
         _userManager = userManager;
+        _usuarioClienteVinculoServices = usuarioClienteVinculoServices;
+        _roleServices = roleServices;
     }
 
     public async Task<RequestResult<IEnumerable<ClienteDto>>> SelectAllAsync(bool include = true)
@@ -74,9 +83,26 @@ public class ClienteServices : IClienteServices<ClienteDto>
             if (!await _repository.CommitAsync())
                 throw new Exception("Erro ao salvar as alterações no banco de dados.");
 
+            var result = await _usuarioClienteVinculoServices.VincularClienteAoClienteAsync(clienteEntity.Id, userEntity.Id);
+            if (!result.Status)
+                throw new Exception("Erro ao vincular o cliente a ele mesmo");
+
+            var roleResult = await _roleServices.AdcionarRoleUser(new RoleDtoAddRoleUser
+            {
+                UserId = userEntity.Id,
+                RoleId = Guid.Parse("2b0f22da-944c-4a66-b27d-afbf86588225")
+            });
+
+            if (!result.Status)
+                throw new Exception("Não foi possível adicionar permissão de ADMIN ao usuário");
+
             var e = await _repository.ClienteImplementacao.SelectByUsuarioClienteId(clienteEntity.UsuarioEntityClienteId, include: true);
             if (e == null)
                 throw new Exception("Erro ao buscar o cliente após o registro.");
+
+
+
+
 
             var dto = new ClienteDto
             {
@@ -100,6 +126,8 @@ public class ClienteServices : IClienteServices<ClienteDto>
                     NomeFilial = f.NomeFilial
                 }).ToList() ?? new List<FilialDto>()
             };
+
+
 
             return new RequestResult<ClienteDto>(dto);
         }

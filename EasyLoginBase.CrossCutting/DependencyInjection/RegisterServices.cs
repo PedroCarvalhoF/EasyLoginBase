@@ -1,4 +1,6 @@
-﻿using EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
+﻿using EasyLoginBase.Application.Dto.Role;
+using EasyLoginBase.Application.Services.Intefaces.Role;
+using EasyLoginBase.CrossCutting.DependencyInjection.Extensions;
 using EasyLoginBase.Domain.Entities;
 using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.PDV;
@@ -18,6 +20,7 @@ using EasyLoginBase.InfrastructureData.Repository.Cliente;
 using EasyLoginBase.InfrastructureData.Repository.Filial;
 using EasyLoginBase.InfrastructureData.Repository.PDV;
 using EasyLoginBase.InfrastructureData.Repository.UsuarioClienteVinculo;
+using EasyLoginBase.Services.Services.Role;
 using EasyLoginBase.Services.Tools.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +38,8 @@ public static class RegisterServices
         serviceCollection.AddScoped(typeof(IBaseClienteRepository<>), typeof(BaseClienteRepository<>));
         serviceCollection.AddScoped(typeof(IGerenericRepository<>), typeof(GenericRepository<>));
         serviceCollection.AddScoped(typeof(IBaseClienteRepository_REFACTOR<>), typeof(BaseClienteRepository_REFACTOR<>));
+
+        serviceCollection.AddTransient<IRoleServices<RoleDto>, RoleServices>();
 
         //Cliente Repository
         serviceCollection.AddScoped<IClienteRepository<PessoaClienteEntity>, ClienteImplementacao>();

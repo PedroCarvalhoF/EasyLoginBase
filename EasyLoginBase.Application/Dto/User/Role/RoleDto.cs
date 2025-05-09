@@ -1,5 +1,4 @@
 ﻿namespace EasyLoginBase.Application.Dto.User.Role;
-
 public class RoleDto
 {
     public Guid Id { get; set; }

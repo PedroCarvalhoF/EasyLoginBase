@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 namespace EasyLoginBase.InfrastructureData.Repository;
 
 public class GenericRepository<T> : IGerenericRepository<T> where T : class
-{    
+{
     private readonly DbSet<T> _dataset;
 
     public GenericRepository(MyContext context)
     {
-        
+
         _dataset = context.Set<T>();
     }
 

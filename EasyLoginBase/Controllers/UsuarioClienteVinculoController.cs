@@ -1,10 +1,9 @@
-﻿using EasyLoginBase.Application.Dto.Produto.Produto;
-using EasyLoginBase.Application.Dto;
+﻿using EasyLoginBase.Application.Dto;
+using EasyLoginBase.Application.Dto.UsuarioVinculadoCliente;
+using EasyLoginBase.Application.Services.Intefaces.UsuarioClienteVinculo;
 using EasyLoginBase.Application.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EasyLoginBase.Application.Dto.UsuarioVinculadoCliente;
-using EasyLoginBase.Application.Services.Intefaces.UsuarioClienteVinculo;
 
 namespace EasyLoginBase.Controllers;
 

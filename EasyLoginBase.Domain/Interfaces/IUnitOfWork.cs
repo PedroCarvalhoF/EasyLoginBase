@@ -19,7 +19,7 @@ public interface IUnitOfWork
 {
     Task<bool> CommitAsync();
     void FinalizarContexto();
-     
+
 
     //Cliente Repository
     IGerenericRepository<PessoaClienteEntity> ClienteRepostory { get; }

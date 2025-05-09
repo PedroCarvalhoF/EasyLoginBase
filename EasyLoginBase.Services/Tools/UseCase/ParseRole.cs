@@ -1,17 +1,15 @@
-﻿using EasyLoginBase.Application.Dto.Role;
+﻿using EasyLoginBase.Application.Dto.User.Role;
 using EasyLoginBase.Domain.Entities.User;
 
 namespace EasyLoginBase.Services.Tools.UseCase;
 public static class ParseRole
 {
-    public static RoleDto ParseToRole(this RoleEntity role)
+    public static RoleDto Parce(this RoleEntity entity) => new RoleDto(entity.Id, entity.Name ?? "N/A");
+    public static IEnumerable<RoleDto> Parce(this IEnumerable<RoleEntity> entities)
     {
-        var roleId = Guid.Parse(role.Id.ToString());
-        return new RoleDto(roleId, role.Name, role.NormalizedName, role.ConcurrencyStamp);
-    }
-
-    public static IEnumerable<RoleDto> ParseToRole(this IEnumerable<RoleEntity> roles)
-    {
-        return roles.Select(role => role.ParseToRole());
+        foreach (var entity in entities)
+        {
+            yield return entity.Parce();
+        }
     }
 }

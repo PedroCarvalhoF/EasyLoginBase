@@ -3,16 +3,17 @@ using EasyLoginBase.Application.Dto.User.Role;
 using EasyLoginBase.Application.Tools;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.Services.Services.User.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EasyLoginBase.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class AccountUserRoleControlle : ControllerBase
 {
     private readonly IUserRoleServices<RoleDto, RoleUserDto> _userRoleServices;
-
     public AccountUserRoleControlle(IUserRoleServices<RoleDto, RoleUserDto> userRoleServices)
     {
         _userRoleServices = userRoleServices;
@@ -59,6 +60,7 @@ public class AccountUserRoleControlle : ControllerBase
 
 
     [HttpPost]
+    [Authorize(Roles = "Programador")]
     public async Task<ActionResult<RequestResult<RoleEntity>>> CreateRoleAsync([FromBody] RoleDtoCreate roleDtoCreate)
     {
         try

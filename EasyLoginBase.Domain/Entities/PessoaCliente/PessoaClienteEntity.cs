@@ -1,6 +1,5 @@
 ﻿using EasyLoginBase.Domain.Entities.Filial;
 using EasyLoginBase.Domain.Entities.User;
-using System.Runtime.InteropServices;
 
 namespace EasyLoginBase.Domain.Entities.PessoaCliente;
 

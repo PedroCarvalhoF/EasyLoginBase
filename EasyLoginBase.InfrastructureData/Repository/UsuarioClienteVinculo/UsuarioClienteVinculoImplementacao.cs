@@ -65,7 +65,7 @@ public class UsuarioClienteVinculoImplementacao : GenericRepository<PessoaClient
         try
         {
             var query = _dbSet.AsQueryable();
-            
+
             if (include)
                 query = Include(query);
 

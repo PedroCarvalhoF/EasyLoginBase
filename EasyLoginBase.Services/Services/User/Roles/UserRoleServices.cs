@@ -3,6 +3,7 @@ using EasyLoginBase.Application.Dto.User;
 using EasyLoginBase.Application.Dto.User.Role;
 using EasyLoginBase.Application.Tools.Roles;
 using EasyLoginBase.Domain.Entities.User;
+using EasyLoginBase.Services.Tools.UseCase;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -70,20 +71,20 @@ public class UserRoleServices : IUserRoleServices<RoleDto, RoleUserDto>
             var user = await _userManager.FindByIdAsync(roleDtoAddRoleUser.UserId.ToString());
             if (user == null) return RequestResult<RoleUserDto>.BadRequest($"Usuário não encontrado");
 
-            var result = await _userManager.AddToRoleAsync(user, role.Name!);
+            var result = await _userManager.AddToRoleAsync(user, role.Name!);           
 
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var userResult = await _userManager.Users.Where(user => user.Id == roleDtoAddRoleUser.UserId).Include(role => role.UserRoles).ThenInclude(r => r.Role).SingleOrDefaultAsync();
 
             var roleUserDto = new RoleUserDto
             {
                 UserDto = new UserDto
                 {
-                    Id = user.Id,
-                    Nome = user.Nome,
-                    SobreNome = user.SobreNome,
-                    Email = user.Email
+                    Id = userResult.Id,
+                    Nome = userResult.Nome,
+                    SobreNome = userResult.SobreNome,
+                    Email = userResult.Email
                 },
-                Roles = userRoles.ToList()
+                Roles = userResult.UserRoles.Select(roles => roles.Role).Parce().ToList()
             };
 
             return new RequestResult<RoleUserDto>(roleUserDto);
@@ -113,21 +114,21 @@ public class UserRoleServices : IUserRoleServices<RoleDto, RoleUserDto>
                 return RequestResult<RoleUserDto>.BadRequest($"Erro ao remover role: {errors}");
             }
 
-            var rolesAtualizadas = await _userManager.GetRolesAsync(user);
+            var userResult = await _userManager.Users.Where(user => user.Id == roleDtoRemoverRoleUser.UserId).Include(role => role.UserRoles).ThenInclude(r => r.Role).SingleOrDefaultAsync();
 
-            var dto = new RoleUserDto
+            var roleUserDto = new RoleUserDto
             {
                 UserDto = new UserDto
                 {
-                    Id = user.Id,
-                    Nome = user.Nome,
-                    SobreNome = user.SobreNome,
-                    Email = user.Email
+                    Id = userResult.Id,
+                    Nome = userResult.Nome,
+                    SobreNome = userResult.SobreNome,
+                    Email = userResult.Email
                 },
-                Roles = rolesAtualizadas.ToList()
+                Roles = userResult.UserRoles.Select(roles => roles.Role).Parce().ToList()
             };
 
-            return new RequestResult<RoleUserDto>(dto);
+            return new RequestResult<RoleUserDto>(roleUserDto);
         }
         catch (Exception ex)
         {
@@ -138,10 +139,13 @@ public class UserRoleServices : IUserRoleServices<RoleDto, RoleUserDto>
     {
         try
         {
-            var user = await _userManager.FindByIdAsync(requestId.Id.ToString() ?? string.Empty);
-            if (user == null) return RequestResult<RoleUserDto>.BadRequest($"Usuário não encontrado");
+            var user = await _userManager.Users.Where(user => user.Id == requestId.Id).Include(role => role.UserRoles).ThenInclude(r => r.Role).SingleOrDefaultAsync();
+            if (user == null)
+                return RequestResult<RoleUserDto>.BadRequest($"Usuário não encontrado");
 
             var userRoles = await _userManager.GetRolesAsync(user);
+
+            //var rolesEntities = user.UserRoles.Select(r => r.Role);
 
             var roleUserDto = new RoleUserDto
             {
@@ -152,7 +156,7 @@ public class UserRoleServices : IUserRoleServices<RoleDto, RoleUserDto>
                     SobreNome = user.SobreNome,
                     Email = user.Email
                 },
-                Roles = userRoles.ToList()
+                Roles = user.UserRoles.Select(roles => roles.Role).Parce().ToList()
             };
 
             return new RequestResult<RoleUserDto>(roleUserDto);
@@ -182,7 +186,7 @@ public class UserRoleServices : IUserRoleServices<RoleDto, RoleUserDto>
                     SobreNome = user.SobreNome,
                     Email = user.Email
                 },
-                Roles = (await _userManager.GetRolesAsync(user)).ToList()
+                // Roles = (await _userManager.GetRolesAsync(user)).ToList()
             }));
 
             return new RequestResult<IEnumerable<RoleUserDto>>(result);

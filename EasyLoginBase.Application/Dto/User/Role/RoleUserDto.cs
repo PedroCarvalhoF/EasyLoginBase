@@ -2,5 +2,5 @@
 public class RoleUserDto
 {
     public UserDto? UserDto { get; set; }
-    public List<String>? Roles { get; set; } = new List<string>();
+    public List<RoleDto>? Roles { get; set; } = new List<RoleDto>();
 }

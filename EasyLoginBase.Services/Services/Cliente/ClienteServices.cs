@@ -9,7 +9,6 @@ using EasyLoginBase.Domain.Entities.PessoaCliente;
 using EasyLoginBase.Domain.Entities.User;
 using EasyLoginBase.Domain.Interfaces;
 using EasyLoginBase.Services.Services.User.Roles;
-using EasyLoginBase.Services.Services.UsuarioVinculadoCliente;
 using Microsoft.AspNetCore.Identity;
 
 namespace EasyLoginBase.Services.Services.Cliente;

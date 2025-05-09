@@ -16,7 +16,7 @@ public class ClienteImplementacao : GenericRepository<PessoaClienteEntity>, ICli
     {
         query = query.Include(x => x.UsuarioEntityCliente);
         query = query.Include(x => x.Filiais);
-        query = query.Include(x => x.UsuariosVinculados).ThenInclude(user=>user.UsuarioVinculado);
+        query = query.Include(x => x.UsuariosVinculados).ThenInclude(user => user.UsuarioVinculado);
 
         return query;
     }

@@ -1,6 +1,5 @@
 ﻿using EasyLoginBase.Application.Dto;
 using EasyLoginBase.Application.Dto.Cliente;
-using EasyLoginBase.Application.Dto.Produto.Produto;
 using EasyLoginBase.Application.Services.Intefaces.Cliente;
 using EasyLoginBase.Application.Tools;
 using Microsoft.AspNetCore.Mvc;
